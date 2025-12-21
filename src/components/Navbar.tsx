@@ -1,19 +1,22 @@
 import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const navItems = [
-  { name: 'Home', href: '#home' },
-  { name: 'Services', href: '#services' },
-  { name: 'Developers', href: '#developers' },
-  { name: 'About', href: '#about' },
-  { name: 'Contact', href: '#contact' },
+  { name: 'Home', href: '#home', isHash: true },
+  { name: 'Services', href: '#services', isHash: true },
+  { name: 'Developers', href: '#developers', isHash: true },
+  { name: 'About', href: '#about', isHash: true },
+  { name: 'Blog', href: '/blog', isHash: false },
+  { name: 'Contact', href: '#contact', isHash: true },
 ];
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,6 +25,14 @@ export function Navbar() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleNavClick = (item: typeof navItems[0]) => {
+    if (item.isHash && location.pathname !== '/') {
+      // If we're not on home page and clicking a hash link, go to home first
+      window.location.href = '/' + item.href;
+    }
+    setIsMobileMenuOpen(false);
+  };
 
   return (
     <motion.nav
@@ -33,34 +44,52 @@ export function Navbar() {
       }`}
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
-        <motion.a
-          href="#home"
-          className="flex items-center gap-2"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-            <span className="font-display font-bold text-primary-foreground text-lg">E</span>
-          </div>
-          <span className="font-display font-bold text-xl text-foreground">
-            Eglaf<span className="text-primary">.</span>
-          </span>
-        </motion.a>
+        <Link to="/">
+          <motion.div
+            className="flex items-center gap-2"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+              <span className="font-display font-bold text-primary-foreground text-lg">E</span>
+            </div>
+            <span className="font-display font-bold text-xl text-foreground">
+              Eglaf<span className="text-primary">.</span>
+            </span>
+          </motion.div>
+        </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
           {navItems.map((item, index) => (
-            <motion.a
-              key={item.name}
-              href={item.href}
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="text-muted-foreground hover:text-primary transition-colors duration-300 font-medium relative group"
-            >
-              {item.name}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
-            </motion.a>
+            item.isHash ? (
+              <motion.a
+                key={item.name}
+                href={location.pathname === '/' ? item.href : '/' + item.href}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="text-muted-foreground hover:text-primary transition-colors duration-300 font-medium relative group"
+              >
+                {item.name}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
+              </motion.a>
+            ) : (
+              <motion.div
+                key={item.name}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <Link
+                  to={item.href}
+                  className="text-muted-foreground hover:text-primary transition-colors duration-300 font-medium relative group"
+                >
+                  {item.name}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
+                </Link>
+              </motion.div>
+            )
           ))}
         </div>
 
@@ -90,14 +119,25 @@ export function Navbar() {
           >
             <div className="flex flex-col p-4 gap-4">
               {navItems.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-foreground hover:text-primary transition-colors py-2 font-medium"
-                >
-                  {item.name}
-                </a>
+                item.isHash ? (
+                  <a
+                    key={item.name}
+                    href={location.pathname === '/' ? item.href : '/' + item.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-foreground hover:text-primary transition-colors py-2 font-medium"
+                  >
+                    {item.name}
+                  </a>
+                ) : (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-foreground hover:text-primary transition-colors py-2 font-medium"
+                  >
+                    {item.name}
+                  </Link>
+                )
               ))}
               <Button variant="hero" className="mt-2">
                 Get Quote
