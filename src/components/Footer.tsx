@@ -1,0 +1,145 @@
+import { motion } from 'framer-motion';
+import { Github, Linkedin, Twitter, Instagram } from 'lucide-react';
+
+const socialLinks = [
+  { icon: Github, href: '#', label: 'GitHub' },
+  { icon: Linkedin, href: '#', label: 'LinkedIn' },
+  { icon: Twitter, href: '#', label: 'Twitter' },
+  { icon: Instagram, href: '#', label: 'Instagram' },
+];
+
+const footerLinks = {
+  services: [
+    { name: 'Mobile Development', href: '#services' },
+    { name: 'Web Development', href: '#services' },
+    { name: 'AI Solutions', href: '#services' },
+    { name: 'CRM Development', href: '#services' },
+  ],
+  company: [
+    { name: 'About Us', href: '#about' },
+    { name: 'Our Team', href: '#developers' },
+    { name: 'Careers', href: '#' },
+    { name: 'Contact', href: '#contact' },
+  ],
+  resources: [
+    { name: 'Blog', href: '#' },
+    { name: 'Case Studies', href: '#' },
+    { name: 'Documentation', href: '#' },
+    { name: 'Support', href: '#' },
+  ],
+};
+
+export function Footer() {
+  return (
+    <footer className="relative pt-20 pb-10 overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-muted/30" />
+      
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
+          {/* Brand */}
+          <div className="lg:col-span-2">
+            <motion.a
+              href="#home"
+              className="flex items-center gap-2 mb-6"
+              whileHover={{ scale: 1.05 }}
+            >
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                <span className="font-display font-bold text-primary-foreground text-lg">E</span>
+              </div>
+              <span className="font-display font-bold text-xl text-foreground">
+                Eglaf<span className="text-primary">.</span>
+              </span>
+            </motion.a>
+            
+            <p className="text-muted-foreground mb-6 max-w-sm leading-relaxed">
+              Transforming businesses through innovative technology solutions. 
+              We build the future of digital innovation.
+            </p>
+            
+            <div className="flex gap-3">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  aria-label={social.label}
+                  className="w-10 h-10 rounded-xl glass-card flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/50 transition-colors"
+                >
+                  <social.icon className="w-5 h-5" />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Links */}
+          <div>
+            <h4 className="font-display font-semibold text-foreground mb-4">Services</h4>
+            <ul className="space-y-3">
+              {footerLinks.services.map((link) => (
+                <li key={link.name}>
+                  <a
+                    href={link.href}
+                    className="text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-display font-semibold text-foreground mb-4">Company</h4>
+            <ul className="space-y-3">
+              {footerLinks.company.map((link) => (
+                <li key={link.name}>
+                  <a
+                    href={link.href}
+                    className="text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-display font-semibold text-foreground mb-4">Resources</h4>
+            <ul className="space-y-3">
+              {footerLinks.resources.map((link) => (
+                <li key={link.name}>
+                  <a
+                    href={link.href}
+                    className="text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="pt-8 border-t border-border">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-sm text-muted-foreground">
+              © 2024 Eglaf Technology LLP. All rights reserved.
+            </p>
+            <div className="flex gap-6 text-sm">
+              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                Privacy Policy
+              </a>
+              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                Terms of Service
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+export default Footer;
