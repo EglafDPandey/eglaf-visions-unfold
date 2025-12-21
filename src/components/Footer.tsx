@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { Github, Linkedin, Twitter, Instagram } from 'lucide-react';
 
 const socialLinks = [
@@ -10,22 +11,22 @@ const socialLinks = [
 
 const footerLinks = {
   services: [
-    { name: 'Mobile Development', href: '#services' },
-    { name: 'Web Development', href: '#services' },
-    { name: 'AI Solutions', href: '#services' },
-    { name: 'CRM Development', href: '#services' },
+    { name: 'Mobile Development', href: '/services/mobile-development' },
+    { name: 'Web Development', href: '/services/web-development' },
+    { name: 'AI Solutions', href: '/services/ai-solutions' },
+    { name: 'CRM Development', href: '/services/crm-development' },
   ],
   company: [
-    { name: 'About Us', href: '#about' },
-    { name: 'Our Team', href: '#developers' },
-    { name: 'Careers', href: '#' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'About Us', href: '/about' },
+    { name: 'Our Team', href: '/team' },
+    { name: 'Careers', href: '/careers' },
+    { name: 'Contact', href: '/contact' },
   ],
   resources: [
-    { name: 'Blog', href: '#' },
-    { name: 'Case Studies', href: '#' },
-    { name: 'Documentation', href: '#' },
-    { name: 'Support', href: '#' },
+    { name: 'Blog', href: '/blog' },
+    { name: 'Case Studies', href: '/case-studies' },
+    { name: 'SEO Services', href: '/services/seo-services' },
+    { name: 'Custom Software', href: '/services/custom-software' },
   ],
 };
 
@@ -77,12 +78,12 @@ export function Footer() {
             <ul className="space-y-3">
               {footerLinks.services.map((link) => (
                 <li key={link.name}>
-                  <a
-                    href={link.href}
+                  <Link
+                    to={link.href}
                     className="text-muted-foreground hover:text-primary transition-colors"
                   >
                     {link.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -93,12 +94,12 @@ export function Footer() {
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.name}>
-                  <a
-                    href={link.href}
+                  <Link
+                    to={link.href}
                     className="text-muted-foreground hover:text-primary transition-colors"
                   >
                     {link.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -109,12 +110,12 @@ export function Footer() {
             <ul className="space-y-3">
               {footerLinks.resources.map((link) => (
                 <li key={link.name}>
-                  <a
-                    href={link.href}
+                  <Link
+                    to={link.href}
                     className="text-muted-foreground hover:text-primary transition-colors"
                   >
                     {link.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -128,12 +129,12 @@ export function Footer() {
               © 2024 Eglaf Technology LLP. All rights reserved.
             </p>
             <div className="flex gap-6 text-sm">
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+              <Link to="/privacy-policy" className="text-muted-foreground hover:text-primary transition-colors">
                 Privacy Policy
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+              </Link>
+              <Link to="/terms-of-service" className="text-muted-foreground hover:text-primary transition-colors">
                 Terms of Service
-              </a>
+              </Link>
             </div>
           </div>
         </div>

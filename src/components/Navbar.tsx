@@ -5,12 +5,13 @@ import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const navItems = [
-  { name: 'Home', href: '#home', isHash: true },
+  { name: 'Home', href: '/', isHash: false },
   { name: 'Services', href: '#services', isHash: true },
-  { name: 'Developers', href: '#developers', isHash: true },
-  { name: 'About', href: '#about', isHash: true },
+  { name: 'About', href: '/about', isHash: false },
+  { name: 'Team', href: '/team', isHash: false },
   { name: 'Blog', href: '/blog', isHash: false },
-  { name: 'Contact', href: '#contact', isHash: true },
+  { name: 'Case Studies', href: '/case-studies', isHash: false },
+  { name: 'Contact', href: '/contact', isHash: false },
 ];
 
 export function Navbar() {
