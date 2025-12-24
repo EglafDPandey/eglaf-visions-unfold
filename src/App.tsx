@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import ScrollToTop from "@/components/ScrollToTop";
 import { AuthProvider } from "@/hooks/useAuth";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/AdminLogin";
@@ -39,6 +40,7 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <GoogleAnalytics />
             <ScrollToTop />
             <Routes>
               <Route path="/" element={<Index />} />
