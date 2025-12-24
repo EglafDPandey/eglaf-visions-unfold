@@ -104,6 +104,10 @@ export default {
           "0%, 100%": { boxShadow: "0 0 20px hsla(174, 100%, 50%, 0.3)" },
           "50%": { boxShadow: "0 0 40px hsla(174, 100%, 50%, 0.6)" },
         },
+        "logo-glow": {
+          "0%, 100%": { filter: "drop-shadow(0 0 12px rgba(255, 255, 255, 0.4))" },
+          "50%": { filter: "drop-shadow(0 0 20px rgba(255, 255, 255, 0.7))" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -115,6 +119,7 @@ export default {
         "spin-slow": "spin-slow 20s linear infinite",
         "pulse-subtle": "pulse-subtle 3s ease-in-out infinite",
         "glow-pulse": "glow-pulse 2s ease-in-out infinite",
+        "logo-glow": "logo-glow 3s ease-in-out infinite",
       },
     },
   },

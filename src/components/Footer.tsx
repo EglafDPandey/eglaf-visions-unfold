@@ -49,7 +49,7 @@ export function Footer() {
               <img 
                 src={eglafLogo} 
                 alt="Eglaf Technology" 
-                className="h-16 md:h-20 w-auto object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] hover:drop-shadow-[0_0_25px_rgba(255,255,255,0.8)] transition-all duration-300"
+                className="h-16 md:h-20 w-auto object-contain animate-logo-glow hover:scale-105 transition-transform duration-300"
               />
             </motion.a>
             
