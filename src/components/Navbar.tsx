@@ -94,9 +94,11 @@ export function Navbar() {
         </div>
 
         <div className="hidden md:block">
-          <Button variant="hero" size="lg">
-            Get Quote
-          </Button>
+          <Link to="/quote">
+            <Button variant="hero" size="lg">
+              Get Quote
+            </Button>
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -139,9 +141,11 @@ export function Navbar() {
                   </Link>
                 )
               ))}
-              <Button variant="hero" className="mt-2">
-                Get Quote
-              </Button>
+              <Link to="/quote" onClick={() => setIsMobileMenuOpen(false)}>
+                <Button variant="hero" className="mt-2 w-full">
+                  Get Quote
+                </Button>
+              </Link>
             </div>
           </motion.div>
         )}
