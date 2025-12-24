@@ -54,7 +54,7 @@ export function Navbar() {
             <img 
               src={eglafLogo} 
               alt="Eglaf Technology" 
-              className="h-10 md:h-12 w-auto"
+              className="h-14 md:h-16 w-auto object-contain"
             />
           </motion.div>
         </Link>

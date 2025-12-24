@@ -49,7 +49,7 @@ export function Footer() {
               <img 
                 src={eglafLogo} 
                 alt="Eglaf Technology" 
-                className="h-12 w-auto"
+                className="h-16 w-auto object-contain"
               />
             </motion.a>
             
