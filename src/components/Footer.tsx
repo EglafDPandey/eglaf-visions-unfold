@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Github, Linkedin, Twitter, Instagram } from 'lucide-react';
+import eglafLogo from '@/assets/eglaf-logo.png';
 
 const socialLinks = [
   { icon: Github, href: '#', label: 'GitHub' },
@@ -42,15 +43,14 @@ export function Footer() {
           <div className="lg:col-span-2">
             <motion.a
               href="#home"
-              className="flex items-center gap-2 mb-6"
+              className="flex items-center mb-6"
               whileHover={{ scale: 1.05 }}
             >
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                <span className="font-display font-bold text-primary-foreground text-lg">E</span>
-              </div>
-              <span className="font-display font-bold text-xl text-foreground">
-                Eglaf<span className="text-primary">.</span>
-              </span>
+              <img 
+                src={eglafLogo} 
+                alt="Eglaf Technology" 
+                className="h-12 w-auto"
+              />
             </motion.a>
             
             <p className="text-muted-foreground mb-6 max-w-sm leading-relaxed">

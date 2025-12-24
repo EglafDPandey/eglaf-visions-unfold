@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import eglafLogo from '@/assets/eglaf-logo.png';
 
 const navItems = [
   { name: 'Home', href: '/', isHash: false },
@@ -46,16 +47,15 @@ export function Navbar() {
       <div className="container mx-auto px-4 flex items-center justify-between">
         <Link to="/">
           <motion.div
-            className="flex items-center gap-2"
+            className="flex items-center"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-              <span className="font-display font-bold text-primary-foreground text-lg">E</span>
-            </div>
-            <span className="font-display font-bold text-xl text-foreground">
-              Eglaf<span className="text-primary">.</span>
-            </span>
+            <img 
+              src={eglafLogo} 
+              alt="Eglaf Technology" 
+              className="h-10 md:h-12 w-auto"
+            />
           </motion.div>
         </Link>
 
