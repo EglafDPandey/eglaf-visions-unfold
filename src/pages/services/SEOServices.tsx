@@ -5,6 +5,7 @@ import { ArrowLeft, Search, TrendingUp, Target, BarChart3, Globe, Zap } from 'lu
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { SpaceBackground } from '@/components/SpaceBackground';
 
 const services = [
   {
@@ -57,10 +58,7 @@ export default function SEOServices() {
       
       {/* Hero Section */}
       <section ref={heroRef} className="pt-32 pb-20 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-20 right-20 w-80 h-80 bg-accent/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-40 left-20 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
-        </div>
+        <SpaceBackground />
         
         <div className="container mx-auto px-4 relative z-10">
           <Link to="/#services">
@@ -115,7 +113,19 @@ export default function SEOServices() {
       <section ref={servicesRef} className="py-24 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
         
-        <div className="container mx-auto px-4">
+        {/* Floating elements */}
+        <motion.div
+          className="absolute top-20 right-20 w-24 h-24 border border-accent/20 rounded-full"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        />
+        <motion.div
+          className="absolute bottom-40 left-10 w-16 h-16 border border-primary/20 rounded-full"
+          animate={{ rotate: -360 }}
+          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+        />
+        
+        <div className="container mx-auto px-4 relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isServicesInView ? { opacity: 1, y: 0 } : {}}
@@ -135,21 +145,39 @@ export default function SEOServices() {
             {services.map((service, index) => (
               <motion.div
                 key={service.name}
-                initial={{ opacity: 0, y: 50 }}
-                animate={isServicesInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -10 }}
-                className="group glass-card-hover p-8"
+                initial={{ opacity: 0, y: 50, rotateY: -10 }}
+                animate={isServicesInView ? { opacity: 1, y: 0, rotateY: 0 } : {}}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                whileHover={{ 
+                  y: -15, 
+                  scale: 1.02,
+                  boxShadow: '0 25px 50px -15px hsl(var(--accent) / 0.25)'
+                }}
+                className="group glass-card-hover p-8 relative overflow-hidden"
               >
-                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${service.color} p-0.5 mb-6`}>
+                {/* Animated background glow */}
+                <motion.div
+                  className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
+                />
+                
+                <motion.div 
+                  className={`w-14 h-14 rounded-xl bg-gradient-to-br ${service.color} p-0.5 mb-6 relative`}
+                  whileHover={{ rotate: 360, scale: 1.1 }}
+                  transition={{ duration: 0.5 }}
+                >
                   <div className="w-full h-full rounded-xl bg-card flex items-center justify-center">
                     <service.icon className="w-7 h-7 text-primary" />
                   </div>
-                </div>
-                <h3 className="text-xl font-display font-bold text-foreground mb-3 group-hover:text-accent transition-colors">
+                </motion.div>
+                <h3 className="text-xl font-display font-bold text-foreground mb-3 group-hover:text-accent transition-colors relative">
                   {service.name}
                 </h3>
-                <p className="text-muted-foreground">{service.description}</p>
+                <p className="text-muted-foreground relative">{service.description}</p>
+                
+                {/* Decorative corner accent */}
+                <motion.div
+                  className={`absolute -bottom-2 -right-2 w-16 h-16 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-20 rounded-tl-full transition-opacity duration-500`}
+                />
               </motion.div>
             ))}
           </div>

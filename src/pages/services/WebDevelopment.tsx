@@ -5,6 +5,7 @@ import { ArrowLeft, Globe, Palette, Code, Zap, Lock, Gauge } from 'lucide-react'
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { SpaceBackground } from '@/components/SpaceBackground';
 
 const technologies = [
   {
@@ -58,10 +59,7 @@ export default function WebDevelopment() {
       
       {/* Hero Section */}
       <section ref={heroRef} className="pt-32 pb-20 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-32 left-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-20 right-1/4 w-80 h-80 bg-secondary/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }} />
-        </div>
+        <SpaceBackground />
         
         <div className="container mx-auto px-4 relative z-10">
           <Link to="/#services">
@@ -113,22 +111,35 @@ export default function WebDevelopment() {
       </section>
 
       {/* Features */}
-      <section className="py-20">
+      <section className="py-20 relative">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="glass-card p-6 text-center hover:border-accent/50 transition-colors"
+                initial={{ opacity: 0, y: 30, rotateX: -15 }}
+                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.15 }}
+                whileHover={{ 
+                  scale: 1.05, 
+                  y: -10,
+                  boxShadow: '0 20px 40px -15px hsl(var(--accent) / 0.3)'
+                }}
+                className="glass-card p-6 text-center hover:border-accent/50 transition-colors relative group"
               >
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-accent/20 to-secondary/20 flex items-center justify-center mx-auto mb-4">
+                <motion.div 
+                  className="absolute inset-0 bg-gradient-to-br from-accent/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                />
+                <motion.div 
+                  className="w-14 h-14 rounded-xl bg-gradient-to-br from-accent/20 to-secondary/20 flex items-center justify-center mx-auto mb-4 relative"
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.6 }}
+                >
                   <feature.icon className="w-7 h-7 text-accent" />
-                </div>
-                <h3 className="font-display font-semibold text-foreground mb-2">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground">{feature.description}</p>
+                </motion.div>
+                <h3 className="font-display font-semibold text-foreground mb-2 relative">{feature.title}</h3>
+                <p className="text-sm text-muted-foreground relative">{feature.description}</p>
               </motion.div>
             ))}
           </div>
