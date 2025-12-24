@@ -5,7 +5,7 @@ import { ArrowLeft, Globe, Palette, Code, Zap, Lock, Gauge, FileText } from 'luc
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { SEO } from '@/components/SEO';
+import { SEO, schemas } from '@/components/SEO';
 import { SpaceBackground } from '@/components/SpaceBackground';
 
 const technologies = [
@@ -72,6 +72,11 @@ export default function WebDevelopment() {
         title="Web Development Services"
         description="Create stunning, high-performance websites with Eglaf Technology. From landing pages to complex web applications, we deliver exceptional digital experiences."
         keywords="web development, website design, React, Next.js, Vue.js, web apps"
+        schema={schemas.service({
+          name: 'Web Development Services',
+          description: 'Create stunning, high-performance websites with Eglaf Technology. From landing pages to complex web applications using React, Next.js, Vue.js, and modern technologies.',
+          url: 'https://eglaftechnology.com/services/web-development',
+        })}
       />
       <Navbar />
       
