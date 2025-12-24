@@ -5,6 +5,7 @@ import { ArrowLeft, Code2, Server, Cloud, Shield, Workflow, Settings, FileText }
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { SEO } from '@/components/SEO';
 import { SpaceBackground } from '@/components/SpaceBackground';
 
 const technologies = [
@@ -43,6 +44,11 @@ export default function CustomSoftware() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Custom Software Development"
+        description="Enterprise-grade custom software development by Eglaf Technology. .NET, Java, Python, and cloud solutions for your business needs."
+        keywords="custom software, enterprise software, .NET development, Java development, cloud solutions"
+      />
       <Navbar />
       
       <section ref={heroRef} className="pt-32 pb-20 relative overflow-hidden">

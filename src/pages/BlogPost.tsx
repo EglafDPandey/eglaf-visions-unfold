@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { SEO } from '@/components/SEO';
 
 interface Blog {
   id: string;
@@ -89,6 +90,11 @@ export default function BlogPost() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title={blog.title}
+        description={blog.excerpt || `Read ${blog.title} on Eglaf Technology's blog.`}
+        ogImage={blog.cover_image || undefined}
+      />
       <Navbar />
 
       {/* Hero Section */}

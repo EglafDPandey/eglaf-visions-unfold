@@ -5,6 +5,7 @@ import { ArrowLeft, Search, TrendingUp, Target, BarChart3, Globe, Zap, FileText 
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { SEO } from '@/components/SEO';
 import { SpaceBackground } from '@/components/SpaceBackground';
 
 const services = [
@@ -66,6 +67,11 @@ export default function SEOServices() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="SEO Services"
+        description="Professional SEO services by Eglaf Technology. Technical SEO, on-page optimization, and link building to boost your search rankings."
+        keywords="SEO services, search engine optimization, technical SEO, on-page SEO, link building"
+      />
       <Navbar />
       
       {/* Hero Section */}

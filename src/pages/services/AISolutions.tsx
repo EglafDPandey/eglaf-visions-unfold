@@ -5,6 +5,7 @@ import { ArrowLeft, Bot, Brain, Cpu, Network, Sparkles, Workflow, MessageSquare,
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { SEO } from '@/components/SEO';
 
 const technologies = [
   {
@@ -84,6 +85,11 @@ export default function AISolutions() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="AI Solutions"
+        description="Harness the power of AI with Eglaf Technology. We develop intelligent solutions for chatbots, predictive analytics, process automation, and more."
+        keywords="AI solutions, artificial intelligence, machine learning, chatbots, predictive analytics"
+      />
       <Navbar />
       
       {/* Hero Section */}

@@ -5,6 +5,7 @@ import { ArrowLeft, Globe, Palette, Code, Zap, Lock, Gauge, FileText } from 'luc
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { SEO } from '@/components/SEO';
 import { SpaceBackground } from '@/components/SpaceBackground';
 
 const technologies = [
@@ -67,6 +68,11 @@ export default function WebDevelopment() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Web Development Services"
+        description="Create stunning, high-performance websites with Eglaf Technology. From landing pages to complex web applications, we deliver exceptional digital experiences."
+        keywords="web development, website design, React, Next.js, Vue.js, web apps"
+      />
       <Navbar />
       
       {/* Hero Section */}

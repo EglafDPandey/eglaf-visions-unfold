@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Smartphone, Globe, Bot, Database } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { SEO } from '@/components/SEO';
 
 const categories = [
   { name: 'Mobile Development', icon: Smartphone, color: 'from-primary to-accent' },
@@ -23,6 +24,11 @@ const caseStudies = [
 export default function CaseStudies() {
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Case Studies"
+        description="Explore Eglaf Technology's success stories. See how we've helped businesses transform with mobile apps, web platforms, AI solutions, and CRM systems."
+        keywords="case studies, success stories, client projects, software development"
+      />
       <Navbar />
       
       <section className="pt-32 pb-20 relative overflow-hidden">
