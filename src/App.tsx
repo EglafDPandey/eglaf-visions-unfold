@@ -15,6 +15,7 @@ import Team from "./pages/Team";
 import Careers from "./pages/Careers";
 import Contact from "./pages/Contact";
 import CaseStudies from "./pages/CaseStudies";
+import CaseStudyDetail from "./pages/CaseStudyDetail";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import MobileAppDevelopment from "./pages/services/MobileAppDevelopment";
@@ -42,6 +43,7 @@ const App = () => (
             <Route path="/careers" element={<Careers />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/case-studies" element={<CaseStudies />} />
+            <Route path="/case-studies/:slug" element={<CaseStudyDetail />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/services/mobile-development" element={<MobileAppDevelopment />} />
