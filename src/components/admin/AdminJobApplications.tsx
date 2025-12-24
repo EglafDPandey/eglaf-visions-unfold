@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Eye, Trash2, Mail, Phone, Calendar, Briefcase, Linkedin, FileText } from 'lucide-react';
+import { Eye, Trash2, Mail, Phone, Calendar, Briefcase, Linkedin, FileText, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -28,6 +28,7 @@ export default function AdminJobApplications() {
   const [applications, setApplications] = useState<JobApplication[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedApplication, setSelectedApplication] = useState<JobApplication | null>(null);
+  const [downloadingCV, setDownloadingCV] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -108,6 +109,35 @@ export default function AdminJobApplications() {
         return 'bg-emerald-500/20 text-emerald-400';
       default:
         return 'bg-muted text-muted-foreground';
+    }
+  };
+
+  const handleDownloadCV = async (cvUrl: string) => {
+    setDownloadingCV(true);
+    try {
+      const { data, error } = await supabase.storage
+        .from('resumes')
+        .createSignedUrl(cvUrl, 60); // 60 second expiry
+
+      if (error) {
+        toast({
+          title: 'Error',
+          description: 'Failed to generate download link',
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      // Open in new tab
+      window.open(data.signedUrl, '_blank');
+    } catch (err) {
+      toast({
+        title: 'Error',
+        description: 'Failed to download resume',
+        variant: 'destructive',
+      });
+    } finally {
+      setDownloadingCV(false);
     }
   };
 
@@ -238,10 +268,20 @@ export default function AdminJobApplications() {
               {selectedApplication.cv_url && (
                 <div>
                   <p className="text-sm text-muted-foreground">Resume</p>
-                  <p className="flex items-center gap-1 text-foreground">
-                    <FileText className="w-4 h-4" />
-                    {selectedApplication.cv_url}
-                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleDownloadCV(selectedApplication.cv_url!)}
+                    disabled={downloadingCV}
+                    className="mt-1"
+                  >
+                    {downloadingCV ? (
+                      <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-primary mr-2" />
+                    ) : (
+                      <Download className="w-4 h-4 mr-2" />
+                    )}
+                    Download Resume
+                  </Button>
                 </div>
               )}
               {selectedApplication.cover_letter && (
