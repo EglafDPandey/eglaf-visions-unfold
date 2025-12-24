@@ -49,9 +49,9 @@ export default function Careers() {
                       <span className="flex items-center gap-1"><Briefcase className="w-4 h-4" />{pos.department}</span>
                     </div>
                   </div>
-                  <Link to={`/apply?position=${encodeURIComponent(pos.title)}`}>
-                    <Button variant="outline">Apply Now</Button>
-                  </Link>
+                  <Button variant="outline" asChild>
+                    <Link to={`/apply?position=${encodeURIComponent(pos.title)}`}>Apply Now</Link>
+                  </Button>
                 </motion.div>
               ))}
             </div>
