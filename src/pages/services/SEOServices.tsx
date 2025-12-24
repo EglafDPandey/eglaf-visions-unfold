@@ -54,7 +54,7 @@ export default function SEOServices() {
   const navigate = useNavigate();
 
   const handleGetQuote = () => {
-    navigate('/contact?service=SEO Services&subject=Quote Request: SEO Services');
+    navigate('/quote?service=SEO Services');
   };
 
   return (

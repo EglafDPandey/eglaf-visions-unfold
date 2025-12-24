@@ -31,7 +31,7 @@ export default function CustomSoftware() {
   const navigate = useNavigate();
 
   const handleGetQuote = () => {
-    navigate('/contact?service=Custom Software Development&subject=Quote Request: Custom Software Development');
+    navigate('/quote?service=Custom Software Development');
   };
 
   return (

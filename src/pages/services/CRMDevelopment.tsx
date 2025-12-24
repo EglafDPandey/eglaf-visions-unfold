@@ -61,7 +61,7 @@ export default function CRMDevelopment() {
   const navigate = useNavigate();
 
   const handleGetQuote = () => {
-    navigate('/contact?service=CRM Development&subject=Quote Request: CRM Development');
+    navigate('/quote?service=CRM Development');
   };
 
   return (
