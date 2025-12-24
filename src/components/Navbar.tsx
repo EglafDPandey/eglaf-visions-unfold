@@ -32,13 +32,6 @@ export const Navbar = forwardRef<HTMLElement, object>(function Navbar(_props, re
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavClick = (item: typeof navItems[0]) => {
-    if (item.isHash && location.pathname !== '/') {
-      // If we're not on home page and clicking a hash link, go to home first
-      window.location.href = '/' + item.href;
-    }
-    setIsMobileMenuOpen(false);
-  };
 
   return (
     <motion.nav
@@ -69,17 +62,20 @@ export const Navbar = forwardRef<HTMLElement, object>(function Navbar(_props, re
         <div className="hidden md:flex items-center gap-8">
           {navItems.map((item, index) => (
             item.isHash ? (
-              <motion.a
+              <motion.div
                 key={item.name}
-                href={location.pathname === '/' ? item.href : '/' + item.href}
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="text-muted-foreground hover:text-primary transition-colors duration-300 font-medium relative group"
               >
-                {item.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
-              </motion.a>
+                <Link
+                  to={{ pathname: '/', hash: item.href }}
+                  className="text-muted-foreground hover:text-primary transition-colors duration-300 font-medium relative group"
+                >
+                  {item.name}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
+                </Link>
+              </motion.div>
             ) : (
               <motion.div
                 key={item.name}
@@ -128,14 +124,14 @@ export const Navbar = forwardRef<HTMLElement, object>(function Navbar(_props, re
             <div className="flex flex-col p-4 gap-4">
               {navItems.map((item) => (
                 item.isHash ? (
-                  <a
+                  <Link
                     key={item.name}
-                    href={location.pathname === '/' ? item.href : '/' + item.href}
+                    to={{ pathname: '/', hash: item.href }}
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="text-foreground hover:text-primary transition-colors py-2 font-medium"
                   >
                     {item.name}
-                  </a>
+                  </Link>
                 ) : (
                   <Link
                     key={item.name}

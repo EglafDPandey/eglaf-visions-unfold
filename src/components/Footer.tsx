@@ -42,17 +42,18 @@ export const Footer = forwardRef<HTMLElement, object>(function Footer(_props, re
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <motion.a
-              href="#home"
-              className="inline-flex items-center mb-6"
-              whileHover={{ scale: 1.05 }}
-            >
-              <img 
-                src={eglafLogo} 
-                alt="Eglaf Technology" 
-                className="h-16 md:h-20 w-auto object-contain animate-logo-glow hover:scale-105 transition-transform duration-300"
-              />
-            </motion.a>
+            <Link to="/#home" className="inline-flex items-center mb-6">
+              <motion.div
+                className="inline-flex items-center"
+                whileHover={{ scale: 1.05 }}
+              >
+                <img 
+                  src={eglafLogo} 
+                  alt="Eglaf Technology" 
+                  className="h-16 md:h-20 w-auto object-contain animate-logo-glow hover:scale-105 transition-transform duration-300"
+                />
+              </motion.div>
+            </Link>
             
             <p className="text-muted-foreground mb-6 max-w-sm leading-relaxed">
               Transforming businesses through innovative technology solutions. 
