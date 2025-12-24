@@ -7,10 +7,9 @@ import { Button } from '@/components/ui/button';
 const navItems = [
   { name: 'Home', href: '/', isHash: false },
   { name: 'Services', href: '#services', isHash: true },
+  { name: 'Portfolio', href: '/portfolio', isHash: false },
   { name: 'About', href: '/about', isHash: false },
-  { name: 'Team', href: '/team', isHash: false },
   { name: 'Blog', href: '/blog', isHash: false },
-  { name: 'Case Studies', href: '/case-studies', isHash: false },
   { name: 'Contact', href: '/contact', isHash: false },
 ];
 
