@@ -50,7 +50,7 @@ export function Footer() {
                 <img 
                   src={eglafLogo} 
                   alt="Eglaf Technology" 
-                  className="h-12 w-auto object-contain drop-shadow-md"
+                  className="h-16 md:h-20 w-auto object-contain drop-shadow-md"
                 />
               </div>
             </motion.a>
