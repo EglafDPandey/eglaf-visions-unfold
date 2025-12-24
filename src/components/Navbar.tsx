@@ -54,8 +54,7 @@ export function Navbar() {
             <img 
               src={eglafLogo} 
               alt="Eglaf Technology" 
-              className="h-16 md:h-20 lg:h-24 w-auto object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.3)] brightness-110 contrast-110"
-              style={{ filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.4))' }}
+              className="h-14 md:h-16 lg:h-20 w-auto object-contain"
             />
           </motion.div>
         </Link>
