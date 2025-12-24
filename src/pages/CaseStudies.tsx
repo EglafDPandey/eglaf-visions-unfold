@@ -12,12 +12,12 @@ const categories = [
 ];
 
 const caseStudies = [
-  { title: 'E-Commerce Mobile App', category: 'Mobile Development', image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop', description: 'Built a high-performance shopping app with 1M+ downloads' },
-  { title: 'Healthcare Platform', category: 'Web Development', image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&h=400&fit=crop', description: 'Telemedicine platform serving 50,000+ patients monthly' },
-  { title: 'Predictive Analytics System', category: 'AI Development', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop', description: 'AI-powered forecasting reducing costs by 30%' },
-  { title: 'Sales CRM Solution', category: 'CRM Development', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop', description: 'Custom CRM increasing sales efficiency by 45%' },
-  { title: 'Fintech Mobile App', category: 'Mobile Development', image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=600&h=400&fit=crop', description: 'Digital banking app with advanced security features' },
-  { title: 'AI Chatbot Platform', category: 'AI Development', image: 'https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=600&h=400&fit=crop', description: 'Conversational AI handling 10,000+ queries daily' },
+  { title: 'E-Commerce Mobile App', slug: 'e-commerce-mobile-app', category: 'Mobile Development', image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop', description: 'Built a high-performance shopping app with 1M+ downloads' },
+  { title: 'Healthcare Platform', slug: 'healthcare-platform', category: 'Web Development', image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&h=400&fit=crop', description: 'Telemedicine platform serving 50,000+ patients monthly' },
+  { title: 'Predictive Analytics System', slug: 'predictive-analytics-system', category: 'AI Development', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop', description: 'AI-powered forecasting reducing costs by 30%' },
+  { title: 'Sales CRM Solution', slug: 'sales-crm-solution', category: 'CRM Development', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop', description: 'Custom CRM increasing sales efficiency by 45%' },
+  { title: 'Fintech Mobile App', slug: 'fintech-mobile-app', category: 'Mobile Development', image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=600&h=400&fit=crop', description: 'Digital banking app with advanced security features' },
+  { title: 'AI Chatbot Platform', slug: 'ai-chatbot-platform', category: 'AI Development', image: 'https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=600&h=400&fit=crop', description: 'Conversational AI handling 10,000+ queries daily' },
 ];
 
 export default function CaseStudies() {
@@ -54,19 +54,21 @@ export default function CaseStudies() {
           {/* Case Studies Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {caseStudies.map((study, i) => (
-              <motion.div key={study.title} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} whileHover={{ y: -10 }} className="group glass-card overflow-hidden">
-                <div className="aspect-video overflow-hidden">
-                  <img src={study.image} alt={study.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                </div>
-                <div className="p-6">
-                  <span className="text-xs text-primary font-medium">{study.category}</span>
-                  <h3 className="font-display font-semibold text-lg mt-2 mb-2 group-hover:text-primary transition-colors">{study.title}</h3>
-                  <p className="text-sm text-muted-foreground mb-4">{study.description}</p>
-                  <span className="flex items-center gap-2 text-primary text-sm font-medium">
-                    Read Case Study <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </span>
-                </div>
-              </motion.div>
+              <Link key={study.title} to={`/case-studies/${study.slug}`}>
+                <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} whileHover={{ y: -10 }} className="group glass-card overflow-hidden h-full">
+                  <div className="aspect-video overflow-hidden">
+                    <img src={study.image} alt={study.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  </div>
+                  <div className="p-6">
+                    <span className="text-xs text-primary font-medium">{study.category}</span>
+                    <h3 className="font-display font-semibold text-lg mt-2 mb-2 group-hover:text-primary transition-colors">{study.title}</h3>
+                    <p className="text-sm text-muted-foreground mb-4">{study.description}</p>
+                    <span className="flex items-center gap-2 text-primary text-sm font-medium">
+                      Read Case Study <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                  </div>
+                </motion.div>
+              </Link>
             ))}
           </div>
         </div>
