@@ -1,5 +1,7 @@
+import { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Quote, Star } from 'lucide-react';
+import Autoplay from 'embla-carousel-autoplay';
 import {
   Carousel,
   CarouselContent,
@@ -54,6 +56,9 @@ const testimonials = [
 ];
 
 export function TestimonialsSection() {
+  const autoplayPlugin = useRef(
+    Autoplay({ delay: 4000, stopOnInteraction: false, stopOnMouseEnter: true })
+  );
   return (
     <section className="py-24 bg-secondary/30 relative overflow-hidden">
       {/* Background Elements */}
@@ -91,6 +96,7 @@ export function TestimonialsSection() {
               align: 'start',
               loop: true,
             }}
+            plugins={[autoplayPlugin.current]}
             className="w-full max-w-6xl mx-auto"
           >
             <CarouselContent className="-ml-4">
