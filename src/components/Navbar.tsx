@@ -54,7 +54,7 @@ export function Navbar() {
             <img 
               src={eglafLogo} 
               alt="Eglaf Technology" 
-              className="h-14 md:h-16 lg:h-20 w-auto object-contain"
+              className="h-14 md:h-16 lg:h-20 w-auto object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] hover:drop-shadow-[0_0_25px_rgba(255,255,255,0.8)] transition-all duration-300"
             />
           </motion.div>
         </Link>
