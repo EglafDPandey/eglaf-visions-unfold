@@ -97,10 +97,18 @@ export default function Apply() {
 
       // Upload CV if selected
       if (selectedFile) {
-        const fileExt = selectedFile.name.split('.').pop();
-        const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+        // Validate file extension (whitelist approach)
+        const allowedExtensions = ['pdf', 'doc', 'docx'];
+        const fileExt = selectedFile.name.split('.').pop()?.toLowerCase().replace(/[^a-z0-9]/g, '') || '';
         
-        const { data: uploadData, error: uploadError } = await supabase.storage
+        if (!allowedExtensions.includes(fileExt)) {
+          throw new Error('Invalid file type. Please upload PDF or Word documents only.');
+        }
+        
+        // Generate safe filename
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
+        
+        const { error: uploadError } = await supabase.storage
           .from('resumes')
           .upload(fileName, selectedFile);
 
@@ -108,11 +116,8 @@ export default function Apply() {
           throw new Error('Failed to upload CV: ' + uploadError.message);
         }
 
-        const { data: { publicUrl } } = supabase.storage
-          .from('resumes')
-          .getPublicUrl(fileName);
-        
-        cvUrl = publicUrl;
+        // Store the path reference (not public URL since bucket is now private)
+        cvUrl = fileName;
       }
 
       // Insert application into database
