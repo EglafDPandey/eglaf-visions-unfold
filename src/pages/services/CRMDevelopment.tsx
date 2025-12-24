@@ -5,6 +5,7 @@ import { ArrowLeft, Database, Users, BarChart3, Settings, Shield, Cloud, Puzzle,
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { SpaceBackground } from '@/components/SpaceBackground';
 
 const technologies = [
   {
@@ -64,30 +65,28 @@ export default function CRMDevelopment() {
       
       {/* Hero Section */}
       <section ref={heroRef} className="pt-32 pb-20 relative overflow-hidden">
-        <div className="absolute inset-0">
-          {/* Animated grid background */}
-          <div className="absolute inset-0 opacity-20">
-            {[...Array(10)].map((_, i) => (
-              <motion.div
-                key={`h-${i}`}
-                className="absolute h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent w-full"
-                style={{ top: `${10 + i * 10}%` }}
-                animate={{ opacity: [0.2, 0.5, 0.2] }}
-                transition={{ duration: 3, repeat: Infinity, delay: i * 0.2 }}
-              />
-            ))}
-            {[...Array(10)].map((_, i) => (
-              <motion.div
-                key={`v-${i}`}
-                className="absolute w-px bg-gradient-to-b from-transparent via-primary/50 to-transparent h-full"
-                style={{ left: `${10 + i * 10}%` }}
-                animate={{ opacity: [0.2, 0.5, 0.2] }}
-                transition={{ duration: 3, repeat: Infinity, delay: i * 0.2 }}
-              />
-            ))}
-          </div>
-          <div className="absolute top-40 left-20 w-80 h-80 bg-primary/15 rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-accent/15 rounded-full blur-3xl" />
+        <SpaceBackground />
+        
+        {/* Additional animated grid overlay */}
+        <div className="absolute inset-0 opacity-20 pointer-events-none">
+          {[...Array(8)].map((_, i) => (
+            <motion.div
+              key={`h-${i}`}
+              className="absolute h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent w-full"
+              style={{ top: `${15 + i * 12}%` }}
+              animate={{ opacity: [0.2, 0.5, 0.2] }}
+              transition={{ duration: 3, repeat: Infinity, delay: i * 0.2 }}
+            />
+          ))}
+          {[...Array(8)].map((_, i) => (
+            <motion.div
+              key={`v-${i}`}
+              className="absolute w-px bg-gradient-to-b from-transparent via-primary/50 to-transparent h-full"
+              style={{ left: `${15 + i * 12}%` }}
+              animate={{ opacity: [0.2, 0.5, 0.2] }}
+              transition={{ duration: 3, repeat: Infinity, delay: i * 0.2 }}
+            />
+          ))}
         </div>
         
         <div className="container mx-auto px-4 relative z-10">
@@ -140,22 +139,35 @@ export default function CRMDevelopment() {
       </section>
 
       {/* Features */}
-      <section className="py-20">
+      <section className="py-20 relative">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="glass-card p-6 text-center hover:border-primary/50 transition-colors"
+                initial={{ opacity: 0, y: 30, rotateX: -15 }}
+                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.15 }}
+                whileHover={{ 
+                  scale: 1.05, 
+                  y: -10,
+                  boxShadow: '0 20px 40px -15px hsl(var(--primary) / 0.3)'
+                }}
+                className="glass-card p-6 text-center hover:border-primary/50 transition-colors relative group"
               >
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center mx-auto mb-4">
+                <motion.div 
+                  className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                />
+                <motion.div 
+                  className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center mx-auto mb-4 relative"
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.6 }}
+                >
                   <feature.icon className="w-7 h-7 text-primary" />
-                </div>
-                <h3 className="font-display font-semibold text-foreground mb-2">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground">{feature.description}</p>
+                </motion.div>
+                <h3 className="font-display font-semibold text-foreground mb-2 relative">{feature.title}</h3>
+                <p className="text-sm text-muted-foreground relative">{feature.description}</p>
               </motion.div>
             ))}
           </div>

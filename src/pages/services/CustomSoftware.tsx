@@ -5,6 +5,7 @@ import { ArrowLeft, Code2, Server, Cloud, Shield, Workflow, Settings } from 'luc
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { SpaceBackground } from '@/components/SpaceBackground';
 
 const technologies = [
   { name: '.NET Core', description: 'Enterprise-grade Microsoft framework', color: 'from-[#512BD4] to-[#68217A]' },
@@ -33,10 +34,7 @@ export default function CustomSoftware() {
       <Navbar />
       
       <section ref={heroRef} className="pt-32 pb-20 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-20 w-96 h-96 bg-secondary/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-20 w-80 h-80 bg-accent/20 rounded-full blur-3xl" />
-        </div>
+        <SpaceBackground />
         
         <div className="container mx-auto px-4 relative z-10">
           <Link to="/#services">
@@ -88,22 +86,35 @@ export default function CustomSoftware() {
       </section>
 
       {/* Services */}
-      <section className="py-20">
+      <section className="py-20 relative">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.map((service, index) => (
               <motion.div
                 key={service.title}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="glass-card p-6 text-center hover:border-secondary/50 transition-colors"
+                initial={{ opacity: 0, y: 30, rotateX: -15 }}
+                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.15 }}
+                whileHover={{ 
+                  scale: 1.05, 
+                  y: -10,
+                  boxShadow: '0 20px 40px -15px hsl(var(--secondary) / 0.3)'
+                }}
+                className="glass-card p-6 text-center hover:border-secondary/50 transition-colors relative group"
               >
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-secondary/20 to-accent/20 flex items-center justify-center mx-auto mb-4">
+                <motion.div 
+                  className="absolute inset-0 bg-gradient-to-br from-secondary/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                />
+                <motion.div 
+                  className="w-14 h-14 rounded-xl bg-gradient-to-br from-secondary/20 to-accent/20 flex items-center justify-center mx-auto mb-4 relative"
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.6 }}
+                >
                   <service.icon className="w-7 h-7 text-secondary" />
-                </div>
-                <h3 className="font-display font-semibold text-foreground mb-2">{service.title}</h3>
-                <p className="text-sm text-muted-foreground">{service.description}</p>
+                </motion.div>
+                <h3 className="font-display font-semibold text-foreground mb-2 relative">{service.title}</h3>
+                <p className="text-sm text-muted-foreground relative">{service.description}</p>
               </motion.div>
             ))}
           </div>

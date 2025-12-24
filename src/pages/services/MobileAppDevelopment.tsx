@@ -5,6 +5,7 @@ import { ArrowLeft, Smartphone, Zap, Shield, Layers, Code2, Rocket } from 'lucid
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { SpaceBackground } from '@/components/SpaceBackground';
 
 const technologies = [
   {
@@ -58,10 +59,7 @@ export default function MobileAppDevelopment() {
       
       {/* Hero Section */}
       <section ref={heroRef} className="pt-32 pb-20 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-primary/20 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-        </div>
+        <SpaceBackground />
         
         <div className="container mx-auto px-4 relative z-10">
           <Link to="/#services">
@@ -113,22 +111,36 @@ export default function MobileAppDevelopment() {
       </section>
 
       {/* Features */}
-      <section className="py-20">
+      <section className="py-20 relative">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="glass-card p-6 text-center hover:border-primary/50 transition-colors"
+                initial={{ opacity: 0, y: 30, rotateX: -15 }}
+                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.15 }}
+                whileHover={{ 
+                  scale: 1.05, 
+                  y: -10,
+                  boxShadow: '0 20px 40px -15px hsl(var(--primary) / 0.3)'
+                }}
+                className="glass-card p-6 text-center hover:border-primary/50 transition-colors relative group"
               >
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center mx-auto mb-4">
+                {/* Glow effect on hover */}
+                <motion.div 
+                  className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                />
+                <motion.div 
+                  className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center mx-auto mb-4 relative"
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.6 }}
+                >
                   <feature.icon className="w-7 h-7 text-primary" />
-                </div>
-                <h3 className="font-display font-semibold text-foreground mb-2">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground">{feature.description}</p>
+                </motion.div>
+                <h3 className="font-display font-semibold text-foreground mb-2 relative">{feature.title}</h3>
+                <p className="text-sm text-muted-foreground relative">{feature.description}</p>
               </motion.div>
             ))}
           </div>
@@ -197,27 +209,80 @@ export default function MobileAppDevelopment() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24">
-        <div className="container mx-auto px-4">
+      <section className="py-24 relative overflow-hidden">
+        {/* Floating orbs */}
+        <motion.div
+          className="absolute top-10 left-10 w-32 h-32 bg-primary/20 rounded-full blur-2xl"
+          animate={{ y: [-20, 20, -20], x: [-10, 10, -10] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-10 right-10 w-40 h-40 bg-accent/20 rounded-full blur-2xl"
+          animate={{ y: [20, -20, 20], x: [10, -10, 10] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
+        
+        <div className="container mx-auto px-4 relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: true }}
-            className="glass-card p-12 text-center relative overflow-hidden"
+            transition={{ duration: 0.6 }}
+            className="glass-card p-12 text-center relative overflow-hidden group"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-secondary/10" />
+            {/* Animated gradient background */}
+            <motion.div 
+              className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10"
+              animate={{ 
+                backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
+              }}
+              transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+            />
+            
+            {/* Pulsing ring */}
+            <motion.div
+              className="absolute inset-0 border border-primary/20 rounded-2xl"
+              animate={{ scale: [1, 1.02, 1], opacity: [0.5, 0.8, 0.5] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            />
+            
             <div className="relative z-10">
-              <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
+              <motion.h2 
+                className="text-3xl md:text-4xl font-display font-bold mb-4"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+              >
                 Ready to Build Your Mobile App?
-              </h2>
-              <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+              </motion.h2>
+              <motion.p 
+                className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+              >
                 Let's discuss your project and create something amazing together.
-              </p>
-              <Link to="/contact">
-                <Button variant="hero" size="lg">
-                  Get Free Consultation
-                </Button>
-              </Link>
+              </motion.p>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4 }}
+              >
+                <Link to="/contact">
+                  <Button variant="hero" size="lg" className="relative overflow-hidden group/btn">
+                    <span className="relative z-10">Get Free Consultation</span>
+                    <motion.span
+                      className="absolute inset-0 bg-gradient-to-r from-primary via-accent to-primary"
+                      animate={{ x: ['-100%', '100%'] }}
+                      transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                      style={{ opacity: 0.3 }}
+                    />
+                  </Button>
+                </Link>
+              </motion.div>
             </div>
           </motion.div>
         </div>
