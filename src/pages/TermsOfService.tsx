@@ -1,9 +1,14 @@
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { SEO } from '@/components/SEO';
 
 export default function TermsOfService() {
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Terms of Service"
+        description="Eglaf Technology's Terms of Service. Read our terms and conditions for using our software development and consulting services."
+      />
       <Navbar />
       <section className="pt-32 pb-20">
         <div className="container mx-auto px-4 max-w-4xl">

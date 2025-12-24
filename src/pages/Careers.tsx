@@ -4,6 +4,7 @@ import { Briefcase, MapPin, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { SEO } from '@/components/SEO';
 
 const positions = [
   { title: 'Senior React Developer', location: 'Remote', type: 'Full-time', department: 'Engineering' },
@@ -19,6 +20,11 @@ export default function Careers() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Careers"
+        description="Join Eglaf Technology's team. Build the future of technology with us - we're always looking for talented developers, designers, and engineers."
+        keywords="careers, jobs, tech jobs, software developer jobs, remote work"
+      />
       <Navbar />
       
       <section className="pt-32 pb-20 relative overflow-hidden">

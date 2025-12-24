@@ -3,6 +3,7 @@ import { useRef } from 'react';
 import { Target, Eye, Lightbulb, Users, Award, TrendingUp, Calendar, CheckCircle, Sparkles, Rocket, Heart, Globe } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { SEO } from '@/components/SEO';
 
 const milestones = [
   { year: '2014', title: 'Company Founded', description: 'Started with a vision to transform digital landscapes', icon: Rocket },
@@ -126,6 +127,11 @@ export default function About() {
 
   return (
     <div className="min-h-screen bg-background overflow-hidden">
+      <SEO 
+        title="About Us"
+        description="Learn about Eglaf Technology - A forward-thinking technology company transforming businesses through innovative digital solutions since 2014."
+        keywords="about eglaf, technology company, software company, digital solutions"
+      />
       <Navbar />
       
       <section className="pt-32 pb-20 relative">

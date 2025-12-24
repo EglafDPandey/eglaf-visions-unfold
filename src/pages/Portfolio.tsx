@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Search, ExternalLink, Smartphone, Globe, Bot, Database, Code, TrendingUp } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { SEO } from '@/components/SEO';
 import { Input } from '@/components/ui/input';
 
 const categories = [
@@ -170,6 +171,11 @@ export default function Portfolio() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Portfolio"
+        description="Explore Eglaf Technology's portfolio of successful projects across mobile apps, web development, AI solutions, and enterprise software."
+        keywords="portfolio, projects, case studies, mobile apps, web apps, AI projects"
+      />
       <Navbar />
 
       {/* Hero Section */}

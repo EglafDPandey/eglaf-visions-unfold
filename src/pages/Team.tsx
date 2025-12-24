@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Linkedin, Twitter } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { SEO } from '@/components/SEO';
 
 const team = [
   { name: 'John Smith', role: 'CEO & Founder', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop' },
@@ -17,6 +18,11 @@ const team = [
 export default function Team() {
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Our Team"
+        description="Meet the talented team of professionals at Eglaf Technology dedicated to delivering exceptional results in software development and AI solutions."
+        keywords="team, experts, developers, designers, engineers"
+      />
       <Navbar />
       
       <section className="pt-32 pb-20 relative overflow-hidden">

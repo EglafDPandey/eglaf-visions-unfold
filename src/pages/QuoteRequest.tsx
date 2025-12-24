@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { SEO } from '@/components/SEO';
 import { toast } from 'sonner';
 
 const services = [
@@ -130,6 +131,11 @@ export default function QuoteRequest() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Request a Quote"
+        description="Get a free quote for your software development project from Eglaf Technology. Web, mobile, AI, and custom software solutions."
+        keywords="get quote, project estimate, software development cost, free consultation"
+      />
       <Navbar />
       
       <section className="pt-32 pb-20 relative overflow-hidden">

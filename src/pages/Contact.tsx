@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { SEO } from '@/components/SEO';
 import { toast } from 'sonner';
 
 const contactInfo = [
@@ -66,6 +67,11 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Contact Us"
+        description="Get in touch with Eglaf Technology. Ready to transform your ideas into reality? Contact our team for custom software and AI solutions."
+        keywords="contact eglaf, get in touch, software consultation, project inquiry"
+      />
       <Navbar />
       
       <section className="pt-32 pb-20 relative overflow-hidden">

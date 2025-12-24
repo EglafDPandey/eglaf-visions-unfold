@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { SEO } from '@/components/SEO';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { z } from 'zod';
@@ -148,6 +149,11 @@ export default function Apply() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title={position ? `Apply for ${position}` : "Apply"}
+        description="Submit your application to join Eglaf Technology. We're looking for talented individuals to build the future of technology."
+        keywords="job application, apply now, tech careers, software jobs"
+      />
       <Navbar />
       
       <section className="pt-32 pb-20 relative overflow-hidden">
