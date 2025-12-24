@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Github, Linkedin, Twitter, Instagram } from 'lucide-react';
@@ -31,9 +32,9 @@ const footerLinks = {
   ],
 };
 
-export function Footer() {
+export const Footer = forwardRef<HTMLElement, object>(function Footer(_props, ref) {
   return (
-    <footer className="relative pt-20 pb-10 overflow-hidden">
+    <footer ref={ref} className="relative pt-20 pb-10 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent to-muted/30" />
       
@@ -141,6 +142,6 @@ export function Footer() {
       </div>
     </footer>
   );
-}
+});
 
 export default Footer;

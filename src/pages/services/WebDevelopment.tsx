@@ -55,7 +55,7 @@ export default function WebDevelopment() {
   const navigate = useNavigate();
 
   const handleGetQuote = () => {
-    navigate('/quote?service=Web Development');
+    navigate('/quote?service=Web Development', { replace: false });
   };
 
   return (
