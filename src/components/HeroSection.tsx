@@ -73,10 +73,10 @@ export function HeroSection() {
             className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20"
           >
             {[
-              { value: '150+', label: 'Projects Delivered' },
-              { value: '50+', label: 'Happy Clients' },
-              { value: '25+', label: 'Expert Developers' },
-              { value: '5+', label: 'Years Experience' },
+              { value: '35+', label: 'Projects Delivered' },
+              { value: '21+', label: 'Happy Clients' },
+              { value: '14+', label: 'Expert Developers' },
+              { value: '10+', label: 'Years Experience' },
             ].map((stat, index) => (
               <motion.div
                 key={stat.label}

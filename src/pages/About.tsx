@@ -15,9 +15,9 @@ const milestones = [
 
 const stats = [
   { value: '10+', label: 'Years Experience', icon: Calendar },
-  { value: '500+', label: 'Projects Delivered', icon: CheckCircle },
-  { value: '200+', label: 'Happy Clients', icon: Users },
-  { value: '50+', label: 'Team Members', icon: Award },
+  { value: '35+', label: 'Projects Delivered', icon: CheckCircle },
+  { value: '21+', label: 'Happy Clients', icon: Users },
+  { value: '14+', label: 'Expert Developers', icon: Award },
 ];
 
 const values = [
