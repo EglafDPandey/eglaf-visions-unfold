@@ -43,14 +43,16 @@ export function Footer() {
           <div className="lg:col-span-2">
             <motion.a
               href="#home"
-              className="flex items-center mb-6"
+              className="inline-flex items-center mb-6"
               whileHover={{ scale: 1.05 }}
             >
-              <img 
-                src={eglafLogo} 
-                alt="Eglaf Technology" 
-                className="h-16 w-auto object-contain"
-              />
+              <div className="p-3 rounded-xl bg-background/80 backdrop-blur-sm shadow-lg shadow-primary/10 border border-border/50">
+                <img 
+                  src={eglafLogo} 
+                  alt="Eglaf Technology" 
+                  className="h-12 w-auto object-contain drop-shadow-md"
+                />
+              </div>
             </motion.a>
             
             <p className="text-muted-foreground mb-6 max-w-sm leading-relaxed">
