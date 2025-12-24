@@ -20,7 +20,7 @@ serve(async (req) => {
   const origin = req.headers.get('origin');
   const corsHeaders = {
     'Access-Control-Allow-Origin': getAllowedOrigin(origin),
-    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-admin-secret',
   };
 
   // Handle CORS preflight requests
@@ -29,6 +29,27 @@ serve(async (req) => {
   }
 
   try {
+    // ========== SECURITY: Validate Admin Setup Secret ==========
+    const adminSetupSecret = Deno.env.get('ADMIN_SETUP_SECRET');
+    const providedSecret = req.headers.get('x-admin-secret');
+    
+    if (!adminSetupSecret) {
+      console.error('ADMIN_SETUP_SECRET not configured');
+      return new Response(
+        JSON.stringify({ error: 'Server configuration error' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    if (!providedSecret || providedSecret !== adminSetupSecret) {
+      console.warn(`Unauthorized admin creation attempt from origin: ${origin}`);
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized - Invalid or missing admin secret' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    // ============================================================
+
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     
@@ -60,7 +81,7 @@ serve(async (req) => {
     }
 
     // Log attempt (without sensitive data)
-    console.log(`Admin creation attempt from origin: ${origin}, email domain: ${email.split('@')[1]}`);
+    console.log(`Authorized admin creation attempt from origin: ${origin}, email domain: ${email.split('@')[1]}`);
 
     // Create user using admin API
     const { data: userData, error: createError } = await supabaseAdmin.auth.admin.createUser({
