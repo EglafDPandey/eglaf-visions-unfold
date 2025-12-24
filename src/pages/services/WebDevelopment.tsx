@@ -1,7 +1,7 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft, Globe, Palette, Code, Zap, Lock, Gauge } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowLeft, Globe, Palette, Code, Zap, Lock, Gauge, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
@@ -52,6 +52,11 @@ export default function WebDevelopment() {
   const techRef = useRef(null);
   const isHeroInView = useInView(heroRef, { once: true });
   const isTechInView = useInView(techRef, { once: true, margin: '-100px' });
+  const navigate = useNavigate();
+
+  const handleGetQuote = () => {
+    navigate('/contact?service=Web Development&subject=Quote Request: Web Development');
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -98,12 +103,13 @@ export default function WebDevelopment() {
             </p>
             
             <div className="flex flex-wrap gap-4">
-              <Button variant="hero" size="lg">
+              <Button variant="hero" size="lg" onClick={handleGetQuote}>
+                <FileText className="w-4 h-4 mr-2" />
+                Get Quote
+              </Button>
+              <Button variant="outline" size="lg" onClick={handleGetQuote}>
                 <Code className="w-4 h-4 mr-2" />
                 Start Your Project
-              </Button>
-              <Button variant="outline" size="lg">
-                View Portfolio
               </Button>
             </div>
           </motion.div>

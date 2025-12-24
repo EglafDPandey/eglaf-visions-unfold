@@ -1,7 +1,7 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft, Search, TrendingUp, Target, BarChart3, Globe, Zap } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowLeft, Search, TrendingUp, Target, BarChart3, Globe, Zap, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
@@ -51,6 +51,11 @@ export default function SEOServices() {
   const servicesRef = useRef(null);
   const isHeroInView = useInView(heroRef, { once: true });
   const isServicesInView = useInView(servicesRef, { once: true, margin: '-100px' });
+  const navigate = useNavigate();
+
+  const handleGetQuote = () => {
+    navigate('/contact?service=SEO Services&subject=Quote Request: SEO Services');
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -97,12 +102,13 @@ export default function SEOServices() {
             </p>
             
             <div className="flex flex-wrap gap-4">
-              <Button variant="hero" size="lg">
+              <Button variant="hero" size="lg" onClick={handleGetQuote}>
+                <FileText className="w-4 h-4 mr-2" />
+                Get Quote
+              </Button>
+              <Button variant="outline" size="lg" onClick={handleGetQuote}>
                 <TrendingUp className="w-4 h-4 mr-2" />
                 Get SEO Audit
-              </Button>
-              <Button variant="outline" size="lg">
-                View Results
               </Button>
             </div>
           </motion.div>

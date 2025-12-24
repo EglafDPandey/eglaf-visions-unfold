@@ -1,7 +1,7 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft, Database, Users, BarChart3, Settings, Shield, Cloud, Puzzle, LineChart } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowLeft, Database, Users, BarChart3, Settings, Shield, Cloud, Puzzle, LineChart, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
@@ -58,6 +58,11 @@ export default function CRMDevelopment() {
   const techRef = useRef(null);
   const isHeroInView = useInView(heroRef, { once: true });
   const isTechInView = useInView(techRef, { once: true, margin: '-100px' });
+  const navigate = useNavigate();
+
+  const handleGetQuote = () => {
+    navigate('/contact?service=CRM Development&subject=Quote Request: CRM Development');
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -126,12 +131,13 @@ export default function CRMDevelopment() {
             </p>
             
             <div className="flex flex-wrap gap-4">
-              <Button variant="hero" size="lg">
+              <Button variant="hero" size="lg" onClick={handleGetQuote}>
+                <FileText className="w-4 h-4 mr-2" />
+                Get Quote
+              </Button>
+              <Button variant="outline" size="lg" onClick={handleGetQuote}>
                 <Database className="w-4 h-4 mr-2" />
                 Build Your CRM
-              </Button>
-              <Button variant="outline" size="lg">
-                View Case Studies
               </Button>
             </div>
           </motion.div>

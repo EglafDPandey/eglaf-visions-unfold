@@ -1,7 +1,7 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft, Code2, Server, Cloud, Shield, Workflow, Settings } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowLeft, Code2, Server, Cloud, Shield, Workflow, Settings, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
@@ -28,6 +28,11 @@ export default function CustomSoftware() {
   const techRef = useRef(null);
   const isHeroInView = useInView(heroRef, { once: true });
   const isTechInView = useInView(techRef, { once: true, margin: '-100px' });
+  const navigate = useNavigate();
+
+  const handleGetQuote = () => {
+    navigate('/contact?service=Custom Software Development&subject=Quote Request: Custom Software Development');
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -73,12 +78,13 @@ export default function CustomSoftware() {
             </p>
             
             <div className="flex flex-wrap gap-4">
-              <Button variant="hero" size="lg">
+              <Button variant="hero" size="lg" onClick={handleGetQuote}>
+                <FileText className="w-4 h-4 mr-2" />
+                Get Quote
+              </Button>
+              <Button variant="outline" size="lg" onClick={handleGetQuote}>
                 <Settings className="w-4 h-4 mr-2" />
                 Discuss Your Project
-              </Button>
-              <Button variant="outline" size="lg">
-                View Case Studies
               </Button>
             </div>
           </motion.div>
