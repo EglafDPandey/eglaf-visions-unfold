@@ -5,7 +5,7 @@ import { ArrowLeft, Smartphone, Zap, Shield, Layers, Code2, Rocket, FileText } f
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { SEO, schemas } from '@/components/SEO';
+import { SEO, schemas, faqSchema } from '@/components/SEO';
 import { SpaceBackground } from '@/components/SpaceBackground';
 
 const technologies = [
@@ -48,6 +48,25 @@ const features = [
   { icon: Code2, title: 'Clean Code', description: 'Maintainable and well-documented codebase' },
 ];
 
+const mobileAppFaqs = [
+  {
+    question: 'How much does mobile app development cost in India?',
+    answer: 'Mobile app development in India typically costs $5,000-$150,000 depending on complexity. Simple apps cost $5,000-$25,000, medium apps $25,000-$75,000, and complex enterprise apps $75,000+.',
+  },
+  {
+    question: 'Should I build a native or cross-platform app?',
+    answer: 'Cross-platform apps (Flutter, React Native) are cost-effective and faster to develop. Native apps (Swift, Kotlin) offer best performance for complex apps. We recommend based on your specific needs.',
+  },
+  {
+    question: 'How long does it take to develop a mobile app?',
+    answer: 'Simple apps take 2-3 months, medium complexity apps 3-6 months, and complex apps 6-12 months. We follow agile methodology for faster delivery with regular updates.',
+  },
+  {
+    question: 'Do you publish apps to App Store and Google Play?',
+    answer: 'Yes, we handle the complete app submission process including app store optimization (ASO), compliance review, and publishing to both Apple App Store and Google Play Store.',
+  },
+];
+
 export default function MobileAppDevelopment() {
   const heroRef = useRef(null);
   const techRef = useRef(null);
@@ -84,6 +103,7 @@ export default function MobileAppDevelopment() {
             { name: 'Services', url: 'https://eglaftechnology.com/#services' },
             { name: 'Mobile App Development', url: 'https://eglaftechnology.com/services/mobile-development' },
           ]),
+          faqSchema(mobileAppFaqs),
         ]}
       />
       <Navbar />

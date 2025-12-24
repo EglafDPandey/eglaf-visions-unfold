@@ -94,13 +94,21 @@ export default function BlogPost() {
         title={blog.title}
         description={blog.excerpt || `Read ${blog.title} on Eglaf Technology's blog.`}
         ogImage={blog.cover_image || undefined}
-        schema={schemas.article({
-          title: blog.title,
-          description: blog.excerpt || `Read ${blog.title} on Eglaf Technology's blog.`,
-          url: `https://eglaftechnology.com/blog/${blog.slug}`,
-          image: blog.cover_image || undefined,
-          datePublished: blog.published_at || blog.created_at,
-        })}
+        canonical={`https://eglaftechnology.com/blog/${blog.slug}`}
+        schema={[
+          schemas.article({
+            title: blog.title,
+            description: blog.excerpt || `Read ${blog.title} on Eglaf Technology's blog.`,
+            url: `https://eglaftechnology.com/blog/${blog.slug}`,
+            image: blog.cover_image || undefined,
+            datePublished: blog.published_at || blog.created_at,
+          }),
+          schemas.breadcrumb([
+            { name: 'Home', url: 'https://eglaftechnology.com/' },
+            { name: 'Blog', url: 'https://eglaftechnology.com/blog' },
+            { name: blog.title, url: `https://eglaftechnology.com/blog/${blog.slug}` },
+          ]),
+        ]}
       />
       <Navbar />
 

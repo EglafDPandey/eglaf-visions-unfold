@@ -4,7 +4,7 @@ import { Briefcase, MapPin, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { SEO } from '@/components/SEO';
+import { SEO, schemas, jobPostingSchema } from '@/components/SEO';
 
 const positions = [
   { title: 'Senior React Developer', location: 'Remote', type: 'Full-time', department: 'Engineering' },
@@ -25,6 +25,20 @@ export default function Careers() {
         description="Join Eglaf Technology! We're hiring React developers, AI/ML engineers, Flutter developers, UX designers, DevOps engineers. Remote-first company. Competitive salary, great benefits. Apply now!"
         keywords="tech jobs India, software developer jobs, remote work India, React developer jobs, AI engineer jobs, Flutter developer jobs, IT careers Ahmedabad, software company hiring, developer jobs India"
         canonical="https://eglaftechnology.com/careers"
+        schema={[
+          ...positions.map(pos => jobPostingSchema({
+            title: pos.title,
+            description: `${pos.title} position at Eglaf Technology. ${pos.type} role in ${pos.department} department.`,
+            department: pos.department,
+            employmentType: pos.type,
+            location: pos.location,
+            remote: pos.location === 'Remote',
+          })),
+          schemas.breadcrumb([
+            { name: 'Home', url: 'https://eglaftechnology.com/' },
+            { name: 'Careers', url: 'https://eglaftechnology.com/careers' },
+          ]),
+        ]}
       />
       <Navbar />
       

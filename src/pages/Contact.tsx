@@ -7,9 +7,10 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { SEO } from '@/components/SEO';
+import { SEO, schemas } from '@/components/SEO';
 import { toast } from 'sonner';
 import { trackEvent, trackConversion } from '@/components/GoogleAnalytics';
+import { supabase } from '@/integrations/supabase/client';
 
 const contactInfo = [
   { icon: Mail, label: 'Email', value: 'dpandey@eglaftechnology.com', href: 'mailto:dpandey@eglaftechnology.com' },
@@ -60,7 +61,20 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    // Save to database
+    const { error } = await supabase.from('contacts').insert({
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone || null,
+      message: `${formData.subject ? `Subject: ${formData.subject}\n\n` : ''}${formData.message}`,
+    });
+
+    if (error) {
+      toast.error('Failed to send message. Please try again.');
+      setIsSubmitting(false);
+      return;
+    }
     
     // Track conversion for contact form
     trackConversion('contact_form', {
@@ -83,6 +97,10 @@ export default function Contact() {
         description="Contact Eglaf Technology for custom software development, mobile apps, AI solutions. Free consultation available! Call +91-9898598257 or email dpandey@eglaftechnology.com. Located in Ahmedabad, India."
         keywords="contact Eglaf Technology, software development inquiry, free consultation, IT services Ahmedabad, hire developers India, software project quote, tech company contact"
         canonical="https://eglaftechnology.com/contact"
+        schema={schemas.breadcrumb([
+          { name: 'Home', url: 'https://eglaftechnology.com/' },
+          { name: 'Contact', url: 'https://eglaftechnology.com/contact' },
+        ])}
       />
       <Navbar />
       

@@ -5,7 +5,7 @@ import { ArrowLeft, Search, TrendingUp, Target, BarChart3, Globe, Zap, FileText 
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { SEO, schemas } from '@/components/SEO';
+import { SEO, schemas, faqSchema } from '@/components/SEO';
 import { SpaceBackground } from '@/components/SpaceBackground';
 
 const services = [
@@ -47,6 +47,25 @@ const services = [
   },
 ];
 
+const seoFaqs = [
+  {
+    question: 'How long does SEO take to show results?',
+    answer: 'SEO typically shows initial improvements in 3-6 months, with significant results in 6-12 months. Timeline depends on competition, website age, and content quality.',
+  },
+  {
+    question: 'What is included in your SEO services?',
+    answer: 'Our SEO services include technical SEO, on-page optimization, content strategy, link building, local SEO, keyword research, competitor analysis, and monthly reporting.',
+  },
+  {
+    question: 'How much does SEO cost in India?',
+    answer: 'SEO packages in India range from $500-$5,000/month. Basic SEO starts at $500-$1,000, standard packages $1,000-$2,500, and comprehensive enterprise SEO $2,500-$5,000+.',
+  },
+  {
+    question: 'Do you guarantee first page rankings?',
+    answer: 'We don\'t guarantee specific rankings as Google\'s algorithm constantly changes. However, we guarantee improved visibility, organic traffic growth, and measurable ROI.',
+  },
+];
+
 export default function SEOServices() {
   const heroRef = useRef(null);
   const servicesRef = useRef(null);
@@ -83,6 +102,7 @@ export default function SEOServices() {
             { name: 'Services', url: 'https://eglaftechnology.com/#services' },
             { name: 'SEO Services', url: 'https://eglaftechnology.com/services/seo-services' },
           ]),
+          faqSchema(seoFaqs),
         ]}
       />
       <Navbar />

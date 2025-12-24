@@ -5,7 +5,7 @@ import { ArrowLeft, Database, Users, BarChart3, Settings, Shield, Cloud, Puzzle,
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { SEO, schemas } from '@/components/SEO';
+import { SEO, schemas, faqSchema } from '@/components/SEO';
 import { SpaceBackground } from '@/components/SpaceBackground';
 
 const technologies = [
@@ -54,6 +54,25 @@ const features = [
   { icon: Shield, title: 'Data Security', description: 'Enterprise-grade data protection' },
 ];
 
+const crmFaqs = [
+  {
+    question: 'Which CRM platforms do you work with?',
+    answer: 'We specialize in Salesforce, HubSpot, Microsoft Dynamics 365, Zoho CRM, and custom CRM development. We help you choose the best platform based on your business needs and budget.',
+  },
+  {
+    question: 'How much does CRM development cost?',
+    answer: 'CRM costs vary: Salesforce/HubSpot customization starts at $5,000, Microsoft Dynamics from $10,000, and custom CRM development from $20,000-$100,000+ depending on features.',
+  },
+  {
+    question: 'Can you migrate data from our existing CRM?',
+    answer: 'Yes, we handle complete CRM data migration including contacts, deals, activities, and custom fields. We ensure zero data loss and minimal downtime during migration.',
+  },
+  {
+    question: 'Do you provide CRM training and support?',
+    answer: 'Yes, we provide comprehensive user training, documentation, and ongoing support packages. Our team helps with adoption, troubleshooting, and continuous optimization.',
+  },
+];
+
 export default function CRMDevelopment() {
   const heroRef = useRef(null);
   const techRef = useRef(null);
@@ -90,6 +109,7 @@ export default function CRMDevelopment() {
             { name: 'Services', url: 'https://eglaftechnology.com/#services' },
             { name: 'CRM Development', url: 'https://eglaftechnology.com/services/crm-development' },
           ]),
+          faqSchema(crmFaqs),
         ]}
       />
       <Navbar />
