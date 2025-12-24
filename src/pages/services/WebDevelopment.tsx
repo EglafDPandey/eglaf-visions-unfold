@@ -55,7 +55,7 @@ export default function WebDevelopment() {
   const navigate = useNavigate();
 
   const handleGetQuote = () => {
-    navigate('/contact?service=Web Development&subject=Quote Request: Web Development');
+    navigate('/quote?service=Web Development');
   };
 
   return (

@@ -72,7 +72,7 @@ export default function AISolutions() {
   const navigate = useNavigate();
 
   const handleGetQuote = () => {
-    navigate('/contact?service=AI Solutions&subject=Quote Request: AI Solutions');
+    navigate('/quote?service=AI Solutions');
   };
 
   return (

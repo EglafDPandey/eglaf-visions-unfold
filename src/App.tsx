@@ -26,7 +26,7 @@ import CRMDevelopment from "./pages/services/CRMDevelopment";
 import WebDevelopment from "./pages/services/WebDevelopment";
 import SEOServices from "./pages/services/SEOServices";
 import CustomSoftware from "./pages/services/CustomSoftware";
-
+import QuoteRequest from "./pages/QuoteRequest";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -56,6 +56,7 @@ const App = () => (
             <Route path="/services/web-development" element={<WebDevelopment />} />
             <Route path="/services/seo-services" element={<SEOServices />} />
             <Route path="/services/custom-software" element={<CustomSoftware />} />
+            <Route path="/quote" element={<QuoteRequest />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminDashboard />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

@@ -55,7 +55,7 @@ export default function MobileAppDevelopment() {
   const navigate = useNavigate();
 
   const handleGetQuote = () => {
-    navigate('/contact?service=Mobile App Development&subject=Quote Request: Mobile App Development');
+    navigate('/quote?service=Mobile App Development');
   };
 
   return (
