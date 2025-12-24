@@ -12,7 +12,7 @@ const contactSchema = z.object({
   name: z.string().trim().min(2, 'Name must be at least 2 characters').max(100, 'Name is too long'),
   email: z.string().trim().email('Invalid email address').max(255, 'Email is too long'),
   phone: z.string().trim().max(20, 'Phone number is too long').optional().or(z.literal('')),
-  message: z.string().trim().min(10, 'Message must be at least 10 characters').max(5000, 'Message is too long'),
+  message: z.string().trim().min(1, 'Message is required').max(5000, 'Message is too long'),
 });
 
 const contactInfo = [
@@ -72,7 +72,7 @@ export function ContactSection() {
       });
 
       if (error) {
-        toast.error('Failed to send message. Please try again.');
+        toast.error(error.message || 'Failed to send message. Please try again.');
       } else {
         toast.success('Message sent successfully! We\'ll get back to you soon.');
         formElement.reset();
