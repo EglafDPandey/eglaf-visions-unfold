@@ -10,26 +10,26 @@ const contactInfo = [
   {
     icon: Mail,
     label: 'Email',
-    value: 'info@eglaftech.com',
-    href: 'mailto:info@eglaftech.com',
+    value: 'dpandey@eglaftechnology.com',
+    href: 'mailto:dpandey@eglaftechnology.com',
   },
   {
     icon: Phone,
     label: 'Phone',
-    value: '+1 (555) 123-4567',
-    href: 'tel:+15551234567',
+    value: '+91 9898598257',
+    href: 'tel:+919898598257',
   },
   {
     icon: MessageCircle,
     label: 'WhatsApp',
-    value: 'Chat with us',
-    href: 'https://wa.me/15551234567',
+    value: '+91 9898598257',
+    href: 'https://wa.me/919898598257',
   },
   {
     icon: MapPin,
     label: 'Location',
-    value: 'Global Remote Team',
-    href: '#',
+    value: 'BH F623 Arved Transcube Plaza, Ranip, Ahmedabad, Gujarat 382480, India',
+    href: 'https://maps.google.com/?q=Arved+Transcube+Plaza+Ranip+Ahmedabad',
   },
 ];
 
@@ -205,20 +205,26 @@ export function ContactSection() {
               </div>
             </div>
 
-            {/* Map Placeholder */}
-            <motion.div
+            {/* Map */}
+            <motion.a
+              href="https://maps.google.com/?q=Arved+Transcube+Plaza+Ranip+Ahmedabad"
+              target="_blank"
+              rel="noopener noreferrer"
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.8 }}
-              className="glass-card p-4 h-64 flex items-center justify-center"
+              className="glass-card p-4 h-64 flex items-center justify-center hover:border-primary/50 transition-colors"
             >
               <div className="text-center">
                 <MapPin className="w-12 h-12 text-primary/50 mx-auto mb-4" />
-                <p className="text-muted-foreground">
-                  We work remotely with clients worldwide
+                <p className="text-muted-foreground text-sm">
+                  BH F623 Arved Transcube Plaza, Opp. Ranip BRTS Stand,<br />
+                  Bandhu Nagar, Vijay Nagar, Ranip, Ahmedabad,<br />
+                  Gujarat 382480, India
                 </p>
+                <p className="text-primary text-sm mt-2">Click to view on map →</p>
               </div>
-            </motion.div>
+            </motion.a>
           </motion.div>
         </div>
       </div>

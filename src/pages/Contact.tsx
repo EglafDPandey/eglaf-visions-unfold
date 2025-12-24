@@ -10,10 +10,10 @@ import { Footer } from '@/components/Footer';
 import { toast } from 'sonner';
 
 const contactInfo = [
-  { icon: Mail, label: 'Email', value: 'info@eglaftech.com', href: 'mailto:info@eglaftech.com' },
-  { icon: Phone, label: 'Phone', value: '+1 (555) 123-4567', href: 'tel:+15551234567' },
-  { icon: MessageCircle, label: 'WhatsApp', value: 'Chat with us', href: 'https://wa.me/15551234567' },
-  { icon: MapPin, label: 'Location', value: 'Global Remote Team', href: '#' },
+  { icon: Mail, label: 'Email', value: 'dpandey@eglaftechnology.com', href: 'mailto:dpandey@eglaftechnology.com' },
+  { icon: Phone, label: 'Phone', value: '+91 9898598257', href: 'tel:+919898598257' },
+  { icon: MessageCircle, label: 'WhatsApp', value: '+91 9898598257', href: 'https://wa.me/919898598257' },
+  { icon: MapPin, label: 'Location', value: 'BH F623 Arved Transcube Plaza, Ranip, Ahmedabad, Gujarat 382480, India', href: 'https://maps.google.com/?q=Arved+Transcube+Plaza+Ranip+Ahmedabad' },
 ];
 
 export default function Contact() {
