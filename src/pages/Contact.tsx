@@ -9,6 +9,7 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
 import { toast } from 'sonner';
+import { trackEvent, trackConversion } from '@/components/GoogleAnalytics';
 
 const contactInfo = [
   { icon: Mail, label: 'Email', value: 'dpandey@eglaftechnology.com', href: 'mailto:dpandey@eglaftechnology.com' },
@@ -60,6 +61,16 @@ export default function Contact() {
     e.preventDefault();
     setIsSubmitting(true);
     await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    // Track conversion for contact form
+    trackConversion('contact_form', {
+      subject: formData.subject,
+      has_phone: !!formData.phone,
+    });
+    
+    // Track event for detailed analytics
+    trackEvent('form_submit', 'Contact Form', formData.subject);
+    
     toast.success('Message sent successfully!');
     setIsSubmitting(false);
     setFormData({ name: '', email: '', phone: '', subject: '', message: '' });

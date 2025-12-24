@@ -12,6 +12,7 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
 import { toast } from 'sonner';
+import { trackEvent, trackConversion } from '@/components/GoogleAnalytics';
 
 const services = [
   { id: 'web-development', label: 'Web Development' },
@@ -109,6 +110,16 @@ export default function QuoteRequest() {
     
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Track conversion for quote request
+    trackConversion('quote_request', {
+      services: selectedServices.join(', '),
+      budget: formData.budget,
+      timeline: formData.timeline,
+    });
+    
+    // Track event for detailed analytics
+    trackEvent('form_submit', 'Quote Request', selectedServices.join(', '));
     
     toast.success('Quote request submitted successfully! We\'ll get back to you within 24 hours.');
     setIsSubmitting(false);
