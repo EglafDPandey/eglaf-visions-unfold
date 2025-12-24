@@ -1,6 +1,6 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate, createSearchParams } from 'react-router-dom';
 import { ArrowLeft, Globe, Palette, Code, Zap, Lock, Gauge, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
@@ -53,9 +53,16 @@ export default function WebDevelopment() {
   const isHeroInView = useInView(heroRef, { once: true });
   const isTechInView = useInView(techRef, { once: true, margin: '-100px' });
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleGetQuote = () => {
-    navigate('/quote?service=Web Development', { replace: false });
+    navigate({
+      pathname: '/quote',
+      search: `?${createSearchParams({
+        service: 'Web Development',
+        from: location.pathname + location.search,
+      }).toString()}`,
+    });
   };
 
   return (

@@ -1,5 +1,5 @@
 import { useState, useEffect, forwardRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, createSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -18,6 +18,11 @@ export const Navbar = forwardRef<HTMLElement, object>(function Navbar(_props, re
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+
+  const quoteTo = {
+    pathname: '/quote',
+    search: `?${createSearchParams({ from: location.pathname + location.search }).toString()}`,
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -95,7 +100,7 @@ export const Navbar = forwardRef<HTMLElement, object>(function Navbar(_props, re
         </div>
 
         <div className="hidden md:block">
-          <Link to="/quote">
+          <Link to={quoteTo}>
             <Button variant="hero" size="lg">
               Get Quote
             </Button>
@@ -142,7 +147,7 @@ export const Navbar = forwardRef<HTMLElement, object>(function Navbar(_props, re
                   </Link>
                 )
               ))}
-              <Link to="/quote" onClick={() => setIsMobileMenuOpen(false)}>
+              <Link to={quoteTo} onClick={() => setIsMobileMenuOpen(false)}>
                 <Button variant="hero" className="mt-2 w-full">
                   Get Quote
                 </Button>

@@ -1,6 +1,6 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate, createSearchParams } from 'react-router-dom';
 import { ArrowLeft, Database, Users, BarChart3, Settings, Shield, Cloud, Puzzle, LineChart, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
@@ -59,9 +59,16 @@ export default function CRMDevelopment() {
   const isHeroInView = useInView(heroRef, { once: true });
   const isTechInView = useInView(techRef, { once: true, margin: '-100px' });
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleGetQuote = () => {
-    navigate('/quote?service=CRM Development');
+    navigate({
+      pathname: '/quote',
+      search: `?${createSearchParams({
+        service: 'CRM Development',
+        from: location.pathname + location.search,
+      }).toString()}`,
+    });
   };
 
   return (

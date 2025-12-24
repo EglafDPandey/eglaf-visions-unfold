@@ -143,6 +143,12 @@ export default function QuoteRequest() {
             variant="ghost" 
             className="mb-8 text-muted-foreground hover:text-primary"
             onClick={() => {
+              const from = searchParams.get('from');
+              if (from && from.startsWith('/')) {
+                navigate(from);
+                return;
+              }
+
               if (window.history.length > 2) {
                 navigate(-1);
               } else {
