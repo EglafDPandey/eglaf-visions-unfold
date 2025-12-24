@@ -42,21 +42,38 @@ export default function Careers() {
             <h2 className="text-2xl font-display font-bold mb-8">Open Positions</h2>
             <div className="space-y-4">
               {positions.map((pos, i) => (
-                <motion.div key={pos.title} initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 }} className="glass-card p-6 flex flex-wrap items-center justify-between gap-4 hover:border-primary/50 transition-colors">
+                <motion.div
+                  key={pos.title}
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  className="glass-card p-6 flex flex-wrap items-center justify-between gap-4 hover:border-primary/50 transition-colors"
+                >
                   <div>
                     <h3 className="font-display font-semibold text-lg">{pos.title}</h3>
                     <div className="flex flex-wrap gap-4 mt-2 text-sm text-muted-foreground">
-                      <span className="flex items-center gap-1"><MapPin className="w-4 h-4" />{pos.location}</span>
-                      <span className="flex items-center gap-1"><Clock className="w-4 h-4" />{pos.type}</span>
-                      <span className="flex items-center gap-1"><Briefcase className="w-4 h-4" />{pos.department}</span>
+                      <span className="flex items-center gap-1">
+                        <MapPin className="w-4 h-4" />
+                        {pos.location}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-4 h-4" />
+                        {pos.type}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Briefcase className="w-4 h-4" />
+                        {pos.department}
+                      </span>
                     </div>
                   </div>
+
                   <Button
                     variant="outline"
                     onClick={() => navigate(`/apply?position=${encodeURIComponent(pos.title)}`)}
                   >
                     Apply Now
                   </Button>
+                </motion.div>
               ))}
             </div>
           </div>
