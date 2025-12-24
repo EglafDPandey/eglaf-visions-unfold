@@ -142,7 +142,13 @@ export default function QuoteRequest() {
           <Button 
             variant="ghost" 
             className="mb-8 text-muted-foreground hover:text-primary"
-            onClick={() => navigate(-1)}
+            onClick={() => {
+              if (window.history.length > 2) {
+                navigate(-1);
+              } else {
+                navigate('/');
+              }
+            }}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Go Back
