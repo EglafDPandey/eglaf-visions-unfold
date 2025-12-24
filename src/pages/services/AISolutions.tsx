@@ -1,6 +1,6 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate, createSearchParams } from 'react-router-dom';
 import { ArrowLeft, Bot, Brain, Cpu, Network, Sparkles, Workflow, MessageSquare, Eye, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
@@ -70,9 +70,16 @@ export default function AISolutions() {
   const isHeroInView = useInView(heroRef, { once: true });
   const isTechInView = useInView(techRef, { once: true, margin: '-100px' });
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleGetQuote = () => {
-    navigate('/quote?service=AI Solutions');
+    navigate({
+      pathname: '/quote',
+      search: `?${createSearchParams({
+        service: 'AI Solutions',
+        from: location.pathname + location.search,
+      }).toString()}`,
+    });
   };
 
   return (

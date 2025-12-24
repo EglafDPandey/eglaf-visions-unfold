@@ -1,10 +1,16 @@
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, createSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import HeroScene from './HeroScene';
 
 export function HeroSection() {
+  const location = useLocation();
+  const quoteTo = {
+    pathname: '/quote',
+    search: `?${createSearchParams({ from: location.pathname + location.search }).toString()}`,
+  };
+
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* 3D Background */}
@@ -57,7 +63,7 @@ export function HeroSection() {
             transition={{ duration: 0.8, delay: 0.8 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <Link to="/quote">
+            <Link to={quoteTo}>
               <Button variant="hero" size="xl" className="group">
                 Start Your Project
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />

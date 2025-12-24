@@ -1,6 +1,6 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate, createSearchParams } from 'react-router-dom';
 import { ArrowLeft, Search, TrendingUp, Target, BarChart3, Globe, Zap, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
@@ -52,9 +52,16 @@ export default function SEOServices() {
   const isHeroInView = useInView(heroRef, { once: true });
   const isServicesInView = useInView(servicesRef, { once: true, margin: '-100px' });
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleGetQuote = () => {
-    navigate('/quote?service=SEO Services');
+    navigate({
+      pathname: '/quote',
+      search: `?${createSearchParams({
+        service: 'SEO Services',
+        from: location.pathname + location.search,
+      }).toString()}`,
+    });
   };
 
   return (
