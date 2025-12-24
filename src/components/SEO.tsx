@@ -7,11 +7,12 @@ interface SEOProps {
   ogImage?: string;
   canonical?: string;
   schema?: object | object[];
+  noindex?: boolean;
 }
 
 const defaults = {
   siteName: 'Eglaf Technology',
-  description: 'Custom Software & AI Solutions - Transform your business with cutting-edge technology',
+  description: 'Eglaf Technology - Leading software development company in India offering custom web development, mobile app development, AI solutions, CRM development & SEO services. 10+ years experience. Get free consultation!',
   ogImage: '/og-image.png',
   siteUrl: 'https://eglaftechnology.com',
 };
@@ -88,6 +89,71 @@ export const schemas = {
   }),
 };
 
+// FAQ Schema generator
+export const faqSchema = (faqs: { question: string; answer: string }[]) => ({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer,
+    },
+  })),
+});
+
+// Local Business Schema
+export const localBusinessSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: 'Eglaf Technology',
+  image: `${defaults.siteUrl}/og-image.png`,
+  '@id': defaults.siteUrl,
+  url: defaults.siteUrl,
+  telephone: '+91-9898598257',
+  priceRange: '$$',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'BH F623 Arved Transcube Plaza, Ranip',
+    addressLocality: 'Ahmedabad',
+    addressRegion: 'Gujarat',
+    postalCode: '382480',
+    addressCountry: 'IN',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 23.0225,
+    longitude: 72.5714,
+  },
+  openingHoursSpecification: {
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    opens: '09:00',
+    closes: '18:00',
+  },
+  sameAs: [
+    'https://www.linkedin.com/company/eglaftechnology',
+    'https://twitter.com/EglafTech',
+  ],
+};
+
+// WebSite Schema for sitelinks search box
+export const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Eglaf Technology',
+  url: defaults.siteUrl,
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: `${defaults.siteUrl}/blog?search={search_term_string}`,
+    },
+    'query-input': 'required name=search_term_string',
+  },
+};
+
 export function SEO({
   title,
   description = defaults.description,
@@ -95,8 +161,9 @@ export function SEO({
   ogImage = defaults.ogImage,
   canonical,
   schema,
+  noindex = false,
 }: SEOProps) {
-  const fullTitle = title ? `${title} | ${defaults.siteName}` : defaults.siteName;
+  const fullTitle = title ? `${title} | ${defaults.siteName}` : `${defaults.siteName} - Custom Software & AI Solutions Company India`;
 
   const schemaScripts = schema
     ? Array.isArray(schema)
@@ -104,19 +171,36 @@ export function SEO({
       : [schema]
     : [];
 
+  const fullOgImage = ogImage.startsWith('http') ? ogImage : `${defaults.siteUrl}${ogImage}`;
+
   return (
     <Helmet>
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
       {keywords && <meta name="keywords" content={keywords} />}
+      {noindex && <meta name="robots" content="noindex, nofollow" />}
       
+      {/* Open Graph */}
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
-      <meta property="og:image" content={ogImage} />
+      <meta property="og:image" content={fullOgImage} />
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content={defaults.siteName} />
+      <meta property="og:locale" content="en_IN" />
       
+      {/* Twitter Card */}
+      <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={ogImage} />
+      <meta name="twitter:image" content={fullOgImage} />
+      <meta name="twitter:site" content="@EglafTech" />
+      
+      {/* Additional SEO Meta Tags */}
+      <meta name="author" content="Eglaf Technology" />
+      <meta name="geo.region" content="IN-GJ" />
+      <meta name="geo.placename" content="Ahmedabad" />
+      <meta name="geo.position" content="23.0225;72.5714" />
+      <meta name="ICBM" content="23.0225, 72.5714" />
       
       {canonical && <link rel="canonical" href={canonical} />}
       

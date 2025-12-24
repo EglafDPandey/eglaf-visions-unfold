@@ -68,14 +68,22 @@ export default function SEOServices() {
   return (
     <div className="min-h-screen bg-background">
       <SEO 
-        title="SEO Services"
-        description="Professional SEO services by Eglaf Technology. Technical SEO, on-page optimization, and link building to boost your search rankings."
-        keywords="SEO services, search engine optimization, technical SEO, on-page SEO, link building"
-        schema={schemas.service({
-          name: 'SEO Services',
-          description: 'Professional SEO services including technical SEO, on-page optimization, and link building to boost search rankings.',
-          url: 'https://eglaftechnology.com/services/seo-services',
-        })}
+        title="SEO Services India - Best SEO Company for Higher Rankings"
+        description="Best SEO services company in India. Technical SEO, on-page optimization, link building, local SEO, content strategy. Guaranteed rankings improvement. 100+ businesses ranked on page 1. Get free SEO audit!"
+        keywords="SEO services India, best SEO company, search engine optimization services, technical SEO, on-page SEO, off-page SEO, link building services, local SEO India, Google ranking services, SEO audit, keyword research, content optimization, SEO consulting India, organic traffic growth"
+        canonical="https://eglaftechnology.com/services/seo-services"
+        schema={[
+          schemas.service({
+            name: 'Professional SEO Services',
+            description: 'Best SEO services in India. Technical SEO, on-page optimization, link building, and local SEO to boost your Google rankings and organic traffic.',
+            url: 'https://eglaftechnology.com/services/seo-services',
+          }),
+          schemas.breadcrumb([
+            { name: 'Home', url: 'https://eglaftechnology.com/' },
+            { name: 'Services', url: 'https://eglaftechnology.com/#services' },
+            { name: 'SEO Services', url: 'https://eglaftechnology.com/services/seo-services' },
+          ]),
+        ]}
       />
       <Navbar />
       

@@ -68,9 +68,10 @@ export default function Contact() {
   return (
     <div className="min-h-screen bg-background">
       <SEO 
-        title="Contact Us"
-        description="Get in touch with Eglaf Technology. Ready to transform your ideas into reality? Contact our team for custom software and AI solutions."
-        keywords="contact eglaf, get in touch, software consultation, project inquiry"
+        title="Contact Us - Get Free Consultation"
+        description="Contact Eglaf Technology for custom software development, mobile apps, AI solutions. Free consultation available! Call +91-9898598257 or email dpandey@eglaftechnology.com. Located in Ahmedabad, India."
+        keywords="contact Eglaf Technology, software development inquiry, free consultation, IT services Ahmedabad, hire developers India, software project quote, tech company contact"
+        canonical="https://eglaftechnology.com/contact"
       />
       <Navbar />
       

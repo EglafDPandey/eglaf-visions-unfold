@@ -21,9 +21,10 @@ export default function Careers() {
   return (
     <div className="min-h-screen bg-background">
       <SEO 
-        title="Careers"
-        description="Join Eglaf Technology's team. Build the future of technology with us - we're always looking for talented developers, designers, and engineers."
-        keywords="careers, jobs, tech jobs, software developer jobs, remote work"
+        title="Careers - Join Our Team | Remote Tech Jobs India"
+        description="Join Eglaf Technology! We're hiring React developers, AI/ML engineers, Flutter developers, UX designers, DevOps engineers. Remote-first company. Competitive salary, great benefits. Apply now!"
+        keywords="tech jobs India, software developer jobs, remote work India, React developer jobs, AI engineer jobs, Flutter developer jobs, IT careers Ahmedabad, software company hiring, developer jobs India"
+        canonical="https://eglaftechnology.com/careers"
       />
       <Navbar />
       
