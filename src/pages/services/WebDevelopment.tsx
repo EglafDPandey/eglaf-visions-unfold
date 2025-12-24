@@ -69,14 +69,22 @@ export default function WebDevelopment() {
   return (
     <div className="min-h-screen bg-background">
       <SEO 
-        title="Web Development Services"
-        description="Create stunning, high-performance websites with Eglaf Technology. From landing pages to complex web applications, we deliver exceptional digital experiences."
-        keywords="web development, website design, React, Next.js, Vue.js, web apps"
-        schema={schemas.service({
-          name: 'Web Development Services',
-          description: 'Create stunning, high-performance websites with Eglaf Technology. From landing pages to complex web applications using React, Next.js, Vue.js, and modern technologies.',
-          url: 'https://eglaftechnology.com/services/web-development',
-        })}
+        title="Web Development Services - Custom Website Development Company India"
+        description="Professional web development services in India. Custom React, Next.js, Vue.js websites. Responsive design, SEO-optimized, fast-loading websites. 500+ websites delivered. Get free quote!"
+        keywords="web development company India, custom website development, React development services, Next.js development, Vue.js developers, responsive web design, ecommerce website development, WordPress development, web application development, frontend development services, full stack development India"
+        canonical="https://eglaftechnology.com/services/web-development"
+        schema={[
+          schemas.service({
+            name: 'Professional Web Development Services',
+            description: 'Custom web development services in India. We build responsive, SEO-optimized websites using React, Next.js, Vue.js. From landing pages to complex web applications.',
+            url: 'https://eglaftechnology.com/services/web-development',
+          }),
+          schemas.breadcrumb([
+            { name: 'Home', url: 'https://eglaftechnology.com/' },
+            { name: 'Services', url: 'https://eglaftechnology.com/#services' },
+            { name: 'Web Development', url: 'https://eglaftechnology.com/services/web-development' },
+          ]),
+        ]}
       />
       <Navbar />
       

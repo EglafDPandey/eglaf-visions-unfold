@@ -45,14 +45,22 @@ export default function CustomSoftware() {
   return (
     <div className="min-h-screen bg-background">
       <SEO 
-        title="Custom Software Development"
-        description="Enterprise-grade custom software development by Eglaf Technology. .NET, Java, Python, and cloud solutions for your business needs."
-        keywords="custom software, enterprise software, .NET development, Java development, cloud solutions"
-        schema={schemas.service({
-          name: 'Custom Software Development',
-          description: 'Enterprise-grade custom software development using .NET, Java, Python, and cloud solutions for your business needs.',
-          url: 'https://eglaftechnology.com/services/custom-software',
-        })}
+        title="Custom Software Development Company India - Enterprise Solutions"
+        description="Leading custom software development company in India. Enterprise applications, cloud solutions, API development, process automation. .NET, Java, Python expertise. 10+ years experience. Get free consultation!"
+        keywords="custom software development company India, enterprise software development, .NET development services, Java development company, Python development, cloud application development, AWS development, Docker Kubernetes, API development services, business process automation, SaaS development, software consulting India"
+        canonical="https://eglaftechnology.com/services/custom-software"
+        schema={[
+          schemas.service({
+            name: 'Custom Enterprise Software Development',
+            description: 'Enterprise-grade custom software development in India. .NET, Java, Python, AWS cloud solutions. Scalable, secure software for your business needs.',
+            url: 'https://eglaftechnology.com/services/custom-software',
+          }),
+          schemas.breadcrumb([
+            { name: 'Home', url: 'https://eglaftechnology.com/' },
+            { name: 'Services', url: 'https://eglaftechnology.com/#services' },
+            { name: 'Custom Software', url: 'https://eglaftechnology.com/services/custom-software' },
+          ]),
+        ]}
       />
       <Navbar />
       

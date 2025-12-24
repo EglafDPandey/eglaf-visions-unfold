@@ -75,14 +75,22 @@ export default function CRMDevelopment() {
   return (
     <div className="min-h-screen bg-background">
       <SEO 
-        title="CRM Development"
-        description="Custom CRM development by Eglaf Technology. Salesforce, HubSpot, and custom CRM solutions to streamline your sales and customer relationships."
-        keywords="CRM development, Salesforce, HubSpot, customer relationship management, sales CRM"
-        schema={schemas.service({
-          name: 'CRM Development',
-          description: 'Custom CRM development with Salesforce, HubSpot, and bespoke solutions to streamline sales and customer relationships.',
-          url: 'https://eglaftechnology.com/services/crm-development',
-        })}
+        title="CRM Development Services India - Salesforce & HubSpot Experts"
+        description="Expert CRM development company in India. Salesforce implementation, HubSpot customization, Microsoft Dynamics, Zoho CRM, and custom CRM solutions. Streamline sales & boost customer relationships. Get free CRM consultation!"
+        keywords="CRM development company India, Salesforce implementation partner, HubSpot development, Microsoft Dynamics 365, Zoho CRM customization, custom CRM development, CRM integration services, sales automation, customer relationship management software, CRM consulting India"
+        canonical="https://eglaftechnology.com/services/crm-development"
+        schema={[
+          schemas.service({
+            name: 'CRM Development & Implementation Services',
+            description: 'Professional CRM development services in India. Salesforce, HubSpot, Microsoft Dynamics, Zoho CRM implementation and custom CRM solutions for businesses.',
+            url: 'https://eglaftechnology.com/services/crm-development',
+          }),
+          schemas.breadcrumb([
+            { name: 'Home', url: 'https://eglaftechnology.com/' },
+            { name: 'Services', url: 'https://eglaftechnology.com/#services' },
+            { name: 'CRM Development', url: 'https://eglaftechnology.com/services/crm-development' },
+          ]),
+        ]}
       />
       <Navbar />
       

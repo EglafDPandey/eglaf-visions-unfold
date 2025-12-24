@@ -86,14 +86,22 @@ export default function AISolutions() {
   return (
     <div className="min-h-screen bg-background">
       <SEO 
-        title="AI Solutions"
-        description="Harness the power of AI with Eglaf Technology. We develop intelligent solutions for chatbots, predictive analytics, process automation, and more."
-        keywords="AI solutions, artificial intelligence, machine learning, chatbots, predictive analytics"
-        schema={schemas.service({
-          name: 'AI Solutions',
-          description: 'Harness the power of AI with intelligent solutions for chatbots, predictive analytics, process automation, and content generation.',
-          url: 'https://eglaftechnology.com/services/ai-solutions',
-        })}
+        title="AI Solutions & Machine Learning Services India - Artificial Intelligence Company"
+        description="Leading AI solutions company in India. Custom ChatGPT integration, machine learning, predictive analytics, computer vision, NLP solutions. Transform your business with AI. Get free AI consultation!"
+        keywords="AI solutions company India, artificial intelligence services, machine learning development, ChatGPT integration, chatbot development, predictive analytics services, computer vision solutions, NLP development, AI automation, deep learning services, AI consulting India, TensorFlow developers, PyTorch development"
+        canonical="https://eglaftechnology.com/services/ai-solutions"
+        schema={[
+          schemas.service({
+            name: 'AI & Machine Learning Solutions',
+            description: 'Expert AI solutions company in India. Chatbots, predictive analytics, process automation, computer vision, and NLP solutions using TensorFlow, PyTorch, and OpenAI.',
+            url: 'https://eglaftechnology.com/services/ai-solutions',
+          }),
+          schemas.breadcrumb([
+            { name: 'Home', url: 'https://eglaftechnology.com/' },
+            { name: 'Services', url: 'https://eglaftechnology.com/#services' },
+            { name: 'AI Solutions', url: 'https://eglaftechnology.com/services/ai-solutions' },
+          ]),
+        ]}
       />
       <Navbar />
       

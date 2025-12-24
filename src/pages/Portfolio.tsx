@@ -172,9 +172,10 @@ export default function Portfolio() {
   return (
     <div className="min-h-screen bg-background">
       <SEO 
-        title="Portfolio"
-        description="Explore Eglaf Technology's portfolio of successful projects across mobile apps, web development, AI solutions, and enterprise software."
-        keywords="portfolio, projects, case studies, mobile apps, web apps, AI projects"
+        title="Portfolio - Our Work & Case Studies"
+        description="Explore Eglaf Technology's portfolio of 500+ successful projects. Mobile apps, web development, AI solutions, CRM systems, and enterprise software. See our work across healthcare, fintech, e-commerce, and more."
+        keywords="software development portfolio, mobile app examples, web development projects, AI project case studies, custom software examples, Flutter apps portfolio, React projects, enterprise software portfolio, tech company work samples"
+        canonical="https://eglaftechnology.com/portfolio"
       />
       <Navbar />
 

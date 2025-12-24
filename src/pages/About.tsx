@@ -128,9 +128,10 @@ export default function About() {
   return (
     <div className="min-h-screen bg-background overflow-hidden">
       <SEO 
-        title="About Us"
-        description="Learn about Eglaf Technology - A forward-thinking technology company transforming businesses through innovative digital solutions since 2014."
-        keywords="about eglaf, technology company, software company, digital solutions"
+        title="About Us - Leading Software Development Company India"
+        description="About Eglaf Technology - Premier software development company in Ahmedabad, India since 2014. 10+ years experience, 500+ projects delivered, 50+ expert developers. Learn about our mission, vision, and journey."
+        keywords="about Eglaf Technology, software company India, IT company Ahmedabad, technology company history, software development firm, tech startup India, Eglaf Technology team, company profile"
+        canonical="https://eglaftechnology.com/about"
       />
       <Navbar />
       
