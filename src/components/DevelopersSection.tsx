@@ -1,5 +1,6 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
 const developers = [
@@ -42,6 +43,11 @@ const hiringModels = [
 function DeveloperCard({ developer, index }: { developer: typeof developers[0]; index: number }) {
   const cardRef = useRef(null);
   const isInView = useInView(cardRef, { once: true, margin: '-50px' });
+  const navigate = useNavigate();
+
+  const handleHireNow = () => {
+    navigate(`/contact?service=Hire ${developer.role}&subject=Hiring Inquiry: ${developer.role}`);
+  };
 
   return (
     <motion.div
@@ -78,7 +84,7 @@ function DeveloperCard({ developer, index }: { developer: typeof developers[0]; 
         ))}
       </div>
 
-      <Button variant="neon" className="w-full">
+      <Button variant="neon" className="w-full" onClick={handleHireNow}>
         Hire Now
       </Button>
     </motion.div>

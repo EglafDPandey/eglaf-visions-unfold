@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Mail, Phone, MapPin, MessageCircle, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,7 +17,32 @@ const contactInfo = [
 ];
 
 export default function Contact() {
+  const [searchParams] = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    subject: '',
+    message: '',
+  });
+
+  useEffect(() => {
+    const service = searchParams.get('service');
+    const subject = searchParams.get('subject');
+    
+    if (service || subject) {
+      setFormData(prev => ({
+        ...prev,
+        subject: subject || `Inquiry about ${service}`,
+        message: service ? `Hi, I'm interested in ${service}. Please provide more details about availability and rates.` : '',
+      }));
+    }
+  }, [searchParams]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,7 +50,7 @@ export default function Contact() {
     await new Promise(resolve => setTimeout(resolve, 1500));
     toast.success('Message sent successfully!');
     setIsSubmitting(false);
-    (e.target as HTMLFormElement).reset();
+    setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
   };
 
   return (
@@ -53,12 +79,12 @@ export default function Contact() {
               <h3 className="text-xl font-display font-semibold mb-6">Send us a Message</h3>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid sm:grid-cols-2 gap-4">
-                  <Input name="name" placeholder="Your Name" required className="bg-muted/50" />
-                  <Input name="email" type="email" placeholder="Email Address" required className="bg-muted/50" />
+                  <Input name="name" placeholder="Your Name" required className="bg-muted/50" value={formData.name} onChange={handleChange} />
+                  <Input name="email" type="email" placeholder="Email Address" required className="bg-muted/50" value={formData.email} onChange={handleChange} />
                 </div>
-                <Input name="phone" placeholder="Phone Number" className="bg-muted/50" />
-                <Input name="subject" placeholder="Subject" required className="bg-muted/50" />
-                <Textarea name="message" placeholder="Your Message" required rows={5} className="bg-muted/50" />
+                <Input name="phone" placeholder="Phone Number" className="bg-muted/50" value={formData.phone} onChange={handleChange} />
+                <Input name="subject" placeholder="Subject" required className="bg-muted/50" value={formData.subject} onChange={handleChange} />
+                <Textarea name="message" placeholder="Your Message" required rows={5} className="bg-muted/50" value={formData.message} onChange={handleChange} />
                 <Button type="submit" variant="hero" size="lg" className="w-full" disabled={isSubmitting}>
                   {isSubmitting ? 'Sending...' : <><Send className="w-4 h-4 mr-2" />Send Message</>}
                 </Button>
