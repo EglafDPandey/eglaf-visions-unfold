@@ -1,5 +1,5 @@
-import { useState, useRef } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Upload, CheckCircle, FileText, X, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -22,8 +22,11 @@ const applicationSchema = z.object({
 
 export default function Apply() {
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const navigate = useNavigate();
-  const position = searchParams.get('position') || '';
+
+  const statePosition = (location.state as { position?: string } | null)?.position;
+  const position = statePosition ?? searchParams.get('position') ?? '';
   
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -34,10 +37,19 @@ export default function Apply() {
     name: '',
     email: '',
     phone: '',
-    position: position,
+    position,
     linkedin_url: '',
     cover_letter: '',
   });
+
+  const lastPrefilledPositionRef = useRef(position);
+
+  useEffect(() => {
+    if (position && position !== lastPrefilledPositionRef.current) {
+      setFormData((prev) => ({ ...prev, position }));
+      lastPrefilledPositionRef.current = position;
+    }
+  }, [position]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
