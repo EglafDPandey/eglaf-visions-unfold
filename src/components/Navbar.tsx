@@ -51,11 +51,13 @@ export function Navbar() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <img 
-              src={eglafLogo} 
-              alt="Eglaf Technology" 
-              className="h-14 md:h-16 w-auto object-contain"
-            />
+            <div className="relative p-2 rounded-xl bg-background/80 backdrop-blur-sm shadow-lg shadow-primary/10 border border-border/50">
+              <img 
+                src={eglafLogo} 
+                alt="Eglaf Technology" 
+                className="h-10 md:h-12 w-auto object-contain drop-shadow-md"
+              />
+            </div>
           </motion.div>
         </Link>
 
