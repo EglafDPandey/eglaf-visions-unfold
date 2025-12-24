@@ -5,7 +5,7 @@ import { ArrowLeft, Bot, Brain, Cpu, Network, Sparkles, Workflow, MessageSquare,
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { SEO, schemas } from '@/components/SEO';
+import { SEO, schemas, faqSchema } from '@/components/SEO';
 
 const technologies = [
   {
@@ -65,6 +65,25 @@ const useCases = [
   },
 ];
 
+const aiFaqs = [
+  {
+    question: 'What AI services does Eglaf Technology offer?',
+    answer: 'We offer chatbot development, predictive analytics, process automation, computer vision, NLP solutions, and custom AI/ML model development using TensorFlow, PyTorch, and OpenAI APIs.',
+  },
+  {
+    question: 'How can AI help my business?',
+    answer: 'AI can automate repetitive tasks, provide 24/7 customer support via chatbots, predict sales trends, personalize customer experiences, and improve decision-making with data insights.',
+  },
+  {
+    question: 'Do you integrate ChatGPT and other LLMs?',
+    answer: 'Yes, we specialize in integrating OpenAI GPT, Claude, LangChain, and other LLMs into business applications for chatbots, content generation, and intelligent automation.',
+  },
+  {
+    question: 'How long does AI development take?',
+    answer: 'Simple AI integrations take 4-8 weeks, custom chatbots 2-3 months, and complex ML solutions 4-6 months. Timeline depends on data availability and model complexity.',
+  },
+];
+
 export default function AISolutions() {
   const heroRef = useRef(null);
   const techRef = useRef(null);
@@ -101,6 +120,7 @@ export default function AISolutions() {
             { name: 'Services', url: 'https://eglaftechnology.com/#services' },
             { name: 'AI Solutions', url: 'https://eglaftechnology.com/services/ai-solutions' },
           ]),
+          faqSchema(aiFaqs),
         ]}
       />
       <Navbar />

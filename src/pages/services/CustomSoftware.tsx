@@ -5,7 +5,7 @@ import { ArrowLeft, Code2, Server, Cloud, Shield, Workflow, Settings, FileText }
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { SEO, schemas } from '@/components/SEO';
+import { SEO, schemas, faqSchema } from '@/components/SEO';
 import { SpaceBackground } from '@/components/SpaceBackground';
 
 const technologies = [
@@ -22,6 +22,25 @@ const services = [
   { icon: Cloud, title: 'Cloud Solutions', description: 'Scalable cloud-native applications' },
   { icon: Server, title: 'API Development', description: 'Robust API design and integration' },
   { icon: Workflow, title: 'Process Automation', description: 'Streamline business workflows' },
+];
+
+const customSoftwareFaqs = [
+  {
+    question: 'What is custom software development?',
+    answer: 'Custom software development creates tailored applications specifically designed for your business needs, unlike off-the-shelf solutions. It offers complete flexibility, scalability, and competitive advantage.',
+  },
+  {
+    question: 'How much does custom software development cost in India?',
+    answer: 'Custom software costs $10,000-$500,000+ depending on complexity. Small applications start at $10,000-$50,000, mid-size projects $50,000-$150,000, and enterprise systems $150,000+.',
+  },
+  {
+    question: 'Which technologies do you use for enterprise software?',
+    answer: 'We use .NET Core, Java Spring, Python Django for backend, React/Angular for frontend, AWS/Azure/GCP for cloud, and Docker/Kubernetes for containerization and orchestration.',
+  },
+  {
+    question: 'Do you provide source code ownership?',
+    answer: 'Yes, you receive complete source code ownership upon project completion. We also provide documentation, training, and knowledge transfer for your team.',
+  },
 ];
 
 export default function CustomSoftware() {
@@ -60,6 +79,7 @@ export default function CustomSoftware() {
             { name: 'Services', url: 'https://eglaftechnology.com/#services' },
             { name: 'Custom Software', url: 'https://eglaftechnology.com/services/custom-software' },
           ]),
+          faqSchema(customSoftwareFaqs),
         ]}
       />
       <Navbar />

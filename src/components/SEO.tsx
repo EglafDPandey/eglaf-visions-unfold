@@ -103,6 +103,65 @@ export const faqSchema = (faqs: { question: string; answer: string }[]) => ({
   })),
 });
 
+// JobPosting Schema generator
+export const jobPostingSchema = (job: {
+  title: string;
+  description: string;
+  department: string;
+  employmentType: string;
+  location: string;
+  remote?: boolean;
+}) => ({
+  '@context': 'https://schema.org',
+  '@type': 'JobPosting',
+  title: job.title,
+  description: job.description,
+  datePosted: new Date().toISOString().split('T')[0],
+  employmentType: job.employmentType.toUpperCase().replace('-', '_'),
+  jobLocationType: job.remote ? 'TELECOMMUTE' : undefined,
+  applicantLocationRequirements: job.remote ? {
+    '@type': 'Country',
+    name: 'India',
+  } : undefined,
+  jobLocation: {
+    '@type': 'Place',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'BH F623 Arved Transcube Plaza, Ranip',
+      addressLocality: 'Ahmedabad',
+      addressRegion: 'Gujarat',
+      postalCode: '382480',
+      addressCountry: 'IN',
+    },
+  },
+  hiringOrganization: {
+    '@type': 'Organization',
+    name: 'Eglaf Technology',
+    sameAs: defaults.siteUrl,
+    logo: `${defaults.siteUrl}/favicon.png`,
+  },
+  industry: 'Software Development',
+  occupationalCategory: job.department,
+});
+
+// CollectionPage Schema for listings (Blog, Portfolio)
+export const collectionPageSchema = (collection: {
+  name: string;
+  description: string;
+  url: string;
+}) => ({
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: collection.name,
+  description: collection.description,
+  url: collection.url,
+  isPartOf: {
+    '@type': 'WebSite',
+    name: 'Eglaf Technology',
+    url: defaults.siteUrl,
+  },
+});
+
 // Local Business Schema
 export const localBusinessSchema = {
   '@context': 'https://schema.org',

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Search, ExternalLink, Smartphone, Globe, Bot, Database, Code, TrendingUp } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { SEO } from '@/components/SEO';
+import { SEO, schemas, collectionPageSchema } from '@/components/SEO';
 import { Input } from '@/components/ui/input';
 
 const categories = [
@@ -176,6 +176,17 @@ export default function Portfolio() {
         description="Explore Eglaf Technology's portfolio of 500+ successful projects. Mobile apps, web development, AI solutions, CRM systems, and enterprise software. See our work across healthcare, fintech, e-commerce, and more."
         keywords="software development portfolio, mobile app examples, web development projects, AI project case studies, custom software examples, Flutter apps portfolio, React projects, enterprise software portfolio, tech company work samples"
         canonical="https://eglaftechnology.com/portfolio"
+        schema={[
+          collectionPageSchema({
+            name: 'Eglaf Technology Portfolio',
+            description: 'Explore our portfolio of 500+ successful projects across mobile apps, web development, AI solutions, and enterprise software.',
+            url: 'https://eglaftechnology.com/portfolio',
+          }),
+          schemas.breadcrumb([
+            { name: 'Home', url: 'https://eglaftechnology.com/' },
+            { name: 'Portfolio', url: 'https://eglaftechnology.com/portfolio' },
+          ]),
+        ]}
       />
       <Navbar />
 

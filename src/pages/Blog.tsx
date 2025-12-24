@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { SEO } from '@/components/SEO';
+import { SEO, schemas, collectionPageSchema } from '@/components/SEO';
 
 interface Blog {
   id: string;
@@ -50,9 +50,21 @@ export default function Blog() {
   return (
     <div className="min-h-screen bg-background">
       <SEO 
-        title="Blog"
-        description="Insights, tutorials, and updates from Eglaf Technology's team of experts on software development, AI, and technology trends."
-        keywords="tech blog, software development blog, AI insights, technology articles"
+        title="Blog - Software Development Insights & Tech Tutorials"
+        description="Insights, tutorials, and updates from Eglaf Technology's team of experts on software development, AI, machine learning, web development, and technology trends."
+        keywords="tech blog, software development blog, AI insights, technology articles, web development tutorials, React guides, mobile app development tips, programming blog India"
+        canonical="https://eglaftechnology.com/blog"
+        schema={[
+          collectionPageSchema({
+            name: 'Eglaf Technology Blog',
+            description: 'Insights, tutorials, and updates on software development, AI, and technology trends.',
+            url: 'https://eglaftechnology.com/blog',
+          }),
+          schemas.breadcrumb([
+            { name: 'Home', url: 'https://eglaftechnology.com/' },
+            { name: 'Blog', url: 'https://eglaftechnology.com/blog' },
+          ]),
+        ]}
       />
       <Navbar />
 

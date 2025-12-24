@@ -5,7 +5,7 @@ import { ArrowLeft, Globe, Palette, Code, Zap, Lock, Gauge, FileText } from 'luc
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { SEO, schemas } from '@/components/SEO';
+import { SEO, schemas, faqSchema } from '@/components/SEO';
 import { SpaceBackground } from '@/components/SpaceBackground';
 
 const technologies = [
@@ -48,6 +48,25 @@ const features = [
   { icon: Gauge, title: 'SEO Optimized', description: 'Rank higher in search results' },
 ];
 
+const webDevFaqs = [
+  {
+    question: 'How much does web development cost in India?',
+    answer: 'Web development costs in India range from $2,000 for basic websites to $50,000+ for complex web applications. Factors include features, design complexity, and timeline. Contact us for a free quote.',
+  },
+  {
+    question: 'How long does it take to build a website?',
+    answer: 'A simple website takes 2-4 weeks, while complex web applications may take 3-6 months. Timeline depends on features, design requirements, and content availability.',
+  },
+  {
+    question: 'Which technologies do you use for web development?',
+    answer: 'We use modern technologies including React, Next.js, Vue.js, Node.js, TypeScript, and Tailwind CSS. We choose the best tech stack based on your project requirements.',
+  },
+  {
+    question: 'Do you provide website maintenance and support?',
+    answer: 'Yes, we offer comprehensive maintenance packages including updates, security patches, performance optimization, and 24/7 support.',
+  },
+];
+
 export default function WebDevelopment() {
   const heroRef = useRef(null);
   const techRef = useRef(null);
@@ -84,6 +103,7 @@ export default function WebDevelopment() {
             { name: 'Services', url: 'https://eglaftechnology.com/#services' },
             { name: 'Web Development', url: 'https://eglaftechnology.com/services/web-development' },
           ]),
+          faqSchema(webDevFaqs),
         ]}
       />
       <Navbar />
