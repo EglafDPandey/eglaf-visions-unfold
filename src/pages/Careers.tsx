@@ -69,7 +69,7 @@ export default function Careers() {
 
                   <Button
                     variant="outline"
-                    onClick={() => navigate(`/apply?position=${encodeURIComponent(pos.title)}`)}
+                    onClick={() => navigate('/apply', { state: { position: pos.title } })}
                   >
                     Apply Now
                   </Button>
