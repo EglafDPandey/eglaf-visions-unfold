@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 import { trackEvent, trackConversion } from '@/components/GoogleAnalytics';
 import { supabase } from '@/integrations/supabase/client';
 import { z } from 'zod';
+import { useSpamProtection } from '@/hooks/useSpamProtection';
 
 const contactSchema = z.object({
   name: z.string().trim().min(2, 'Name must be at least 2 characters').max(100, 'Name is too long'),
@@ -32,6 +33,8 @@ export default function Contact() {
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [honeypot, setHoneypot] = useState('');
+  const { validateSubmission, resetFormLoadTime } = useSpamProtection();
 
   const prefills = useMemo(() => {
     const state = (location.state as { service?: string; subject?: string } | null) ?? null;
@@ -48,6 +51,11 @@ export default function Contact() {
     subject: '',
     message: '',
   });
+
+  // Reset form load time when component mounts
+  useEffect(() => {
+    resetFormLoadTime();
+  }, [resetFormLoadTime]);
 
   useEffect(() => {
     const { service, subject } = prefills;
@@ -71,6 +79,14 @@ export default function Contact() {
     e.preventDefault();
     setIsSubmitting(true);
     
+    // Spam protection check
+    const spamCheck = validateSubmission(honeypot);
+    if (!spamCheck.valid) {
+      toast.error(spamCheck.error || 'Unable to submit. Please try again.');
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       // Validate form data
       const validatedData = contactSchema.parse(formData);
@@ -99,6 +115,8 @@ export default function Contact() {
       
       toast.success('Message sent successfully!');
       setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+      setHoneypot('');
+      resetFormLoadTime();
     } catch (error) {
       if (error instanceof z.ZodError) {
         toast.error(error.errors[0].message);
@@ -145,6 +163,19 @@ export default function Contact() {
             <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} className="glass-card p-8">
               <h3 className="text-xl font-display font-semibold mb-6">Send us a Message</h3>
               <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Honeypot field - hidden from real users, bots will fill it */}
+                <div className="absolute -left-[9999px] opacity-0 h-0 overflow-hidden" aria-hidden="true">
+                  <label htmlFor="company_website_hp">Leave this field empty</label>
+                  <input
+                    type="text"
+                    id="company_website_hp"
+                    name="company_website"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                </div>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <Input name="name" placeholder="Your Name" required className="bg-muted/50" value={formData.name} onChange={handleChange} />
                   <Input name="email" type="email" placeholder="Email Address" required className="bg-muted/50" value={formData.email} onChange={handleChange} />

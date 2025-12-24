@@ -1,5 +1,5 @@
 import { motion, useInView } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -7,6 +7,7 @@ import { Mail, Phone, MapPin, Send, MessageCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { z } from 'zod';
+import { useSpamProtection } from '@/hooks/useSpamProtection';
 
 const contactSchema = z.object({
   name: z.string().trim().min(2, 'Name must be at least 2 characters').max(100, 'Name is too long'),
@@ -46,11 +47,26 @@ export function ContactSection() {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [honeypot, setHoneypot] = useState('');
+  const { validateSubmission, resetFormLoadTime } = useSpamProtection();
+
+  // Reset form load time when component mounts
+  useEffect(() => {
+    resetFormLoadTime();
+  }, [resetFormLoadTime]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     
+    // Spam protection check
+    const spamCheck = validateSubmission(honeypot);
+    if (!spamCheck.valid) {
+      toast.error(spamCheck.error || 'Unable to submit. Please try again.');
+      setIsSubmitting(false);
+      return;
+    }
+
     const formElement = e.currentTarget;
     const formData = new FormData(formElement);
     const rawData = {
@@ -76,6 +92,8 @@ export function ContactSection() {
       } else {
         toast.success('Message sent successfully! We\'ll get back to you soon.');
         formElement.reset();
+        setHoneypot('');
+        resetFormLoadTime();
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -139,6 +157,19 @@ export function ContactSection() {
             </h3>
             
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Honeypot field - hidden from real users, bots will fill it */}
+              <div className="absolute -left-[9999px] opacity-0 h-0 overflow-hidden" aria-hidden="true">
+                <label htmlFor="website_url_hp">Leave this field empty</label>
+                <input
+                  type="text"
+                  id="website_url_hp"
+                  name="website_url"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-muted-foreground mb-2">
