@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { Mail, Phone, MapPin, MessageCircle, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,7 +18,17 @@ const contactInfo = [
 
 export default function Contact() {
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const prefills = useMemo(() => {
+    const state = (location.state as { service?: string; subject?: string } | null) ?? null;
+    const service = state?.service ?? searchParams.get('service') ?? undefined;
+    const subject = state?.subject ?? searchParams.get('subject') ?? undefined;
+
+    return { service, subject };
+  }, [location.state, searchParams]);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -28,17 +38,18 @@ export default function Contact() {
   });
 
   useEffect(() => {
-    const service = searchParams.get('service');
-    const subject = searchParams.get('subject');
-    
+    const { service, subject } = prefills;
+
     if (service || subject) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         subject: subject || `Inquiry about ${service}`,
-        message: service ? `Hi, I'm interested in ${service}. Please provide more details about availability and rates.` : '',
+        message: service
+          ? `Hi, I'm interested in ${service}. Please provide more details about availability and rates.`
+          : prev.message,
       }));
     }
-  }, [searchParams]);
+  }, [prefills]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
