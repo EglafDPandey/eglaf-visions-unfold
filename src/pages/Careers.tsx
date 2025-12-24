@@ -1,12 +1,9 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
-import { Briefcase, MapPin, Clock, Upload, CheckCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Briefcase, MapPin, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { toast } from 'sonner';
 
 const positions = [
   { title: 'Senior React Developer', location: 'Remote', type: 'Full-time', department: 'Engineering' },
@@ -18,14 +15,6 @@ const positions = [
 ];
 
 export default function Careers() {
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitted(true);
-    toast.success('Application submitted successfully!');
-  };
-
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -47,7 +36,7 @@ export default function Careers() {
           </motion.div>
 
           {/* Open Positions */}
-          <div className="max-w-4xl mx-auto mb-20">
+          <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl font-display font-bold mb-8">Open Positions</h2>
             <div className="space-y-4">
               {positions.map((pos, i) => (
@@ -60,45 +49,13 @@ export default function Careers() {
                       <span className="flex items-center gap-1"><Briefcase className="w-4 h-4" />{pos.department}</span>
                     </div>
                   </div>
-                  <Button variant="outline">Apply Now</Button>
+                  <Link to={`/apply?position=${encodeURIComponent(pos.title)}`}>
+                    <Button variant="outline">Apply Now</Button>
+                  </Link>
                 </motion.div>
               ))}
             </div>
           </div>
-
-          {/* Application Form */}
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="max-w-2xl mx-auto">
-            <div className="glass-card p-8">
-              <h2 className="text-2xl font-display font-bold mb-6 text-center">
-                <Upload className="w-6 h-6 inline mr-2" />
-                Drop Your CV
-              </h2>
-              {submitted ? (
-                <div className="text-center py-8">
-                  <CheckCircle className="w-16 h-16 text-primary mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">Application Submitted!</h3>
-                  <p className="text-muted-foreground">We'll review your application and get back to you soon.</p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <Input placeholder="Your Name" required className="bg-muted/50" />
-                    <Input type="email" placeholder="Email Address" required className="bg-muted/50" />
-                  </div>
-                  <Input placeholder="Phone Number" className="bg-muted/50" />
-                  <Input placeholder="Position Applying For" required className="bg-muted/50" />
-                  <Input placeholder="LinkedIn Profile URL" className="bg-muted/50" />
-                  <div className="border-2 border-dashed border-border rounded-xl p-8 text-center hover:border-primary/50 transition-colors cursor-pointer">
-                    <Upload className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
-                    <p className="text-muted-foreground">Drag & drop your CV here or click to browse</p>
-                    <input type="file" className="hidden" accept=".pdf,.doc,.docx" />
-                  </div>
-                  <Textarea placeholder="Cover Letter (Optional)" rows={4} className="bg-muted/50" />
-                  <Button type="submit" variant="hero" size="lg" className="w-full">Submit Application</Button>
-                </form>
-              )}
-            </div>
-          </motion.div>
         </div>
       </section>
 
