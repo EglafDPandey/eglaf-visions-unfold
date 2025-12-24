@@ -5,7 +5,7 @@ import { ArrowLeft, Code2, Server, Cloud, Shield, Workflow, Settings, FileText }
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { SEO } from '@/components/SEO';
+import { SEO, schemas } from '@/components/SEO';
 import { SpaceBackground } from '@/components/SpaceBackground';
 
 const technologies = [
@@ -48,6 +48,11 @@ export default function CustomSoftware() {
         title="Custom Software Development"
         description="Enterprise-grade custom software development by Eglaf Technology. .NET, Java, Python, and cloud solutions for your business needs."
         keywords="custom software, enterprise software, .NET development, Java development, cloud solutions"
+        schema={schemas.service({
+          name: 'Custom Software Development',
+          description: 'Enterprise-grade custom software development using .NET, Java, Python, and cloud solutions for your business needs.',
+          url: 'https://eglaftechnology.com/services/custom-software',
+        })}
       />
       <Navbar />
       

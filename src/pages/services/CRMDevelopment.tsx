@@ -5,7 +5,7 @@ import { ArrowLeft, Database, Users, BarChart3, Settings, Shield, Cloud, Puzzle,
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { SEO } from '@/components/SEO';
+import { SEO, schemas } from '@/components/SEO';
 import { SpaceBackground } from '@/components/SpaceBackground';
 
 const technologies = [
@@ -78,6 +78,11 @@ export default function CRMDevelopment() {
         title="CRM Development"
         description="Custom CRM development by Eglaf Technology. Salesforce, HubSpot, and custom CRM solutions to streamline your sales and customer relationships."
         keywords="CRM development, Salesforce, HubSpot, customer relationship management, sales CRM"
+        schema={schemas.service({
+          name: 'CRM Development',
+          description: 'Custom CRM development with Salesforce, HubSpot, and bespoke solutions to streamline sales and customer relationships.',
+          url: 'https://eglaftechnology.com/services/crm-development',
+        })}
       />
       <Navbar />
       

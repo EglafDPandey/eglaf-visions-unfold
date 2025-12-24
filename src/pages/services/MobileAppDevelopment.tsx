@@ -5,7 +5,7 @@ import { ArrowLeft, Smartphone, Zap, Shield, Layers, Code2, Rocket, FileText } f
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { SEO } from '@/components/SEO';
+import { SEO, schemas } from '@/components/SEO';
 import { SpaceBackground } from '@/components/SpaceBackground';
 
 const technologies = [
@@ -72,6 +72,11 @@ export default function MobileAppDevelopment() {
         title="Mobile App Development"
         description="Build stunning, high-performance mobile applications for iOS and Android with Eglaf Technology. Flutter, React Native, Swift, and Kotlin expertise."
         keywords="mobile app development, iOS app, Android app, Flutter, React Native, mobile development"
+        schema={schemas.service({
+          name: 'Mobile App Development',
+          description: 'Build stunning, high-performance mobile applications for iOS and Android using Flutter, React Native, Swift, and Kotlin.',
+          url: 'https://eglaftechnology.com/services/mobile-development',
+        })}
       />
       <Navbar />
       

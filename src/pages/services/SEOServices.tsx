@@ -5,7 +5,7 @@ import { ArrowLeft, Search, TrendingUp, Target, BarChart3, Globe, Zap, FileText 
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { SEO } from '@/components/SEO';
+import { SEO, schemas } from '@/components/SEO';
 import { SpaceBackground } from '@/components/SpaceBackground';
 
 const services = [
@@ -71,6 +71,11 @@ export default function SEOServices() {
         title="SEO Services"
         description="Professional SEO services by Eglaf Technology. Technical SEO, on-page optimization, and link building to boost your search rankings."
         keywords="SEO services, search engine optimization, technical SEO, on-page SEO, link building"
+        schema={schemas.service({
+          name: 'SEO Services',
+          description: 'Professional SEO services including technical SEO, on-page optimization, and link building to boost search rankings.',
+          url: 'https://eglaftechnology.com/services/seo-services',
+        })}
       />
       <Navbar />
       

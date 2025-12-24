@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { SEO } from '@/components/SEO';
+import { SEO, schemas } from '@/components/SEO';
 
 interface Blog {
   id: string;
@@ -94,6 +94,13 @@ export default function BlogPost() {
         title={blog.title}
         description={blog.excerpt || `Read ${blog.title} on Eglaf Technology's blog.`}
         ogImage={blog.cover_image || undefined}
+        schema={schemas.article({
+          title: blog.title,
+          description: blog.excerpt || `Read ${blog.title} on Eglaf Technology's blog.`,
+          url: `https://eglaftechnology.com/blog/${blog.slug}`,
+          image: blog.cover_image || undefined,
+          datePublished: blog.published_at || blog.created_at,
+        })}
       />
       <Navbar />
 
