@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Briefcase, MapPin, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/Navbar';
@@ -15,6 +15,8 @@ const positions = [
 ];
 
 export default function Careers() {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -49,10 +51,12 @@ export default function Careers() {
                       <span className="flex items-center gap-1"><Briefcase className="w-4 h-4" />{pos.department}</span>
                     </div>
                   </div>
-                  <Button variant="outline" asChild>
-                    <Link to={`/apply?position=${encodeURIComponent(pos.title)}`}>Apply Now</Link>
+                  <Button
+                    variant="outline"
+                    onClick={() => navigate(`/apply?position=${encodeURIComponent(pos.title)}`)}
+                  >
+                    Apply Now
                   </Button>
-                </motion.div>
               ))}
             </div>
           </div>
