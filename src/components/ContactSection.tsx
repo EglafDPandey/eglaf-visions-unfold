@@ -6,6 +6,14 @@ import { Textarea } from '@/components/ui/textarea';
 import { Mail, Phone, MapPin, Send, MessageCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { z } from 'zod';
+
+const contactSchema = z.object({
+  name: z.string().trim().min(2, 'Name must be at least 2 characters').max(100, 'Name is too long'),
+  email: z.string().trim().email('Invalid email address').max(255, 'Email is too long'),
+  phone: z.string().trim().max(20, 'Phone number is too long').optional().or(z.literal('')),
+  message: z.string().trim().min(10, 'Message must be at least 10 characters').max(5000, 'Message is too long'),
+});
 
 const contactInfo = [
   {
@@ -43,26 +51,41 @@ export function ContactSection() {
     e.preventDefault();
     setIsSubmitting(true);
     
-    const formData = new FormData(e.currentTarget);
-    const name = formData.get('name') as string;
-    const email = formData.get('email') as string;
-    const phone = formData.get('phone') as string;
-    const message = formData.get('message') as string;
+    const formElement = e.currentTarget;
+    const formData = new FormData(formElement);
+    const rawData = {
+      name: formData.get('name') as string,
+      email: formData.get('email') as string,
+      phone: formData.get('phone') as string,
+      message: formData.get('message') as string,
+    };
 
-    const { error } = await supabase.from('contacts').insert({
-      name,
-      email,
-      phone: phone || null,
-      message,
-    });
+    try {
+      // Validate form data
+      const validatedData = contactSchema.parse(rawData);
 
-    if (error) {
-      toast.error('Failed to send message. Please try again.');
-    } else {
-      toast.success('Message sent successfully! We\'ll get back to you soon.');
-      (e.target as HTMLFormElement).reset();
+      const { error } = await supabase.from('contacts').insert({
+        name: validatedData.name,
+        email: validatedData.email,
+        phone: validatedData.phone || null,
+        message: validatedData.message,
+      });
+
+      if (error) {
+        toast.error('Failed to send message. Please try again.');
+      } else {
+        toast.success('Message sent successfully! We\'ll get back to you soon.');
+        formElement.reset();
+      }
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        toast.error(error.errors[0].message);
+      } else {
+        toast.error('Failed to send message. Please try again.');
+      }
+    } finally {
+      setIsSubmitting(false);
     }
-    setIsSubmitting(false);
   };
 
   return (

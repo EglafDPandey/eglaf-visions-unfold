@@ -14,6 +14,20 @@ import { SEO } from '@/components/SEO';
 import { toast } from 'sonner';
 import { trackEvent, trackConversion } from '@/components/GoogleAnalytics';
 import { supabase } from '@/integrations/supabase/client';
+import { z } from 'zod';
+
+const quoteRequestSchema = z.object({
+  name: z.string().trim().min(2, 'Name must be at least 2 characters').max(100, 'Name is too long'),
+  email: z.string().trim().email('Invalid email address').max(255, 'Email is too long'),
+  phone: z.string().trim().max(20, 'Phone number is too long').optional().or(z.literal('')),
+  company: z.string().trim().max(100, 'Company name is too long').optional().or(z.literal('')),
+  projectTitle: z.string().trim().min(5, 'Project title must be at least 5 characters').max(200, 'Project title is too long'),
+  projectDescription: z.string().trim().min(20, 'Project description must be at least 20 characters').max(10000, 'Project description is too long'),
+  budget: z.string().min(1, 'Please select a budget range'),
+  timeline: z.string().min(1, 'Please select a timeline'),
+  existingWebsite: z.string().trim().url('Invalid URL').max(500, 'URL is too long').optional().or(z.literal('')),
+  additionalInfo: z.string().trim().max(5000, 'Additional info is too long').optional().or(z.literal('')),
+});
 
 const services = [
   { id: 'web-development', label: 'Web Development' },
@@ -110,21 +124,24 @@ export default function QuoteRequest() {
     setIsSubmitting(true);
     
     try {
+      // Validate form data
+      const validatedData = quoteRequestSchema.parse(formData);
+      
       // Save to database
       const { error } = await supabase
         .from('quote_requests')
         .insert({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone || null,
-          company: formData.company || null,
+          name: validatedData.name,
+          email: validatedData.email,
+          phone: validatedData.phone || null,
+          company: validatedData.company || null,
           services: selectedServices,
-          project_title: formData.projectTitle,
-          project_description: formData.projectDescription,
-          budget: formData.budget,
-          timeline: formData.timeline,
-          existing_website: formData.existingWebsite || null,
-          additional_info: formData.additionalInfo || null,
+          project_title: validatedData.projectTitle,
+          project_description: validatedData.projectDescription,
+          budget: validatedData.budget,
+          timeline: validatedData.timeline,
+          existing_website: validatedData.existingWebsite || null,
+          additional_info: validatedData.additionalInfo || null,
         });
 
       if (error) {
@@ -134,8 +151,8 @@ export default function QuoteRequest() {
       // Track conversion for quote request
       trackConversion('quote_request', {
         services: selectedServices.join(', '),
-        budget: formData.budget,
-        timeline: formData.timeline,
+        budget: validatedData.budget,
+        timeline: validatedData.timeline,
       });
       
       // Track event for detailed analytics
@@ -158,8 +175,12 @@ export default function QuoteRequest() {
       });
       setSelectedServices([]);
     } catch (error) {
-      console.error('Error submitting quote request:', error);
-      toast.error('Failed to submit quote request. Please try again.');
+      if (error instanceof z.ZodError) {
+        toast.error(error.errors[0].message);
+      } else {
+        console.error('Error submitting quote request:', error);
+        toast.error('Failed to submit quote request. Please try again.');
+      }
     } finally {
       setIsSubmitting(false);
     }
