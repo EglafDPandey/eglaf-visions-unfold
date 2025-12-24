@@ -46,13 +46,12 @@ export function Footer() {
               className="inline-flex items-center mb-6"
               whileHover={{ scale: 1.05 }}
             >
-              <div className="p-3 rounded-xl bg-background/80 backdrop-blur-sm shadow-lg shadow-primary/10 border border-border/50">
-                <img 
-                  src={eglafLogo} 
-                  alt="Eglaf Technology" 
-                  className="h-16 md:h-20 w-auto object-contain drop-shadow-md"
-                />
-              </div>
+              <img 
+                src={eglafLogo} 
+                alt="Eglaf Technology" 
+                className="h-20 md:h-24 w-auto object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.3)] brightness-110 contrast-110"
+                style={{ filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.4))' }}
+              />
             </motion.a>
             
             <p className="text-muted-foreground mb-6 max-w-sm leading-relaxed">
