@@ -46,7 +46,12 @@ function DeveloperCard({ developer, index }: { developer: typeof developers[0]; 
   const navigate = useNavigate();
 
   const handleHireNow = () => {
-    navigate(`/contact?service=Hire ${developer.role}&subject=Hiring Inquiry: ${developer.role}`);
+    navigate('/contact', {
+      state: {
+        service: `Hire ${developer.role}`,
+        subject: `Hiring Inquiry: ${developer.role}`,
+      },
+    });
   };
 
   return (
