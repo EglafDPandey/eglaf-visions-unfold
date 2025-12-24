@@ -18,7 +18,7 @@ const contactSchema = z.object({
   email: z.string().trim().email('Invalid email address').max(255, 'Email is too long'),
   phone: z.string().trim().max(20, 'Phone number is too long').optional().or(z.literal('')),
   subject: z.string().trim().max(200, 'Subject is too long').optional().or(z.literal('')),
-  message: z.string().trim().min(10, 'Message must be at least 10 characters').max(5000, 'Message is too long'),
+  message: z.string().trim().min(1, 'Message is required').max(5000, 'Message is too long'),
 });
 
 const contactInfo = [
@@ -84,7 +84,7 @@ export default function Contact() {
       });
 
       if (error) {
-        toast.error('Failed to send message. Please try again.');
+        toast.error(error.message || 'Failed to send message. Please try again.');
         return;
       }
       

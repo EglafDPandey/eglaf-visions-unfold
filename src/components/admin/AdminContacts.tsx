@@ -40,7 +40,7 @@ export default function AdminContacts() {
     if (error) {
       toast({
         title: 'Error',
-        description: 'Failed to fetch contacts',
+        description: error.message || 'Failed to fetch contacts',
         variant: 'destructive',
       });
     } else {
