@@ -98,6 +98,60 @@ export type Database = {
         }
         Relationships: []
       }
+      quote_requests: {
+        Row: {
+          additional_info: string | null
+          budget: string
+          company: string | null
+          created_at: string
+          email: string
+          existing_website: string | null
+          id: string
+          name: string
+          phone: string | null
+          project_description: string
+          project_title: string
+          services: string[]
+          status: string
+          timeline: string
+          updated_at: string
+        }
+        Insert: {
+          additional_info?: string | null
+          budget: string
+          company?: string | null
+          created_at?: string
+          email: string
+          existing_website?: string | null
+          id?: string
+          name: string
+          phone?: string | null
+          project_description: string
+          project_title: string
+          services: string[]
+          status?: string
+          timeline: string
+          updated_at?: string
+        }
+        Update: {
+          additional_info?: string | null
+          budget?: string
+          company?: string | null
+          created_at?: string
+          email?: string
+          existing_website?: string | null
+          id?: string
+          name?: string
+          phone?: string | null
+          project_description?: string
+          project_title?: string
+          services?: string[]
+          status?: string
+          timeline?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string

@@ -1,12 +1,28 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+// Restrict CORS to specific origins
+const getAllowedOrigin = (requestOrigin: string | null): string => {
+  const allowedOrigins = [
+    Deno.env.get('ALLOWED_ORIGIN') || 'https://eglaftechnology.com',
+    'https://eglaftechnology.lovable.app',
+    'http://localhost:5173', // Local development
+    'http://localhost:3000',
+  ];
+  
+  if (requestOrigin && allowedOrigins.includes(requestOrigin)) {
+    return requestOrigin;
+  }
+  return allowedOrigins[0];
 };
 
 serve(async (req) => {
+  const origin = req.headers.get('origin');
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': getAllowedOrigin(origin),
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  };
+
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -26,14 +42,25 @@ serve(async (req) => {
 
     const { email, password } = await req.json();
     
-    if (!email || !password) {
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
       return new Response(
-        JSON.stringify({ error: 'Email and password are required' }),
+        JSON.stringify({ error: 'Valid email is required' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    // Validate password strength
+    if (!password || password.length < 8) {
+      return new Response(
+        JSON.stringify({ error: 'Password must be at least 8 characters' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    console.log('Creating admin user:', email);
+    // Log attempt (without sensitive data)
+    console.log(`Admin creation attempt from origin: ${origin}, email domain: ${email.split('@')[1]}`);
 
     // Create user using admin API
     const { data: userData, error: createError } = await supabaseAdmin.auth.admin.createUser({
@@ -43,7 +70,7 @@ serve(async (req) => {
     });
 
     if (createError) {
-      console.error('Error creating user:', createError);
+      console.error('Error creating user:', createError.message);
       return new Response(
         JSON.stringify({ error: createError.message }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -57,7 +84,7 @@ serve(async (req) => {
       );
     }
 
-    console.log('User created, adding admin role for user:', userData.user.id);
+    console.log('User created, adding admin role');
 
     // Add admin role
     const { error: roleError } = await supabaseAdmin
@@ -68,7 +95,7 @@ serve(async (req) => {
       });
 
     if (roleError) {
-      console.error('Error adding admin role:', roleError);
+      console.error('Error adding admin role:', roleError.message);
       return new Response(
         JSON.stringify({ error: 'User created but failed to add admin role: ' + roleError.message }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -78,7 +105,7 @@ serve(async (req) => {
     console.log('Admin user setup complete!');
 
     return new Response(
-      JSON.stringify({ success: true, message: 'Admin user created successfully', userId: userData.user.id }),
+      JSON.stringify({ success: true, message: 'Admin user created successfully' }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 

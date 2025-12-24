@@ -13,6 +13,7 @@ import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
 import { toast } from 'sonner';
 import { trackEvent, trackConversion } from '@/components/GoogleAnalytics';
+import { supabase } from '@/integrations/supabase/client';
 
 const services = [
   { id: 'web-development', label: 'Web Development' },
@@ -108,36 +109,60 @@ export default function QuoteRequest() {
 
     setIsSubmitting(true);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    // Track conversion for quote request
-    trackConversion('quote_request', {
-      services: selectedServices.join(', '),
-      budget: formData.budget,
-      timeline: formData.timeline,
-    });
-    
-    // Track event for detailed analytics
-    trackEvent('form_submit', 'Quote Request', selectedServices.join(', '));
-    
-    toast.success('Quote request submitted successfully! We\'ll get back to you within 24 hours.');
-    setIsSubmitting(false);
-    
-    // Reset form
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      company: '',
-      projectTitle: '',
-      projectDescription: '',
-      budget: '',
-      timeline: '',
-      existingWebsite: '',
-      additionalInfo: '',
-    });
-    setSelectedServices([]);
+    try {
+      // Save to database
+      const { error } = await supabase
+        .from('quote_requests')
+        .insert({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || null,
+          company: formData.company || null,
+          services: selectedServices,
+          project_title: formData.projectTitle,
+          project_description: formData.projectDescription,
+          budget: formData.budget,
+          timeline: formData.timeline,
+          existing_website: formData.existingWebsite || null,
+          additional_info: formData.additionalInfo || null,
+        });
+
+      if (error) {
+        throw error;
+      }
+      
+      // Track conversion for quote request
+      trackConversion('quote_request', {
+        services: selectedServices.join(', '),
+        budget: formData.budget,
+        timeline: formData.timeline,
+      });
+      
+      // Track event for detailed analytics
+      trackEvent('form_submit', 'Quote Request', selectedServices.join(', '));
+      
+      toast.success('Quote request submitted successfully! We\'ll get back to you within 24 hours.');
+      
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        company: '',
+        projectTitle: '',
+        projectDescription: '',
+        budget: '',
+        timeline: '',
+        existingWebsite: '',
+        additionalInfo: '',
+      });
+      setSelectedServices([]);
+    } catch (error) {
+      console.error('Error submitting quote request:', error);
+      toast.error('Failed to submit quote request. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
