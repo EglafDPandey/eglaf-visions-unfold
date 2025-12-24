@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, forwardRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
@@ -14,7 +14,7 @@ const navItems = [
   { name: 'Contact', href: '/contact', isHash: false },
 ];
 
-export function Navbar() {
+export const Navbar = forwardRef<HTMLElement, object>(function Navbar(_props, ref) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
@@ -37,6 +37,7 @@ export function Navbar() {
 
   return (
     <motion.nav
+      ref={ref}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
@@ -152,6 +153,6 @@ export function Navbar() {
       </AnimatePresence>
     </motion.nav>
   );
-}
+});
 
 export default Navbar;

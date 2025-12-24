@@ -1,5 +1,5 @@
+import { forwardRef, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { useMemo } from 'react';
 
 interface Star {
   id: number;
@@ -26,7 +26,7 @@ interface Planet {
   orbitDuration: number;
 }
 
-export function SpaceBackground() {
+export const SpaceBackground = forwardRef<HTMLDivElement, object>(function SpaceBackground(_props, ref) {
   const stars = useMemo<Star[]>(() => 
     Array.from({ length: 50 }, (_, i) => ({
       id: i,
@@ -54,7 +54,7 @@ export function SpaceBackground() {
   ], []);
 
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <div ref={ref} className="absolute inset-0 overflow-hidden pointer-events-none">
       {/* Deep space gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-background/95" />
       
@@ -220,4 +220,4 @@ export function SpaceBackground() {
       ))}
     </div>
   );
-}
+});
