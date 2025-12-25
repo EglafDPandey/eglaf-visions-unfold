@@ -1,7 +1,12 @@
-import { useRef, useMemo, useState, useEffect } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { useRef, useMemo, useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Points, PointMaterial } from '@react-three/drei';
 import * as THREE from 'three';
+
+// Props interface for visibility control
+interface HeroSceneProps {
+  isVisible?: boolean;
+}
 
 // Reduced particle count for better performance
 const PARTICLE_COUNT = 500;
@@ -129,7 +134,7 @@ function RotatingRing() {
   );
 }
 
-export function HeroScene() {
+export function HeroScene({ isVisible = true }: HeroSceneProps) {
   const [isReady, setIsReady] = useState(false);
   
   // Defer heavy 3D initialization to not block main thread
@@ -149,6 +154,7 @@ export function HeroScene() {
         style={{ background: 'transparent' }}
         dpr={[1, 1.5]}
         performance={{ min: 0.5 }}
+        frameloop={isVisible ? 'always' : 'never'}
       >
         <ambientLight intensity={0.2} />
         <pointLight position={[10, 10, 10]} intensity={0.5} />
