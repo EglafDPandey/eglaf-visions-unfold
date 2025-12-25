@@ -102,9 +102,9 @@ export function AboutSection() {
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center mb-4">
                   <value.icon className="w-6 h-6 text-primary" />
                 </div>
-                <h4 className="text-lg font-display font-semibold text-foreground mb-2">
+                <h3 className="text-lg font-display font-semibold text-foreground mb-2">
                   {value.title}
-                </h4>
+                </h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   {value.description}
                 </p>
