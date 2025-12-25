@@ -25,16 +25,17 @@ export function HeroSection() {
   const [showScene, setShowScene] = useState(false);
   
   useEffect(() => {
-    // Wait for initial content to paint before loading heavy 3D
-    const timer = requestIdleCallback ? 
-      requestIdleCallback(() => setShowScene(true)) :
-      setTimeout(() => setShowScene(true), 100);
-    
-    return () => {
-      if (typeof timer === 'number') {
-        cancelIdleCallback ? cancelIdleCallback(timer) : clearTimeout(timer);
+    // Wait longer for initial content to paint before loading heavy 3D
+    // This significantly reduces TBT by deferring Three.js initialization
+    const timer = setTimeout(() => {
+      if (typeof requestIdleCallback !== 'undefined') {
+        requestIdleCallback(() => setShowScene(true), { timeout: 2000 });
+      } else {
+        setShowScene(true);
       }
-    };
+    }, 500);
+    
+    return () => clearTimeout(timer);
   }, []);
 
   return (
