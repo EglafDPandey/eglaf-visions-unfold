@@ -140,6 +140,25 @@
         }
       }
     </script>
+    
+    <!-- Critical inline CSS to reduce render-blocking -->
+    <style>
+      :root {
+        --background: 240 10% 4%;
+        --foreground: 60 5% 90%;
+        --primary: 250 89% 68%;
+      }
+      *, *::before, *::after { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background-color: hsl(240 10% 4%);
+        color: hsl(60 5% 90%);
+        font-family: 'Inter', system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      #root { min-height: 100vh; }
+    </style>
   </head>
 
   <body>
