@@ -2,7 +2,17 @@ import { motion } from 'framer-motion';
 import { Link, useLocation, createSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles } from 'lucide-react';
-import HeroScene from './HeroScene';
+import { lazy, Suspense, useState, useEffect } from 'react';
+
+// Lazy load the heavy 3D scene to improve FCP
+const HeroScene = lazy(() => import('./HeroScene'));
+
+// Simple gradient fallback while 3D loads
+function HeroSceneFallback() {
+  return (
+    <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary/10 via-background to-purple-500/10" />
+  );
+}
 
 export function HeroSection() {
   const location = useLocation();
@@ -11,10 +21,32 @@ export function HeroSection() {
     search: `?${createSearchParams({ from: location.pathname + location.search }).toString()}`,
   };
 
+  // Delay loading the 3D scene until after initial paint
+  const [showScene, setShowScene] = useState(false);
+  
+  useEffect(() => {
+    // Wait for initial content to paint before loading heavy 3D
+    const timer = requestIdleCallback ? 
+      requestIdleCallback(() => setShowScene(true)) :
+      setTimeout(() => setShowScene(true), 100);
+    
+    return () => {
+      if (typeof timer === 'number') {
+        cancelIdleCallback ? cancelIdleCallback(timer) : clearTimeout(timer);
+      }
+    };
+  }, []);
+
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* 3D Background */}
-      <HeroScene />
+      {/* 3D Background - lazy loaded */}
+      {showScene ? (
+        <Suspense fallback={<HeroSceneFallback />}>
+          <HeroScene />
+        </Suspense>
+      ) : (
+        <HeroSceneFallback />
+      )}
       
       {/* Gradient Overlays */}
       <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-transparent to-background z-10" />
