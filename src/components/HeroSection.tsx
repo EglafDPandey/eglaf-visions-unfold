@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Link, useLocation, createSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles } from 'lucide-react';
-import { lazy, Suspense, useState, useEffect } from 'react';
+import { lazy, Suspense, useState, useEffect, useRef } from 'react';
 
 // Lazy load the heavy 3D scene to improve FCP
 const HeroScene = lazy(() => import('./HeroScene'));
@@ -21,6 +21,10 @@ export function HeroSection() {
     search: `?${createSearchParams({ from: location.pathname + location.search }).toString()}`,
   };
 
+  // Track visibility to pause 3D animations when not in view
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isVisible, setIsVisible] = useState(true);
+  
   // Delay loading the 3D scene until after initial paint
   const [showScene, setShowScene] = useState(false);
   
@@ -38,12 +42,27 @@ export function HeroSection() {
     return () => clearTimeout(timer);
   }, []);
 
+  // Use Intersection Observer to pause 3D when not visible
+  useEffect(() => {
+    if (!sectionRef.current) return;
+    
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+    
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* 3D Background - lazy loaded */}
+    <section ref={sectionRef} id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* 3D Background - lazy loaded, pauses when not visible */}
       {showScene ? (
         <Suspense fallback={<HeroSceneFallback />}>
-          <HeroScene />
+          <HeroScene isVisible={isVisible} />
         </Suspense>
       ) : (
         <HeroSceneFallback />
