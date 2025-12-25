@@ -150,9 +150,9 @@ export function DevelopersSection() {
               className="glass-card p-6 text-center hover:border-primary/50 transition-colors"
             >
               <div className="text-4xl mb-4">{model.icon}</div>
-              <h4 className="text-lg font-display font-semibold text-foreground mb-2">
+              <h3 className="text-lg font-display font-semibold text-foreground mb-2">
                 {model.name}
-              </h4>
+              </h3>
               <p className="text-sm text-muted-foreground">{model.description}</p>
             </div>
           ))}

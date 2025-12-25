@@ -122,7 +122,7 @@ export function TestimonialsSection() {
                           <AvatarFallback>{testimonial.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                         </Avatar>
                         <div>
-                          <h4 className="font-semibold text-foreground">{testimonial.name}</h4>
+                          <p className="font-semibold text-foreground">{testimonial.name}</p>
                           <p className="text-sm text-muted-foreground">{testimonial.role}</p>
                         </div>
                       </div>
