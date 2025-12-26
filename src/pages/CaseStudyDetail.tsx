@@ -499,9 +499,9 @@ export default function CaseStudyDetail() {
         <div className="pt-32 pb-20 container mx-auto px-4 text-center">
           <h1 className="text-3xl font-display font-bold mb-4">Case Study Not Found</h1>
           <p className="text-muted-foreground mb-8">The case study you're looking for doesn't exist.</p>
-          <Link to="/case-studies">
+          <Link to="/portfolio">
             <Button>
-              <ArrowLeft className="w-4 h-4 mr-2" /> Back to Case Studies
+              <ArrowLeft className="w-4 h-4 mr-2" /> Back to Portfolio
             </Button>
           </Link>
         </div>
@@ -533,8 +533,8 @@ export default function CaseStudyDetail() {
             animate={{ opacity: 1, y: 0 }}
             className="mb-8"
           >
-            <Link to="/case-studies" className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-              <ArrowLeft className="w-4 h-4" /> Back to Case Studies
+            <Link to="/portfolio" className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <ArrowLeft className="w-4 h-4" /> Back to Portfolio
             </Link>
           </motion.div>
 
@@ -753,9 +753,9 @@ export default function CaseStudyDetail() {
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
-              <Link to="/case-studies">
+              <Link to="/portfolio">
                 <Button size="lg" variant="outline" className="w-full sm:w-auto">
-                  View More Case Studies
+                  View More Projects
                 </Button>
               </Link>
             </div>
