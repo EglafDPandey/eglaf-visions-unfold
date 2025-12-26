@@ -78,7 +78,7 @@ const portfolioItems = [
     image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&h=400&fit=crop',
     description: 'E-commerce platform with subscription model',
     technologies: ['Next.js', 'Stripe', 'Supabase'],
-    link: '#',
+    link: '/case-studies/greenleaf-organic-store',
   },
   {
     id: 8,
@@ -87,7 +87,7 @@ const portfolioItems = [
     image: 'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=600&h=400&fit=crop',
     description: 'Health tracking with wearable integration',
     technologies: ['Flutter', 'HealthKit', 'Firebase'],
-    link: '#',
+    link: '/case-studies/fittrack-fitness-app',
   },
   {
     id: 9,
@@ -96,7 +96,7 @@ const portfolioItems = [
     image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&h=400&fit=crop',
     description: 'Property management and lead tracking system',
     technologies: ['Vue.js', 'Laravel', 'MySQL'],
-    link: '#',
+    link: '/case-studies/propmanage-real-estate-crm',
   },
   {
     id: 10,
@@ -105,7 +105,7 @@ const portfolioItems = [
     image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600&h=400&fit=crop',
     description: 'AI-powered travel planning and booking',
     technologies: ['React Native', 'Node.js', 'MongoDB'],
-    link: '#',
+    link: '/case-studies/travelbuddy-companion-app',
   },
   {
     id: 11,
@@ -114,7 +114,7 @@ const portfolioItems = [
     image: 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=600&h=400&fit=crop',
     description: 'Learning management system with live classes',
     technologies: ['React', 'WebRTC', 'PostgreSQL'],
-    link: '#',
+    link: '/case-studies/edulearn-online-academy',
   },
   {
     id: 12,
@@ -123,7 +123,7 @@ const portfolioItems = [
     image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop',
     description: 'AI-powered home automation control center',
     technologies: ['React', 'Python', 'MQTT'],
-    link: '#',
+    link: '/case-studies/smarthome-iot-dashboard',
   },
   {
     id: 13,
@@ -132,7 +132,7 @@ const portfolioItems = [
     image: 'https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=600&h=400&fit=crop',
     description: 'Local SEO strategy increasing visibility by 300%',
     technologies: ['SEMrush', 'Ahrefs', 'Analytics'],
-    link: '#',
+    link: '/case-studies/localbiz-seo-campaign',
   },
   {
     id: 14,
@@ -141,7 +141,7 @@ const portfolioItems = [
     image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=400&fit=crop',
     description: 'Multi-vendor fashion marketplace platform',
     technologies: ['Next.js', 'Stripe', 'Algolia'],
-    link: '#',
+    link: '/case-studies/fashionhub-marketplace',
   },
   {
     id: 15,
@@ -150,7 +150,7 @@ const portfolioItems = [
     image: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600&h=400&fit=crop',
     description: 'Complete clinic management with patient portal',
     technologies: ['Angular', 'Node.js', 'PostgreSQL'],
-    link: '#',
+    link: '/case-studies/clinicpro-management-system',
   },
 ];
 
