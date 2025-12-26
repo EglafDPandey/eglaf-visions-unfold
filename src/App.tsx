@@ -23,7 +23,7 @@ const Team = lazy(() => import("./pages/Team"));
 const Careers = lazy(() => import("./pages/Careers"));
 const Apply = lazy(() => import("./pages/Apply"));
 const Contact = lazy(() => import("./pages/Contact"));
-const CaseStudies = lazy(() => import("./pages/CaseStudies"));
+
 const Portfolio = lazy(() => import("./pages/Portfolio"));
 const CaseStudyDetail = lazy(() => import("./pages/CaseStudyDetail"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
@@ -65,7 +65,7 @@ const App = () => (
                 <Route path="/careers" element={<Careers />} />
                 <Route path="/apply" element={<Apply />} />
                 <Route path="/contact" element={<Contact />} />
-                <Route path="/case-studies" element={<CaseStudies />} />
+                
                 <Route path="/case-studies/:slug" element={<CaseStudyDetail />} />
                 <Route path="/portfolio" element={<Portfolio />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
