@@ -471,7 +471,7 @@ const ProcessFlowVisualization = ({ activeStep, onStepClick }: { activeStep: num
   );
 };
 
-// Enhanced Step Card with Glow Effects
+// Enhanced Step Card with Glow Effects and Expandable Details
 const StepCard = ({ 
   step, 
   index, 
@@ -487,7 +487,8 @@ const StepCard = ({
   
   return (
     <motion.div
-      whileHover={{ scale: 1.02, y: -5 }}
+      whileHover={{ scale: isActive ? 1 : 1.02, y: isActive ? 0 : -5 }}
+      layout
       className={`relative glass-card p-6 lg:p-8 rounded-2xl border transition-all duration-500 cursor-pointer ${
         isActive 
           ? 'border-primary shadow-[0_0_40px_rgba(0,245,255,0.4)] bg-primary/10' 
@@ -630,18 +631,140 @@ const StepCard = ({
         </span>
       </div>
 
+      {/* Expandable Details */}
+      <motion.div
+        initial={{ height: 0, opacity: 0 }}
+        animate={{ height: isActive ? 'auto' : 0, opacity: isActive ? 1 : 0 }}
+        transition={{ duration: 0.4, ease: "easeInOut" }}
+        className="overflow-hidden"
+      >
+        <div className="space-y-5 pt-4 border-t border-border/50">
+          {/* Timeline */}
+          <motion.div 
+            className="flex items-start gap-3"
+            initial={{ opacity: 0, x: -20 }}
+            animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+            transition={{ delay: 0.1 }}
+          >
+            <div 
+              className="p-2 rounded-lg"
+              style={{ background: `${color}20` }}
+            >
+              <Clock className="w-4 h-4" style={{ color }} />
+            </div>
+            <div>
+              <span className="font-semibold text-sm text-foreground">Timeline</span>
+              <p className="text-muted-foreground text-sm">{step.timeline}</p>
+            </div>
+          </motion.div>
+
+          {/* Deliverables */}
+          <motion.div 
+            className="flex items-start gap-3"
+            initial={{ opacity: 0, x: -20 }}
+            animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+            transition={{ delay: 0.2 }}
+          >
+            <div 
+              className="p-2 rounded-lg"
+              style={{ background: `${color}20` }}
+            >
+              <FileCheck className="w-4 h-4" style={{ color }} />
+            </div>
+            <div className="flex-1">
+              <span className="font-semibold text-sm text-foreground">Deliverables</span>
+              <ul className="text-muted-foreground text-sm mt-1 space-y-1">
+                {step.deliverables.map((item, i) => (
+                  <motion.li 
+                    key={i}
+                    className="flex items-start gap-2"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+                    transition={{ delay: 0.2 + i * 0.05 }}
+                  >
+                    <span style={{ color }} className="mt-1">•</span>
+                    {item}
+                  </motion.li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
+
+          {/* Collaboration */}
+          <motion.div 
+            className="flex items-start gap-3"
+            initial={{ opacity: 0, x: -20 }}
+            animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+            transition={{ delay: 0.3 }}
+          >
+            <div 
+              className="p-2 rounded-lg"
+              style={{ background: `${color}20` }}
+            >
+              <Users className="w-4 h-4" style={{ color }} />
+            </div>
+            <div className="flex-1">
+              <span className="font-semibold text-sm text-foreground">Client Touchpoints</span>
+              <ul className="text-muted-foreground text-sm mt-1 space-y-1">
+                {step.collaboration.map((item, i) => (
+                  <motion.li 
+                    key={i}
+                    className="flex items-start gap-2"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+                    transition={{ delay: 0.3 + i * 0.05 }}
+                  >
+                    <span style={{ color }} className="mt-1">•</span>
+                    {item}
+                  </motion.li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
+
+          {/* Success Metrics */}
+          <motion.div 
+            className="flex items-start gap-3"
+            initial={{ opacity: 0, x: -20 }}
+            animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+            transition={{ delay: 0.4 }}
+          >
+            <div 
+              className="p-2 rounded-lg"
+              style={{ background: `${color}20` }}
+            >
+              <Target className="w-4 h-4" style={{ color }} />
+            </div>
+            <div className="flex-1">
+              <span className="font-semibold text-sm text-foreground">Success Metrics</span>
+              <ul className="text-muted-foreground text-sm mt-1 space-y-1">
+                {step.metrics.map((item, i) => (
+                  <motion.li 
+                    key={i}
+                    className="flex items-start gap-2"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+                    transition={{ delay: 0.4 + i * 0.05 }}
+                  >
+                    <span style={{ color }} className="mt-1">✓</span>
+                    {item}
+                  </motion.li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
+        </div>
+      </motion.div>
+
       {/* Expand indicator with animation */}
       <motion.div 
-        className="flex items-center justify-center text-sm"
+        className="flex items-center justify-center mt-4 text-sm"
         style={{ color }}
+        animate={{ rotate: isActive ? 90 : 0 }}
+        transition={{ duration: 0.3 }}
       >
-        <span className="mr-2">View Details</span>
-        <motion.div
-          animate={{ x: [0, 5, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-        >
-          <ChevronRight className="w-4 h-4" />
-        </motion.div>
+        <span className="mr-2">{isActive ? 'Click to collapse' : 'View Details'}</span>
+        <ChevronRight className="w-4 h-4" />
       </motion.div>
     </motion.div>
   );
@@ -1103,115 +1226,6 @@ const Methodology = () => {
             activeStep={activeStep} 
             onStepClick={(index) => setActiveStep(activeStep === index ? null : index)} 
           />
-
-          {/* Detailed Step Modal/Drawer */}
-          {activeStep !== null && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              className="mt-12 glass-card p-8 rounded-2xl border border-primary/30 max-w-4xl mx-auto"
-              style={{
-                boxShadow: `0 0 60px ${['#00f5ff', '#ff00ff', '#00ff88', '#ffff00', '#ff6600', '#00ffff'][activeStep]}20`
-              }}
-            >
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-4">
-                  <div 
-                    className="w-12 h-12 rounded-xl flex items-center justify-center"
-                    style={{ 
-                      background: ['#00f5ff', '#ff00ff', '#00ff88', '#ffff00', '#ff6600', '#00ffff'][activeStep] 
-                    }}
-                  >
-                    {(() => {
-                      const Icon = methodologySteps[activeStep].icon;
-                      return <Icon className="w-6 h-6 text-background" />;
-                    })()}
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold">{methodologySteps[activeStep].title}</h3>
-                    <p className="text-muted-foreground">{methodologySteps[activeStep].timeline}</p>
-                  </div>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setActiveStep(null)}
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  Close
-                </Button>
-              </div>
-
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* Deliverables */}
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-primary">
-                    <FileCheck className="w-5 h-5" />
-                    <span className="font-semibold">Deliverables</span>
-                  </div>
-                  <ul className="space-y-2">
-                    {methodologySteps[activeStep].deliverables.map((item, i) => (
-                      <motion.li
-                        key={i}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.1 }}
-                        className="flex items-start gap-2 text-sm text-muted-foreground"
-                      >
-                        <span className="text-primary mt-1">•</span>
-                        {item}
-                      </motion.li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Collaboration */}
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-primary">
-                    <Users className="w-5 h-5" />
-                    <span className="font-semibold">Client Touchpoints</span>
-                  </div>
-                  <ul className="space-y-2">
-                    {methodologySteps[activeStep].collaboration.map((item, i) => (
-                      <motion.li
-                        key={i}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.1 + 0.2 }}
-                        className="flex items-start gap-2 text-sm text-muted-foreground"
-                      >
-                        <span className="text-primary mt-1">•</span>
-                        {item}
-                      </motion.li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Metrics */}
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-primary">
-                    <Target className="w-5 h-5" />
-                    <span className="font-semibold">Success Metrics</span>
-                  </div>
-                  <ul className="space-y-2">
-                    {methodologySteps[activeStep].metrics.map((item, i) => (
-                      <motion.li
-                        key={i}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.1 + 0.4 }}
-                        className="flex items-start gap-2 text-sm text-muted-foreground"
-                      >
-                        <span className="text-primary mt-1">✓</span>
-                        {item}
-                      </motion.li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </motion.div>
-          )}
         </div>
       </section>
 
