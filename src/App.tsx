@@ -35,6 +35,7 @@ const WebDevelopment = lazy(() => import("./pages/services/WebDevelopment"));
 const SEOServices = lazy(() => import("./pages/services/SEOServices"));
 const CustomSoftware = lazy(() => import("./pages/services/CustomSoftware"));
 const QuoteRequest = lazy(() => import("./pages/QuoteRequest"));
+const Methodology = lazy(() => import("./pages/Methodology"));
 
 const queryClient = new QueryClient();
 
@@ -77,6 +78,7 @@ const App = () => (
                 <Route path="/services/seo-services" element={<SEOServices />} />
                 <Route path="/services/custom-software" element={<CustomSoftware />} />
                 <Route path="/quote" element={<QuoteRequest />} />
+                <Route path="/methodology" element={<Methodology />} />
                 <Route path="/admin/login" element={<AdminLogin />} />
                 <Route path="/admin" element={<AdminDashboard />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
