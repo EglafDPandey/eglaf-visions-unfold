@@ -1,5 +1,5 @@
-import { useState, useRef, useMemo, Suspense } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { useState, useRef, useMemo, Suspense, useEffect } from 'react';
+import { motion, useInView, useAnimationControls } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float, MeshDistortMaterial, Sphere, Box, Torus, OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
@@ -277,13 +277,499 @@ const ProcessStep = ({
   );
 };
 
+// Flowing Particles Component
+const FlowingParticle = ({ delay, duration, pathId }: { delay: number; duration: number; pathId: string }) => {
+  return (
+    <motion.circle
+      r="4"
+      fill="url(#particleGradient)"
+      filter="url(#glow)"
+      initial={{ offsetDistance: "0%" }}
+      animate={{ offsetDistance: "100%" }}
+      transition={{
+        duration,
+        delay,
+        repeat: Infinity,
+        ease: "linear"
+      }}
+      style={{
+        offsetPath: `path("${pathId}")`,
+        offsetRotate: "0deg"
+      }}
+    />
+  );
+};
+
+// Process Flow Visualization Component
+const ProcessFlowVisualization = ({ activeStep, onStepClick }: { activeStep: number | null; onStepClick: (index: number) => void }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const isInView = useInView(containerRef, { once: true, margin: "-100px" });
+
+  useEffect(() => {
+    const updateDimensions = () => {
+      if (containerRef.current) {
+        setDimensions({
+          width: containerRef.current.offsetWidth,
+          height: containerRef.current.offsetHeight
+        });
+      }
+    };
+    
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
+  }, []);
+
+  const stepColors = ['#00f5ff', '#ff00ff', '#00ff88', '#ffff00', '#ff6600', '#00ffff'];
+
+  // Generate curved path between nodes
+  const generatePath = (startX: number, startY: number, endX: number, endY: number) => {
+    const midX = (startX + endX) / 2;
+    const controlOffset = Math.abs(endY - startY) * 0.5;
+    return `M ${startX} ${startY} Q ${midX} ${startY - controlOffset} ${endX} ${endY}`;
+  };
+
+  return (
+    <div ref={containerRef} className="relative w-full py-20">
+      {/* SVG Flow Lines */}
+      <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ overflow: 'visible' }}>
+        <defs>
+          <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.8" />
+            <stop offset="50%" stopColor="hsl(var(--accent))" stopOpacity="1" />
+            <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.8" />
+          </linearGradient>
+          <radialGradient id="particleGradient">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="50%" stopColor="hsl(var(--primary))" />
+            <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
+          </radialGradient>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+            <feMerge>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          <filter id="lineGlow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="2" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+      </svg>
+
+      {/* Step Nodes with Animated Connections */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 relative">
+        {methodologySteps.map((step, index) => (
+          <motion.div
+            key={step.step}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.5, delay: index * 0.15 }}
+            className="relative"
+          >
+            {/* Animated Connection Line to Next Step */}
+            {index < 5 && (
+              <div className="hidden lg:block absolute top-1/2 -right-6 w-12 h-px">
+                {/* Glowing line */}
+                <motion.div
+                  className="absolute inset-0 h-0.5 rounded-full"
+                  style={{
+                    background: `linear-gradient(90deg, ${stepColors[index]}, ${stepColors[index + 1]})`
+                  }}
+                  initial={{ scaleX: 0, opacity: 0 }}
+                  animate={isInView ? { scaleX: 1, opacity: 1 } : { scaleX: 0, opacity: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.15 + 0.3 }}
+                />
+                {/* Flowing particles on line */}
+                {[0, 1, 2].map((particleIndex) => (
+                  <motion.div
+                    key={particleIndex}
+                    className="absolute top-1/2 w-2 h-2 rounded-full -translate-y-1/2"
+                    style={{
+                      background: stepColors[index],
+                      boxShadow: `0 0 10px ${stepColors[index]}, 0 0 20px ${stepColors[index]}`
+                    }}
+                    initial={{ left: 0, opacity: 0 }}
+                    animate={isInView ? {
+                      left: ['0%', '100%'],
+                      opacity: [0, 1, 1, 0]
+                    } : { left: 0, opacity: 0 }}
+                    transition={{
+                      duration: 2,
+                      delay: index * 0.15 + particleIndex * 0.6,
+                      repeat: Infinity,
+                      ease: "linear"
+                    }}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Row connector for mobile/tablet */}
+            {index < 5 && index % 3 !== 2 && (
+              <div className="hidden md:block lg:hidden absolute top-1/2 -right-4 w-8 h-px">
+                <motion.div
+                  className="absolute inset-0 h-0.5 rounded-full bg-gradient-to-r from-primary to-accent"
+                  initial={{ scaleX: 0 }}
+                  animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.15 + 0.3 }}
+                />
+              </div>
+            )}
+
+            {/* Vertical connector between rows */}
+            {index === 2 && (
+              <div className="hidden lg:block absolute -bottom-12 left-1/2 w-px h-12 -translate-x-1/2">
+                <motion.div
+                  className="absolute inset-0 w-0.5 rounded-full bg-gradient-to-b from-primary to-accent"
+                  initial={{ scaleY: 0 }}
+                  animate={isInView ? { scaleY: 1 } : { scaleY: 0 }}
+                  transition={{ duration: 0.5, delay: 0.6 }}
+                />
+                {[0, 1].map((particleIndex) => (
+                  <motion.div
+                    key={particleIndex}
+                    className="absolute left-1/2 w-2 h-2 rounded-full -translate-x-1/2"
+                    style={{
+                      background: stepColors[2],
+                      boxShadow: `0 0 10px ${stepColors[2]}, 0 0 20px ${stepColors[2]}`
+                    }}
+                    initial={{ top: 0, opacity: 0 }}
+                    animate={isInView ? {
+                      top: ['0%', '100%'],
+                      opacity: [0, 1, 1, 0]
+                    } : { top: 0, opacity: 0 }}
+                    transition={{
+                      duration: 1.5,
+                      delay: 0.6 + particleIndex * 0.5,
+                      repeat: Infinity,
+                      ease: "linear"
+                    }}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* The actual step card */}
+            <div onClick={() => onStepClick(index)}>
+              <StepCard
+                step={step}
+                index={index}
+                isActive={activeStep === index}
+                color={stepColors[index]}
+              />
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// Enhanced Step Card with Glow Effects
+const StepCard = ({ 
+  step, 
+  index, 
+  isActive, 
+  color 
+}: { 
+  step: typeof methodologySteps[0]; 
+  index: number; 
+  isActive: boolean;
+  color: string;
+}) => {
+  const Icon = step.icon;
+  
+  return (
+    <motion.div
+      whileHover={{ scale: 1.02, y: -5 }}
+      className={`relative glass-card p-6 lg:p-8 rounded-2xl border transition-all duration-500 cursor-pointer ${
+        isActive 
+          ? 'border-primary shadow-[0_0_40px_rgba(0,245,255,0.4)] bg-primary/10' 
+          : 'border-border/50 hover:border-primary/50'
+      }`}
+      style={{
+        boxShadow: isActive ? `0 0 40px ${color}40` : undefined
+      }}
+    >
+      {/* Animated border glow */}
+      <motion.div
+        className="absolute inset-0 rounded-2xl opacity-0 pointer-events-none"
+        style={{
+          background: `linear-gradient(135deg, ${color}20, transparent, ${color}20)`,
+        }}
+        animate={{
+          opacity: isActive ? 1 : 0
+        }}
+        transition={{ duration: 0.3 }}
+      />
+
+      {/* Orbiting particles around active card */}
+      {isActive && (
+        <>
+          {[0, 1, 2, 3].map((i) => (
+            <motion.div
+              key={i}
+              className="absolute w-2 h-2 rounded-full"
+              style={{
+                background: color,
+                boxShadow: `0 0 10px ${color}, 0 0 20px ${color}`
+              }}
+              animate={{
+                rotate: 360
+              }}
+              transition={{
+                duration: 4,
+                delay: i * 1,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+              initial={{
+                top: '50%',
+                left: '50%',
+                x: '-50%',
+                y: '-50%'
+              }}
+            >
+              <motion.div
+                className="absolute w-2 h-2 rounded-full"
+                style={{ background: color }}
+                animate={{
+                  x: [0, 150, 0, -150, 0],
+                  y: [-150, 0, 150, 0, -150]
+                }}
+                transition={{
+                  duration: 4,
+                  delay: i * 1,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+              />
+            </motion.div>
+          ))}
+        </>
+      )}
+
+      {/* Step Number Badge with pulse effect */}
+      <div className="absolute -top-4 -left-4">
+        <motion.div
+          className="absolute inset-0 w-12 h-12 rounded-full"
+          style={{ background: color }}
+          animate={isActive ? {
+            scale: [1, 1.5, 1],
+            opacity: [0.5, 0, 0.5]
+          } : {}}
+          transition={{ duration: 2, repeat: Infinity }}
+        />
+        <div 
+          className="relative w-10 h-10 rounded-full flex items-center justify-center text-background font-bold text-lg shadow-lg"
+          style={{ background: `linear-gradient(135deg, ${color}, ${color}cc)` }}
+        >
+          {step.step}
+        </div>
+      </div>
+
+      {/* 3D Icon Container */}
+      <div className="h-24 w-24 mx-auto mb-6 rounded-xl overflow-hidden relative">
+        <Canvas camera={{ position: [0, 0, 3] }}>
+          <ambientLight intensity={0.5} />
+          <pointLight position={[5, 5, 5]} intensity={1} color={color} />
+          <Suspense fallback={null}>
+            <Step3DIcon step={index} isActive={isActive} />
+          </Suspense>
+        </Canvas>
+        {/* Glow effect behind icon */}
+        <motion.div
+          className="absolute inset-0 rounded-xl -z-10"
+          style={{
+            background: `radial-gradient(circle, ${color}30 0%, transparent 70%)`
+          }}
+          animate={isActive ? { scale: [1, 1.2, 1] } : {}}
+          transition={{ duration: 2, repeat: Infinity }}
+        />
+      </div>
+
+      {/* Title & Icon */}
+      <div className="flex items-center gap-3 mb-4">
+        <motion.div 
+          className={`p-3 rounded-xl transition-all duration-300 ${
+            isActive ? 'text-background' : 'bg-muted/50 text-primary'
+          }`}
+          style={{ background: isActive ? color : undefined }}
+          animate={isActive ? { scale: [1, 1.1, 1] } : {}}
+          transition={{ duration: 1.5, repeat: Infinity }}
+        >
+          <Icon className="w-6 h-6" />
+        </motion.div>
+        <h3 className="text-xl font-bold">{step.title}</h3>
+      </div>
+
+      <p className="text-muted-foreground mb-4">{step.description}</p>
+
+      {/* Quick info pills */}
+      <div className="flex flex-wrap gap-2 mb-4">
+        <span 
+          className="px-3 py-1 rounded-full text-xs font-medium"
+          style={{ 
+            background: `${color}20`, 
+            color: color,
+            border: `1px solid ${color}40`
+          }}
+        >
+          {step.timeline}
+        </span>
+        <span 
+          className="px-3 py-1 rounded-full text-xs font-medium bg-muted/50 text-muted-foreground"
+        >
+          {step.deliverables.length} Deliverables
+        </span>
+      </div>
+
+      {/* Expand indicator with animation */}
+      <motion.div 
+        className="flex items-center justify-center text-sm"
+        style={{ color }}
+      >
+        <span className="mr-2">View Details</span>
+        <motion.div
+          animate={{ x: [0, 5, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+        >
+          <ChevronRight className="w-4 h-4" />
+        </motion.div>
+      </motion.div>
+    </motion.div>
+  );
+};
+
+// Data Flow Animation Section
+const DataFlowAnimation = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+
+  const nodes = [
+    { id: 1, label: 'Requirements', x: 10, y: 50 },
+    { id: 2, label: 'Wireframes', x: 25, y: 30 },
+    { id: 3, label: 'Designs', x: 40, y: 50 },
+    { id: 4, label: 'Code', x: 55, y: 30 },
+    { id: 5, label: 'Testing', x: 70, y: 50 },
+    { id: 6, label: 'Deploy', x: 85, y: 30 },
+  ];
+
+  const connections = [
+    { from: 0, to: 1 },
+    { from: 1, to: 2 },
+    { from: 2, to: 3 },
+    { from: 3, to: 4 },
+    { from: 4, to: 5 },
+  ];
+
+  return (
+    <div ref={ref} className="relative h-40 w-full overflow-hidden">
+      <svg className="absolute inset-0 w-full h-full">
+        <defs>
+          <linearGradient id="flowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#00f5ff" />
+            <stop offset="50%" stopColor="#ff00ff" />
+            <stop offset="100%" stopColor="#00ff88" />
+          </linearGradient>
+          <filter id="flowGlow">
+            <feGaussianBlur stdDeviation="2" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        {/* Connection lines */}
+        {connections.map((conn, index) => {
+          const from = nodes[conn.from];
+          const to = nodes[conn.to];
+          const midX = (from.x + to.x) / 2;
+          const path = `M ${from.x}% ${from.y}% Q ${midX}% ${(from.y + to.y) / 2 - 15}% ${to.x}% ${to.y}%`;
+          
+          return (
+            <g key={index}>
+              <motion.path
+                d={path}
+                fill="none"
+                stroke="url(#flowGradient)"
+                strokeWidth="2"
+                strokeLinecap="round"
+                filter="url(#flowGlow)"
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={isInView ? { pathLength: 1, opacity: 0.6 } : { pathLength: 0, opacity: 0 }}
+                transition={{ duration: 1, delay: index * 0.2 }}
+              />
+              {/* Flowing particle */}
+              <motion.circle
+                r="5"
+                fill="#ffffff"
+                filter="url(#flowGlow)"
+                initial={{ opacity: 0 }}
+                animate={isInView ? { opacity: [0, 1, 1, 0] } : { opacity: 0 }}
+                transition={{
+                  duration: 2,
+                  delay: index * 0.3 + 1,
+                  repeat: Infinity,
+                }}
+              >
+                <animateMotion
+                  dur="2s"
+                  repeatCount="indefinite"
+                  begin={`${index * 0.3 + 1}s`}
+                  path={path}
+                />
+              </motion.circle>
+            </g>
+          );
+        })}
+
+        {/* Nodes */}
+        {nodes.map((node, index) => (
+          <motion.g
+            key={node.id}
+            initial={{ opacity: 0, scale: 0 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+          >
+            <circle
+              cx={`${node.x}%`}
+              cy={`${node.y}%`}
+              r="20"
+              fill="hsl(var(--background))"
+              stroke="url(#flowGradient)"
+              strokeWidth="2"
+              filter="url(#flowGlow)"
+            />
+            <text
+              x={`${node.x}%`}
+              y={`${node.y + 12}%`}
+              textAnchor="middle"
+              className="fill-foreground text-xs font-medium"
+            >
+              {node.label}
+            </text>
+          </motion.g>
+        ))}
+      </svg>
+    </div>
+  );
+};
+
 // Animated Counter Component
 const AnimatedCounter = ({ value, suffix = '' }: { value: number; suffix?: string }) => {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
 
-  useState(() => {
+  useEffect(() => {
     if (isInView) {
       let start = 0;
       const end = value;
@@ -302,7 +788,7 @@ const AnimatedCounter = ({ value, suffix = '' }: { value: number; suffix?: strin
 
       return () => clearInterval(timer);
     }
-  });
+  }, [isInView, value]);
 
   return (
     <span ref={ref} className="text-4xl lg:text-5xl font-bold gradient-text">
@@ -576,7 +1062,27 @@ const Methodology = () => {
         </div>
       </section>
 
-      {/* Process Steps Section */}
+      {/* Data Flow Animation */}
+      <section className="py-16 overflow-hidden">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-8"
+          >
+            <h2 className="text-2xl md:text-3xl font-bold mb-2">
+              Watch Your Project <span className="gradient-text">Flow</span>
+            </h2>
+            <p className="text-muted-foreground">
+              From requirements to deployment - a seamless journey
+            </p>
+          </motion.div>
+          <DataFlowAnimation />
+        </div>
+      </section>
+
+      {/* Process Steps Section with Flow Visualization */}
       <section className="py-24">
         <div className="container mx-auto px-4">
           <motion.div
@@ -589,21 +1095,123 @@ const Methodology = () => {
               The <span className="gradient-text">Journey</span> to Success
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Click on each step to explore timelines, deliverables, collaboration touchpoints, and success metrics.
+              Hover over each step to see the data flow. Click to explore timelines, deliverables, and success metrics.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
-            {methodologySteps.map((step, index) => (
-              <ProcessStep
-                key={step.step}
-                {...step}
-                index={index}
-                isActive={activeStep === index}
-                onClick={() => setActiveStep(activeStep === index ? null : index)}
-              />
-            ))}
-          </div>
+          <ProcessFlowVisualization 
+            activeStep={activeStep} 
+            onStepClick={(index) => setActiveStep(activeStep === index ? null : index)} 
+          />
+
+          {/* Detailed Step Modal/Drawer */}
+          {activeStep !== null && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              className="mt-12 glass-card p-8 rounded-2xl border border-primary/30 max-w-4xl mx-auto"
+              style={{
+                boxShadow: `0 0 60px ${['#00f5ff', '#ff00ff', '#00ff88', '#ffff00', '#ff6600', '#00ffff'][activeStep]}20`
+              }}
+            >
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-4">
+                  <div 
+                    className="w-12 h-12 rounded-xl flex items-center justify-center"
+                    style={{ 
+                      background: ['#00f5ff', '#ff00ff', '#00ff88', '#ffff00', '#ff6600', '#00ffff'][activeStep] 
+                    }}
+                  >
+                    {(() => {
+                      const Icon = methodologySteps[activeStep].icon;
+                      return <Icon className="w-6 h-6 text-background" />;
+                    })()}
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold">{methodologySteps[activeStep].title}</h3>
+                    <p className="text-muted-foreground">{methodologySteps[activeStep].timeline}</p>
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setActiveStep(null)}
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  Close
+                </Button>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* Deliverables */}
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-primary">
+                    <FileCheck className="w-5 h-5" />
+                    <span className="font-semibold">Deliverables</span>
+                  </div>
+                  <ul className="space-y-2">
+                    {methodologySteps[activeStep].deliverables.map((item, i) => (
+                      <motion.li
+                        key={i}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        className="flex items-start gap-2 text-sm text-muted-foreground"
+                      >
+                        <span className="text-primary mt-1">•</span>
+                        {item}
+                      </motion.li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Collaboration */}
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-primary">
+                    <Users className="w-5 h-5" />
+                    <span className="font-semibold">Client Touchpoints</span>
+                  </div>
+                  <ul className="space-y-2">
+                    {methodologySteps[activeStep].collaboration.map((item, i) => (
+                      <motion.li
+                        key={i}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.1 + 0.2 }}
+                        className="flex items-start gap-2 text-sm text-muted-foreground"
+                      >
+                        <span className="text-primary mt-1">•</span>
+                        {item}
+                      </motion.li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Metrics */}
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-primary">
+                    <Target className="w-5 h-5" />
+                    <span className="font-semibold">Success Metrics</span>
+                  </div>
+                  <ul className="space-y-2">
+                    {methodologySteps[activeStep].metrics.map((item, i) => (
+                      <motion.li
+                        key={i}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.1 + 0.4 }}
+                        className="flex items-start gap-2 text-sm text-muted-foreground"
+                      >
+                        <span className="text-primary mt-1">✓</span>
+                        {item}
+                      </motion.li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </motion.div>
+          )}
         </div>
       </section>
 
