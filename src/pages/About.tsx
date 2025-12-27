@@ -4,6 +4,7 @@ import { Target, Eye, Lightbulb, Users, Award, TrendingUp, Calendar, CheckCircle
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
+import { JourneyToSuccessPreview, ProjectTimeline } from '@/components/MethodologyPreview';
 
 const milestones = [
   { year: '2014', title: 'Company Founded', description: 'Started with a vision to transform digital landscapes', icon: Rocket },
@@ -309,6 +310,12 @@ export default function About() {
           </motion.div>
         </div>
       </section>
+
+      {/* Our Development Methodology */}
+      <JourneyToSuccessPreview />
+      
+      {/* Project Timeline */}
+      <ProjectTimeline />
 
       <Footer />
     </div>
