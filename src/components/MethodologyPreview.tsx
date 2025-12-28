@@ -1,4 +1,4 @@
-import { useState, useRef, Suspense } from 'react';
+import { useState, useRef, useEffect, Suspense } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
@@ -9,7 +9,11 @@ import {
   TestTube, 
   Rocket, 
   HeadphonesIcon,
-  ArrowRight
+  ArrowRight,
+  FileCheck,
+  Users,
+  Target,
+  Clock
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -49,6 +53,333 @@ const methodologySteps = [
   { step: 5, title: "Deployment", icon: Rocket, timeline: "1-2 Weeks", color: '#ff6600' },
   { step: 6, title: "Support", icon: HeadphonesIcon, timeline: "Ongoing", color: '#00ffff' },
 ];
+
+const stats = [
+  { value: 150, suffix: '+', label: 'Projects Delivered', icon: FileCheck },
+  { value: 98, suffix: '%', label: 'Client Satisfaction', icon: Users },
+  { value: 45, suffix: '%', label: 'Avg. Conversion Boost', icon: Target },
+  { value: 24, suffix: '/7', label: 'Support Available', icon: HeadphonesIcon }
+];
+
+// Animated Counter Component
+const AnimatedCounter = ({ value, suffix = '' }: { value: number; suffix?: string }) => {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+
+  useEffect(() => {
+    if (isInView) {
+      let start = 0;
+      const end = value;
+      const duration = 2000;
+      const increment = end / (duration / 16);
+
+      const timer = setInterval(() => {
+        start += increment;
+        if (start >= end) {
+          setCount(end);
+          clearInterval(timer);
+        } else {
+          setCount(Math.floor(start));
+        }
+      }, 16);
+
+      return () => clearInterval(timer);
+    }
+  }, [isInView, value]);
+
+  return (
+    <span ref={ref} className="text-4xl lg:text-5xl font-bold">
+      {count}{suffix}
+    </span>
+  );
+};
+
+// Enhanced Stats Card Component
+const StatCard = ({ stat, index }: { stat: typeof stats[0]; index: number }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+  const stepColors = ['#00f5ff', '#ff00ff', '#00ff88', '#ffff00'];
+  const color = stepColors[index % stepColors.length];
+  const Icon = stat.icon;
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 30, scale: 0.9 }}
+      animate={isInView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 30, scale: 0.9 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      whileHover={{ scale: 1.05, y: -5 }}
+      className="relative group"
+    >
+      <div 
+        className="glass-card p-6 lg:p-8 rounded-2xl border border-border/50 hover:border-primary/50 transition-all duration-500 text-center relative overflow-hidden"
+        style={{
+          boxShadow: `0 0 0 rgba(0,0,0,0), inset 0 0 60px ${color}05`
+        }}
+      >
+        {/* Animated background glow */}
+        <motion.div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          style={{
+            background: `radial-gradient(circle at 50% 50%, ${color}15 0%, transparent 70%)`
+          }}
+        />
+
+        {/* Floating particles */}
+        {[0, 1, 2].map((i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 rounded-full opacity-0 group-hover:opacity-60"
+            style={{ background: color }}
+            animate={{
+              y: [0, -30, 0],
+              x: [0, (i - 1) * 15, 0],
+              opacity: [0, 0.6, 0]
+            }}
+            transition={{
+              duration: 2,
+              delay: i * 0.3,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+            initial={{ bottom: '20%', left: `${30 + i * 20}%` }}
+          />
+        ))}
+
+        {/* Icon with glow */}
+        <motion.div 
+          className="w-14 h-14 mx-auto mb-4 rounded-2xl flex items-center justify-center relative"
+          style={{ background: `${color}15` }}
+          whileHover={{ rotate: [0, -10, 10, 0] }}
+          transition={{ duration: 0.5 }}
+        >
+          <motion.div
+            className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100"
+            style={{
+              background: `linear-gradient(135deg, ${color}30, transparent)`,
+              boxShadow: `0 0 20px ${color}30`
+            }}
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+          <Icon className="w-7 h-7 relative z-10" style={{ color }} />
+        </motion.div>
+
+        {/* Counter with color */}
+        <div style={{ color }}>
+          <AnimatedCounter value={stat.value} suffix={stat.suffix} />
+        </div>
+
+        {/* Label */}
+        <p className="text-muted-foreground mt-3 font-medium">{stat.label}</p>
+
+        {/* Bottom accent line */}
+        <motion.div
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 h-1 rounded-full"
+          style={{ background: `linear-gradient(90deg, transparent, ${color}, transparent)` }}
+          initial={{ width: 0 }}
+          whileInView={{ width: '60%' }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: index * 0.1 + 0.3 }}
+        />
+      </div>
+    </motion.div>
+  );
+};
+
+// Enhanced Data Flow Animation Section
+const EnhancedDataFlowAnimation = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+
+  const nodes = [
+    { id: 1, label: 'Requirements', icon: Search },
+    { id: 2, label: 'Wireframes', icon: Palette },
+    { id: 3, label: 'Designs', icon: Palette },
+    { id: 4, label: 'Code', icon: Code },
+    { id: 5, label: 'Testing', icon: TestTube },
+    { id: 6, label: 'Deploy', icon: Rocket },
+  ];
+
+  const stepColors = ['#00f5ff', '#ff00ff', '#00ff88', '#ffff00', '#ff6600', '#00ffff'];
+
+  return (
+    <div ref={ref} className="relative w-full py-8">
+      {/* Glowing background */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-32 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 blur-3xl" />
+      </div>
+
+      <div className="relative flex justify-between items-center px-2 md:px-8">
+        {nodes.map((node, index) => {
+          const Icon = node.icon;
+          const color = stepColors[index];
+          
+          return (
+            <div key={node.id} className="relative flex flex-col items-center">
+              {/* Connection line to next node */}
+              {index < nodes.length - 1 && (
+                <div className="absolute top-1/2 left-full -translate-y-1/2 hidden md:block" style={{ width: 'calc(100% - 20px)' }}>
+                  <motion.div
+                    className="h-0.5 rounded-full origin-left"
+                    style={{
+                      background: `linear-gradient(90deg, ${color}, ${stepColors[index + 1]})`
+                    }}
+                    initial={{ scaleX: 0, opacity: 0 }}
+                    animate={isInView ? { scaleX: 1, opacity: 0.6 } : { scaleX: 0, opacity: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.15 + 0.3 }}
+                  />
+                  {/* Flowing particles */}
+                  {[0, 1].map((particleIndex) => (
+                    <motion.div
+                      key={particleIndex}
+                      className="absolute top-1/2 w-2 h-2 rounded-full -translate-y-1/2"
+                      style={{
+                        background: color,
+                        boxShadow: `0 0 8px ${color}, 0 0 16px ${color}`
+                      }}
+                      initial={{ left: 0, opacity: 0 }}
+                      animate={isInView ? {
+                        left: ['0%', '100%'],
+                        opacity: [0, 1, 1, 0]
+                      } : { left: 0, opacity: 0 }}
+                      transition={{
+                        duration: 2,
+                        delay: index * 0.15 + particleIndex * 0.8 + 0.5,
+                        repeat: Infinity,
+                        ease: "linear"
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {/* Node */}
+              <motion.div
+                className="relative"
+                initial={{ opacity: 0, scale: 0 }}
+                animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                {/* Glow ring */}
+                <motion.div
+                  className="absolute inset-0 rounded-2xl"
+                  style={{
+                    background: `radial-gradient(circle, ${color}30 0%, transparent 70%)`,
+                    transform: 'scale(1.5)'
+                  }}
+                  animate={{ scale: [1.5, 1.8, 1.5], opacity: [0.5, 0.8, 0.5] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: index * 0.2 }}
+                />
+                
+                {/* Icon container */}
+                <motion.div
+                  className="relative w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center border-2"
+                  style={{ 
+                    background: `linear-gradient(135deg, ${color}20, transparent)`,
+                    borderColor: `${color}50`
+                  }}
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                >
+                  <Icon className="w-5 h-5 md:w-6 md:h-6" style={{ color }} />
+                </motion.div>
+              </motion.div>
+
+              {/* Label */}
+              <motion.p
+                className="mt-3 text-xs md:text-sm font-medium text-center"
+                style={{ color }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                transition={{ duration: 0.5, delay: index * 0.1 + 0.2 }}
+              >
+                {node.label}
+              </motion.p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+// Enhanced Timeline Card Component
+const TimelineCard = ({ step, index }: { step: typeof methodologySteps[0]; index: number }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+  const stepColors = ['#00f5ff', '#ff00ff', '#00ff88', '#ffff00', '#ff6600', '#00ffff'];
+  const color = stepColors[index];
+  const Icon = step.icon;
+  const isTop = index % 2 === 0;
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: isTop ? 30 : -30 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: isTop ? 30 : -30 }}
+      transition={{ duration: 0.5, delay: index * 0.15 }}
+      className={`flex flex-col items-center ${isTop ? 'flex-col' : 'flex-col-reverse'}`}
+    >
+      {/* Card */}
+      <motion.div
+        whileHover={{ scale: 1.05, y: isTop ? -5 : 5 }}
+        className="glass-card p-4 rounded-xl border border-border/50 hover:border-primary/50 transition-all duration-300 w-full max-w-[140px] relative overflow-hidden"
+        style={{
+          boxShadow: `0 0 20px ${color}10`
+        }}
+      >
+        {/* Glow effect */}
+        <div 
+          className="absolute inset-0 opacity-20"
+          style={{
+            background: `radial-gradient(circle at 50% ${isTop ? '100%' : '0%'}, ${color}30, transparent 70%)`
+          }}
+        />
+
+        <div className="relative z-10 text-center">
+          <div 
+            className="w-10 h-10 mx-auto rounded-xl flex items-center justify-center mb-2"
+            style={{ background: `${color}20` }}
+          >
+            <Icon className="w-5 h-5" style={{ color }} />
+          </div>
+          <p className="font-semibold text-sm">{step.title}</p>
+          <p className="text-xs text-muted-foreground mt-1">{step.timeline}</p>
+        </div>
+      </motion.div>
+
+      {/* Connector line */}
+      <motion.div
+        className="w-0.5 h-8 rounded-full"
+        style={{ background: `linear-gradient(${isTop ? '180deg' : '0deg'}, ${color}, transparent)` }}
+        initial={{ scaleY: 0 }}
+        animate={isInView ? { scaleY: 1 } : { scaleY: 0 }}
+        transition={{ duration: 0.3, delay: index * 0.15 + 0.2 }}
+      />
+
+      {/* Timeline dot */}
+      <motion.div
+        className="relative z-10"
+        whileHover={{ scale: 1.2 }}
+      >
+        {/* Pulse ring */}
+        <motion.div
+          className="absolute inset-0 rounded-full"
+          style={{ background: color }}
+          animate={{ scale: [1, 1.8, 1], opacity: [0.5, 0, 0.5] }}
+          transition={{ duration: 2, repeat: Infinity, delay: index * 0.2 }}
+        />
+        <div 
+          className="w-10 h-10 rounded-full flex items-center justify-center text-background font-bold text-sm relative"
+          style={{ background: `linear-gradient(135deg, ${color}, ${color}cc)` }}
+        >
+          {step.step}
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
 
 // Compact Step Card for preview
 const CompactStepCard = ({ step, index }: { step: typeof methodologySteps[0]; index: number }) => {
@@ -146,17 +477,30 @@ const CompactStepCard = ({ step, index }: { step: typeof methodologySteps[0]; in
   );
 };
 
-// Project Timeline Component
+// Enhanced Project Timeline Component
 export const ProjectTimeline = ({ showCTA = true }: { showCTA?: boolean }) => {
   return (
-    <section className="py-20 bg-muted/30">
-      <div className="container mx-auto px-4">
+    <section className="py-20 relative overflow-hidden">
+      {/* Background effects */}
+      <div className="absolute inset-0 bg-muted/30" />
+      <div className="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+      
+      <div className="container mx-auto px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="text-center mb-12"
         >
+          <motion.span
+            initial={{ scale: 0 }}
+            whileInView={{ scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ type: "spring", stiffness: 100 }}
+            className="inline-block px-4 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary text-sm font-medium mb-4"
+          >
+            Project Roadmap
+          </motion.span>
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Project <span className="gradient-text">Timeline</span>
           </h2>
@@ -165,61 +509,79 @@ export const ProjectTimeline = ({ showCTA = true }: { showCTA?: boolean }) => {
           </p>
         </motion.div>
 
-        <div className="relative max-w-5xl mx-auto">
-          {/* Timeline Bar */}
-          <div className="absolute top-1/2 left-0 right-0 h-2 bg-muted rounded-full -translate-y-1/2" />
+        <div className="relative max-w-6xl mx-auto">
+          {/* Enhanced Timeline Bar */}
+          <div className="absolute top-1/2 left-0 right-0 h-1 bg-muted/50 rounded-full -translate-y-1/2 hidden md:block" />
           <motion.div 
-            className="absolute top-1/2 left-0 h-2 bg-gradient-to-r from-primary via-accent to-primary rounded-full -translate-y-1/2"
+            className="absolute top-1/2 left-0 h-1 rounded-full -translate-y-1/2 hidden md:block overflow-hidden"
+            style={{
+              background: 'linear-gradient(90deg, #00f5ff, #ff00ff, #00ff88, #ffff00, #ff6600, #00ffff)'
+            }}
             initial={{ width: 0 }}
             whileInView={{ width: '100%' }}
             viewport={{ once: true }}
-            transition={{ duration: 2, ease: "easeOut" }}
-          />
+            transition={{ duration: 2.5, ease: "easeOut" }}
+          >
+            {/* Shimmer effect */}
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+              animate={{ x: ['-100%', '100%'] }}
+              transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+            />
+          </motion.div>
 
-          <div className="grid grid-cols-6 relative">
+          {/* Flowing particles on timeline */}
+          {[0, 1, 2].map((i) => (
+            <motion.div
+              key={i}
+              className="absolute top-1/2 w-3 h-3 rounded-full -translate-y-1/2 hidden md:block"
+              style={{
+                background: 'white',
+                boxShadow: '0 0 10px #00f5ff, 0 0 20px #00f5ff, 0 0 30px #00f5ff'
+              }}
+              initial={{ left: 0, opacity: 0 }}
+              animate={{ 
+                left: ['0%', '100%'],
+                opacity: [0, 1, 1, 0]
+              }}
+              transition={{
+                duration: 4,
+                delay: i * 1.3,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+            />
+          ))}
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 relative">
             {methodologySteps.map((step, index) => (
-              <motion.div
-                key={step.step}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.15 }}
-                className="flex flex-col items-center"
-              >
-                <motion.div 
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-background font-bold text-sm mb-4 relative z-10 ${
-                    index % 2 === 0 ? 'mt-16' : 'mt-0'
-                  }`}
-                  style={{ background: step.color }}
-                  whileHover={{ scale: 1.2 }}
-                >
-                  {step.step}
-                </motion.div>
-                <div className={`text-center ${index % 2 === 0 ? 'order-first' : 'order-last'}`}>
-                  <p className="font-semibold text-sm">{step.title}</p>
-                  <p className="text-xs text-muted-foreground">{step.timeline}</p>
-                </div>
-              </motion.div>
+              <TimelineCard key={step.step} step={step} index={index} />
             ))}
           </div>
         </div>
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 1 }}
-          className="text-center mt-12 text-muted-foreground"
+          transition={{ delay: 1.5 }}
+          className="text-center mt-12"
         >
-          <span className="text-primary font-semibold">Total Project Duration:</span> 10-24 weeks (varies based on complexity)
-        </motion.p>
+          <div className="inline-flex items-center gap-3 glass-card px-6 py-3 rounded-full border border-primary/30">
+            <Clock className="w-5 h-5 text-primary" />
+            <span className="text-muted-foreground">
+              <span className="text-primary font-semibold">Total Project Duration:</span> 10-24 weeks
+            </span>
+            <span className="text-xs text-muted-foreground">(varies based on complexity)</span>
+          </div>
+        </motion.div>
 
         {showCTA && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 1.2 }}
+            transition={{ delay: 1.8 }}
             className="text-center mt-8"
           >
             <Button asChild variant="outline" className="group">
@@ -285,6 +647,89 @@ export const JourneyToSuccessPreview = ({ showCTA = true }: { showCTA?: boolean 
             </Button>
           </motion.div>
         )}
+      </div>
+    </section>
+  );
+};
+
+// Stats Section Component
+export const StatsSection = ({ showCTA = false }: { showCTA?: boolean }) => {
+  return (
+    <section className="py-20 relative overflow-hidden">
+      {/* Background effects */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
+      </div>
+      
+      <div className="container mx-auto px-4 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
+          <motion.span
+            initial={{ scale: 0 }}
+            whileInView={{ scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ type: "spring", stiffness: 100 }}
+            className="inline-block px-4 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary text-sm font-medium mb-4"
+          >
+            Our Impact
+          </motion.span>
+          <h2 className="text-3xl md:text-4xl font-bold mb-2">
+            Numbers That <span className="gradient-text">Speak</span>
+          </h2>
+          <p className="text-muted-foreground max-w-xl mx-auto">
+            Real results from real projects - our track record of excellence
+          </p>
+        </motion.div>
+        
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          {stats.map((stat, index) => (
+            <StatCard key={index} stat={stat} index={index} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// Data Flow Section Component
+export const DataFlowSection = ({ showCTA = false }: { showCTA?: boolean }) => {
+  return (
+    <section className="py-20 overflow-hidden relative">
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-muted/30 via-transparent to-muted/30" />
+      
+      <div className="container mx-auto px-4 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
+          <motion.span
+            initial={{ scale: 0 }}
+            whileInView={{ scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ type: "spring", stiffness: 100 }}
+            className="inline-block px-4 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary text-sm font-medium mb-4"
+          >
+            Seamless Process
+          </motion.span>
+          <h2 className="text-3xl md:text-4xl font-bold mb-2">
+            Watch Your Project <span className="gradient-text">Flow</span>
+          </h2>
+          <p className="text-muted-foreground max-w-xl mx-auto">
+            From requirements to deployment - a seamless journey with continuous data flow
+          </p>
+        </motion.div>
+        
+        <div className="glass-card p-6 md:p-8 rounded-2xl border border-border/50">
+          <EnhancedDataFlowAnimation />
+        </div>
       </div>
     </section>
   );

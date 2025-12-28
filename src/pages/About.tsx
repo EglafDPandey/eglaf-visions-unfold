@@ -4,7 +4,7 @@ import { Target, Eye, Lightbulb, Users, Award, TrendingUp, Calendar, CheckCircle
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
-import { JourneyToSuccessPreview, ProjectTimeline } from '@/components/MethodologyPreview';
+import { JourneyToSuccessPreview, ProjectTimeline, StatsSection, DataFlowSection } from '@/components/MethodologyPreview';
 
 const milestones = [
   { year: '2014', title: 'Company Founded', description: 'Started with a vision to transform digital landscapes', icon: Rocket },
@@ -311,6 +311,12 @@ export default function About() {
         </div>
       </section>
 
+      {/* Stats Section */}
+      <StatsSection />
+      
+      {/* Data Flow Section */}
+      <DataFlowSection />
+      
       {/* Our Development Methodology */}
       <JourneyToSuccessPreview />
       

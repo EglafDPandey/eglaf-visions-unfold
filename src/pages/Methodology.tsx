@@ -1428,64 +1428,62 @@ const Methodology = () => {
             </motion.div>
           </motion.div>
 
-          {/* Enhanced Scroll Indicator */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1, duration: 0.5 }}
-            className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-          >
-            <motion.span 
-              className="text-xs text-muted-foreground font-medium tracking-wider uppercase"
-              animate={{ opacity: [0.5, 1, 0.5] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              Scroll to explore
-            </motion.span>
-            <motion.div
-              className="relative w-8 h-14 rounded-full border-2 border-primary/50 flex items-start justify-center p-2 overflow-hidden"
-              style={{
-                background: 'linear-gradient(180deg, rgba(0,245,255,0.05) 0%, transparent 100%)'
-              }}
-            >
-              {/* Glowing track */}
-              <motion.div
-                className="absolute inset-x-0 top-0 h-full opacity-30"
-                style={{
-                  background: 'linear-gradient(180deg, hsl(var(--primary)) 0%, transparent 100%)'
-                }}
-                animate={{ opacity: [0.1, 0.3, 0.1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
-              {/* Mouse wheel dot */}
-              <motion.div
-                animate={{ y: [0, 20, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                className="relative"
-              >
-                <motion.div
-                  className="w-2 h-2 rounded-full bg-primary"
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                />
-                {/* Glow effect */}
-                <motion.div
-                  className="absolute inset-0 rounded-full bg-primary blur-sm"
-                  animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0.8, 0.5] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                />
-              </motion.div>
-            </motion.div>
-            {/* Animated arrow */}
-            <motion.div
-              animate={{ y: [0, 5, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <ChevronRight className="w-4 h-4 text-primary rotate-90" />
-            </motion.div>
-          </motion.div>
         </div>
       </section>
+
+      {/* Enhanced Scroll Indicator - Fixed position at bottom of viewport */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1, duration: 0.5 }}
+        className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2"
+      >
+        <motion.span 
+          className="text-xs text-muted-foreground font-medium tracking-wider uppercase bg-background/80 backdrop-blur-sm px-3 py-1 rounded-full"
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          Scroll to explore
+        </motion.span>
+        <motion.div
+          className="relative w-8 h-14 rounded-full border-2 border-primary/50 flex items-start justify-center p-2 overflow-hidden bg-background/80 backdrop-blur-sm"
+        >
+          {/* Glowing track */}
+          <motion.div
+            className="absolute inset-x-0 top-0 h-full opacity-30"
+            style={{
+              background: 'linear-gradient(180deg, hsl(var(--primary)) 0%, transparent 100%)'
+            }}
+            animate={{ opacity: [0.1, 0.3, 0.1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+          {/* Mouse wheel dot */}
+          <motion.div
+            animate={{ y: [0, 20, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+            className="relative"
+          >
+            <motion.div
+              className="w-2 h-2 rounded-full bg-primary"
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            />
+            {/* Glow effect */}
+            <motion.div
+              className="absolute inset-0 rounded-full bg-primary blur-sm"
+              animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0.8, 0.5] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            />
+          </motion.div>
+        </motion.div>
+        {/* Animated arrow */}
+        <motion.div
+          animate={{ y: [0, 5, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <ChevronRight className="w-4 h-4 text-primary rotate-90" />
+        </motion.div>
+      </motion.div>
 
       {/* Enhanced Stats Section */}
       <section className="py-20 relative overflow-hidden">
