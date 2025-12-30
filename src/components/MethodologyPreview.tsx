@@ -55,7 +55,7 @@ const methodologySteps = [
 ];
 
 const stats = [
-  { value: 150, suffix: '+', label: 'Projects Delivered', icon: FileCheck },
+  { value: 35, suffix: '+', label: 'Projects Delivered', icon: FileCheck },
   { value: 98, suffix: '%', label: 'Client Satisfaction', icon: Users },
   { value: 45, suffix: '%', label: 'Avg. Conversion Boost', icon: Target },
   { value: 24, suffix: '/7', label: 'Support Available', icon: HeadphonesIcon }
