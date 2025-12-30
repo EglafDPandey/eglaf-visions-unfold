@@ -78,6 +78,7 @@ const App = () => (
                 <Route path="/services/seo-services" element={<SEOServices />} />
                 <Route path="/services/custom-software" element={<CustomSoftware />} />
                 <Route path="/quote" element={<QuoteRequest />} />
+                <Route path="/quote-request" element={<QuoteRequest />} />
                 <Route path="/methodology" element={<Methodology />} />
                 <Route path="/admin/login" element={<AdminLogin />} />
                 <Route path="/admin" element={<AdminDashboard />} />
