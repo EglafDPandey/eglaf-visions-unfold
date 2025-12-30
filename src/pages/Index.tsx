@@ -7,7 +7,7 @@ import AboutSection from '@/components/AboutSection';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 import { SEO, faqSchema, localBusinessSchema, websiteSchema } from '@/components/SEO';
-import { StatsSection, DataFlowSection } from '@/components/MethodologyPreview';
+import { ProjectTimeline, StatsSection, DataFlowSection } from '@/components/MethodologyPreview';
 
 const homeFaqs = [
   {
@@ -46,6 +46,7 @@ const Index = () => {
       <ServicesSection />
       <StatsSection />
       <DataFlowSection />
+      <ProjectTimeline />
       <DevelopersSection />
       <TestimonialsSection />
       <AboutSection />
