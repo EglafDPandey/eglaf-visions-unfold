@@ -2,10 +2,13 @@ import { motion } from 'framer-motion';
 import { Link, useLocation, createSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles } from 'lucide-react';
-import { lazy, Suspense, useState, useEffect, useRef } from 'react';
+import { lazy, Suspense, useState, useEffect, useRef, useCallback } from 'react';
 
 // Lazy load the heavy 3D scene to improve FCP
 const HeroScene = lazy(() => import('./HeroScene'));
+
+// Preload QuoteRequest page for faster navigation
+const preloadQuoteRequest = () => import('@/pages/QuoteRequest');
 
 // Simple gradient fallback while 3D loads
 function HeroSceneFallback() {
@@ -116,7 +119,7 @@ export function HeroSection() {
             transition={{ duration: 0.8, delay: 0.8 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <Link to={quoteTo}>
+            <Link to={quoteTo} onMouseEnter={preloadQuoteRequest} onFocus={preloadQuoteRequest}>
               <Button variant="hero" size="xl" className="group">
                 Start Your Project
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
