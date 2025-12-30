@@ -1348,7 +1348,7 @@ const methodologySteps = [
 ];
 
 const stats = [
-  { value: 150, suffix: '+', label: 'Projects Delivered', icon: FileCheck },
+  { value: 35, suffix: '+', label: 'Projects Delivered', icon: FileCheck },
   { value: 98, suffix: '%', label: 'Client Satisfaction', icon: Users },
   { value: 45, suffix: '%', label: 'Avg. Conversion Boost', icon: Target },
   { value: 24, suffix: '/7', label: 'Support Available', icon: HeadphonesIcon }
@@ -1356,6 +1356,20 @@ const stats = [
 
 const Methodology = () => {
   const [activeStep, setActiveStep] = useState<number | null>(null);
+  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 100) {
+        setShowScrollIndicator(false);
+      } else {
+        setShowScrollIndicator(true);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-hidden">
@@ -1434,9 +1448,9 @@ const Methodology = () => {
       {/* Enhanced Scroll Indicator - Fixed position at bottom of viewport */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1, duration: 0.5 }}
-        className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2"
+        animate={{ opacity: showScrollIndicator ? 1 : 0, y: showScrollIndicator ? 0 : 20 }}
+        transition={{ duration: 0.3 }}
+        className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 ${!showScrollIndicator ? 'pointer-events-none' : ''}`}
       >
         <motion.span 
           className="text-xs text-muted-foreground font-medium tracking-wider uppercase bg-background/80 backdrop-blur-sm px-3 py-1 rounded-full"
