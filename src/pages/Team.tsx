@@ -5,14 +5,13 @@ import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
 
 const team = [
-  { name: 'John Smith', role: 'CEO & Founder', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop' },
-  { name: 'Sarah Johnson', role: 'CTO', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=300&fit=crop' },
-  { name: 'Mike Chen', role: 'Lead Developer', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop' },
-  { name: 'Emily Davis', role: 'Design Director', image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&h=300&fit=crop' },
-  { name: 'David Wilson', role: 'AI Lead', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&h=300&fit=crop' },
-  { name: 'Lisa Anderson', role: 'Project Manager', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&h=300&fit=crop' },
-  { name: 'James Brown', role: 'DevOps Engineer', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&h=300&fit=crop' },
-  { name: 'Anna Martinez', role: 'UX Researcher', image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&h=300&fit=crop' },
+  { name: 'Dhirendra Pandey', role: 'CEO & Founder', initials: 'DP', gradient: 'from-primary to-purple-600' },
+  { name: 'Mudassar Basit', role: 'CTO', initials: 'MB', gradient: 'from-blue-500 to-cyan-500' },
+  { name: 'Rajesh Gurjar', role: 'Lead Developer', initials: 'RG', gradient: 'from-green-500 to-emerald-500' },
+  { name: 'Praveen Upadhyay', role: 'AI Lead', initials: 'PU', gradient: 'from-violet-500 to-purple-500' },
+  { name: 'Bittu Shukla', role: 'Project Manager', initials: 'BS', gradient: 'from-orange-500 to-amber-500' },
+  { name: 'Vivek Jha', role: 'Dev Engineer', initials: 'VJ', gradient: 'from-rose-500 to-pink-500' },
+  { name: 'Rahul Shukla', role: 'Digital Market Expert', initials: 'RS', gradient: 'from-indigo-500 to-blue-500' },
 ];
 
 export default function Team() {
@@ -44,8 +43,10 @@ export default function Team() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {team.map((member, i) => (
               <motion.div key={member.name} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} whileHover={{ y: -10 }} className="group glass-card overflow-hidden">
-                <div className="aspect-square overflow-hidden">
-                  <img src={member.image} alt={member.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                <div className="aspect-square overflow-hidden relative">
+                  <div className={`w-full h-full bg-gradient-to-br ${member.gradient} flex items-center justify-center group-hover:scale-110 transition-transform duration-500`}>
+                    <span className="text-5xl md:text-6xl font-bold text-white/90">{member.initials}</span>
+                  </div>
                 </div>
                 <div className="p-6">
                   <h3 className="font-display font-semibold text-lg">{member.name}</h3>
