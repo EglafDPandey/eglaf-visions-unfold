@@ -54,6 +54,76 @@ const methodologySteps = [
   { step: 6, title: "Support", icon: HeadphonesIcon, timeline: "Ongoing", color: '#00ffff' },
 ];
 
+// Full methodology steps data with details for expandable cards
+const methodologyStepsDetailed = [
+  { 
+    step: 1, 
+    title: "Discovery", 
+    icon: Search, 
+    timeline: "1-2 Weeks", 
+    color: '#00f5ff',
+    description: "Understanding your business goals and requirements",
+    deliverables: ["Requirements Document", "Project Scope", "Technical Feasibility"],
+    collaboration: ["Stakeholder Interviews", "Vision Alignment Session"],
+    metrics: ["Clear project scope defined", "All stakeholders aligned"]
+  },
+  { 
+    step: 2, 
+    title: "Design", 
+    icon: Palette, 
+    timeline: "2-4 Weeks", 
+    color: '#ff00ff',
+    description: "Creating intuitive and engaging user experiences",
+    deliverables: ["Wireframes", "UI Mockups", "Design System"],
+    collaboration: ["Design Review Sessions", "Feedback Iterations"],
+    metrics: ["User-centered design approved", "Brand consistency achieved"]
+  },
+  { 
+    step: 3, 
+    title: "Development", 
+    icon: Code, 
+    timeline: "4-12 Weeks", 
+    color: '#00ff88',
+    description: "Building robust and scalable solutions",
+    deliverables: ["Working Application", "API Documentation", "Source Code"],
+    collaboration: ["Weekly Progress Demos", "Sprint Reviews"],
+    metrics: ["Feature completion rate", "Code quality standards met"]
+  },
+  { 
+    step: 4, 
+    title: "Testing", 
+    icon: TestTube, 
+    timeline: "2-3 Weeks", 
+    color: '#ffff00',
+    description: "Ensuring quality and performance",
+    deliverables: ["Test Reports", "Bug Fixes", "Performance Analysis"],
+    collaboration: ["UAT Sessions", "Bug Triage Meetings"],
+    metrics: ["99% bug-free release", "Performance benchmarks achieved"]
+  },
+  { 
+    step: 5, 
+    title: "Deployment", 
+    icon: Rocket, 
+    timeline: "1-2 Weeks", 
+    color: '#ff6600',
+    description: "Launching your solution to the world",
+    deliverables: ["Live Application", "Deployment Documentation", "Training"],
+    collaboration: ["Go-live Planning", "Launch Coordination"],
+    metrics: ["Zero-downtime deployment", "Successful launch"]
+  },
+  { 
+    step: 6, 
+    title: "Support", 
+    icon: HeadphonesIcon, 
+    timeline: "Ongoing", 
+    color: '#00ffff',
+    description: "Continuous improvement and maintenance",
+    deliverables: ["Monthly Reports", "Updates & Patches", "Feature Enhancements"],
+    collaboration: ["Regular Check-ins", "Quarterly Reviews"],
+    metrics: ["99.9% uptime", "Fast response times"]
+  },
+];
+
 const stats = [
   { value: 35, suffix: '+', label: 'Projects Delivered', icon: FileCheck },
   { value: 98, suffix: '%', label: 'Client Satisfaction', icon: Users },
@@ -597,8 +667,265 @@ export const ProjectTimeline = ({ showCTA = true }: { showCTA?: boolean }) => {
   );
 };
 
-// Journey to Success Preview Component
-export const JourneyToSuccessPreview = ({ showCTA = true }: { showCTA?: boolean }) => {
+// Expandable Step Card Component
+const ExpandableStepCard = ({ 
+  step, 
+  index, 
+  isActive, 
+  onClick 
+}: { 
+  step: typeof methodologyStepsDetailed[0]; 
+  index: number; 
+  isActive: boolean;
+  onClick: () => void;
+}) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+  const Icon = step.icon;
+  const color = step.color;
+  
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 30 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      className="relative"
+      onClick={onClick}
+    >
+      <motion.div
+        layout
+        whileHover={{ scale: isActive ? 1 : 1.02, y: isActive ? 0 : -5 }}
+        className={`glass-card p-6 rounded-2xl border transition-all duration-500 cursor-pointer relative overflow-hidden ${
+          isActive 
+            ? 'border-primary shadow-[0_0_40px_rgba(0,245,255,0.4)] bg-primary/10' 
+            : 'border-border/50 hover:border-primary/50'
+        }`}
+        style={{
+          boxShadow: isActive ? `0 0 40px ${color}40` : undefined
+        }}
+      >
+        {/* Animated border glow */}
+        <motion.div
+          className="absolute inset-0 rounded-2xl opacity-0 pointer-events-none"
+          style={{
+            background: `linear-gradient(135deg, ${color}20, transparent, ${color}20)`,
+          }}
+          animate={{
+            opacity: isActive ? 1 : 0
+          }}
+          transition={{ duration: 0.3 }}
+        />
+
+        {/* Step Number Badge with pulse effect */}
+        <div className="absolute -top-3 -left-3">
+          <motion.div
+            className="absolute inset-0 w-10 h-10 rounded-full"
+            style={{ background: color }}
+            animate={isActive ? {
+              scale: [1, 1.5, 1],
+              opacity: [0.5, 0, 0.5]
+            } : {}}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+          <div 
+            className="relative w-8 h-8 rounded-full flex items-center justify-center text-background font-bold text-sm shadow-lg"
+            style={{ background: `linear-gradient(135deg, ${color}, ${color}cc)` }}
+          >
+            {step.step}
+          </div>
+        </div>
+
+        {/* 3D Icon Container */}
+        <div className="h-20 w-20 mx-auto mb-4 rounded-xl overflow-hidden relative">
+          <Canvas camera={{ position: [0, 0, 3] }}>
+            <ambientLight intensity={0.5} />
+            <pointLight position={[5, 5, 5]} intensity={1} color={color} />
+            <Suspense fallback={null}>
+              <Step3DIconSimple step={index} isHovered={isActive} />
+            </Suspense>
+          </Canvas>
+          {/* Glow effect behind icon */}
+          <motion.div
+            className="absolute inset-0 rounded-xl -z-10"
+            style={{
+              background: `radial-gradient(circle, ${color}30 0%, transparent 70%)`
+            }}
+            animate={isActive ? { scale: [1, 1.2, 1] } : {}}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+        </div>
+
+        {/* Title & Icon */}
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <motion.div 
+            className={`p-2 rounded-lg transition-all duration-300 ${
+              isActive ? 'text-background' : 'bg-muted/50 text-primary'
+            }`}
+            style={{ background: isActive ? color : undefined }}
+            animate={isActive ? { scale: [1, 1.1, 1] } : {}}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          >
+            <Icon className="w-4 h-4" />
+          </motion.div>
+          <h3 className="font-bold text-lg">{step.title}</h3>
+        </div>
+
+        <p className="text-muted-foreground text-sm text-center mb-3">{step.description}</p>
+
+        {/* Quick info pills */}
+        <div className="flex justify-center gap-2 mb-2">
+          <span 
+            className="px-3 py-1 rounded-full text-xs font-medium"
+            style={{ 
+              background: `${color}20`, 
+              color: color,
+              border: `1px solid ${color}40`
+            }}
+          >
+            {step.timeline}
+          </span>
+        </div>
+
+        {/* Expandable Details */}
+        <motion.div
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: isActive ? 'auto' : 0, opacity: isActive ? 1 : 0 }}
+          transition={{ duration: 0.4, ease: "easeInOut" }}
+          className="overflow-hidden"
+        >
+          <div className="space-y-4 pt-4 border-t border-border/50">
+            {/* Timeline */}
+            <motion.div 
+              className="flex items-start gap-3"
+              initial={{ opacity: 0, x: -20 }}
+              animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+              transition={{ delay: 0.1 }}
+            >
+              <div 
+                className="p-2 rounded-lg"
+                style={{ background: `${color}20` }}
+              >
+                <Clock className="w-4 h-4" style={{ color }} />
+              </div>
+              <div>
+                <span className="font-semibold text-sm text-foreground">Timeline</span>
+                <p className="text-muted-foreground text-sm">{step.timeline}</p>
+              </div>
+            </motion.div>
+
+            {/* Deliverables */}
+            <motion.div 
+              className="flex items-start gap-3"
+              initial={{ opacity: 0, x: -20 }}
+              animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+              transition={{ delay: 0.2 }}
+            >
+              <div 
+                className="p-2 rounded-lg"
+                style={{ background: `${color}20` }}
+              >
+                <FileCheck className="w-4 h-4" style={{ color }} />
+              </div>
+              <div className="flex-1">
+                <span className="font-semibold text-sm text-foreground">Deliverables</span>
+                <ul className="text-muted-foreground text-sm mt-1 space-y-1">
+                  {step.deliverables.map((item, i) => (
+                    <motion.li 
+                      key={i}
+                      className="flex items-start gap-2"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+                      transition={{ delay: 0.2 + i * 0.05 }}
+                    >
+                      <span style={{ color }} className="mt-1">•</span>
+                      {item}
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
+
+            {/* Collaboration */}
+            <motion.div 
+              className="flex items-start gap-3"
+              initial={{ opacity: 0, x: -20 }}
+              animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+              transition={{ delay: 0.3 }}
+            >
+              <div 
+                className="p-2 rounded-lg"
+                style={{ background: `${color}20` }}
+              >
+                <Users className="w-4 h-4" style={{ color }} />
+              </div>
+              <div className="flex-1">
+                <span className="font-semibold text-sm text-foreground">Client Touchpoints</span>
+                <ul className="text-muted-foreground text-sm mt-1 space-y-1">
+                  {step.collaboration.map((item, i) => (
+                    <motion.li 
+                      key={i}
+                      className="flex items-start gap-2"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+                      transition={{ delay: 0.3 + i * 0.05 }}
+                    >
+                      <span style={{ color }} className="mt-1">•</span>
+                      {item}
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
+
+            {/* Success Metrics */}
+            <motion.div 
+              className="flex items-start gap-3"
+              initial={{ opacity: 0, x: -20 }}
+              animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+              transition={{ delay: 0.4 }}
+            >
+              <div 
+                className="p-2 rounded-lg"
+                style={{ background: `${color}20` }}
+              >
+                <Target className="w-4 h-4" style={{ color }} />
+              </div>
+              <div className="flex-1">
+                <span className="font-semibold text-sm text-foreground">Success Metrics</span>
+                <ul className="text-muted-foreground text-sm mt-1 space-y-1">
+                  {step.metrics.map((item, i) => (
+                    <motion.li 
+                      key={i}
+                      className="flex items-start gap-2"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+                      transition={{ delay: 0.4 + i * 0.05 }}
+                    >
+                      <span style={{ color }} className="mt-1">•</span>
+                      {item}
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Click indicator */}
+        <motion.div 
+          className="flex items-center justify-center mt-3 text-muted-foreground text-xs"
+          animate={{ opacity: isActive ? 0 : 1 }}
+        >
+          <span>Click to expand</span>
+        </motion.div>
+      </motion.div>
+    </motion.div>
+  );
+};
+
+// Journey to Success Preview Component (Compact version for homepage)
+export const JourneyToSuccessPreviewCompact = ({ showCTA = true }: { showCTA?: boolean }) => {
   return (
     <section className="py-20">
       <div className="container mx-auto px-4">
@@ -628,6 +955,73 @@ export const JourneyToSuccessPreview = ({ showCTA = true }: { showCTA?: boolean 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 lg:gap-4">
           {methodologySteps.map((step, index) => (
             <CompactStepCard key={step.step} step={step} index={index} />
+          ))}
+        </div>
+
+        {showCTA && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.6 }}
+            className="text-center mt-12"
+          >
+            <Button asChild className="group">
+              <Link to="/methodology">
+                Explore Full Methodology
+                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </Button>
+          </motion.div>
+        )}
+      </div>
+    </section>
+  );
+};
+
+// Journey to Success Preview Component (Expandable version for About page)
+export const JourneyToSuccessPreview = ({ showCTA = true }: { showCTA?: boolean }) => {
+  const [activeStep, setActiveStep] = useState<number | null>(null);
+
+  const handleStepClick = (index: number) => {
+    setActiveStep(activeStep === index ? null : index);
+  };
+
+  return (
+    <section className="py-20">
+      <div className="container mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
+          <motion.span
+            initial={{ scale: 0 }}
+            whileInView={{ scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ type: "spring", stiffness: 100 }}
+            className="inline-block px-4 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary text-sm font-medium mb-4"
+          >
+            Our Process
+          </motion.span>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            The <span className="gradient-text">Journey</span> to Success
+          </h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            A proven 6-step methodology that transforms your vision into reality
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {methodologyStepsDetailed.map((step, index) => (
+            <ExpandableStepCard 
+              key={step.step} 
+              step={step} 
+              index={index} 
+              isActive={activeStep === index}
+              onClick={() => handleStepClick(index)}
+            />
           ))}
         </div>
 
