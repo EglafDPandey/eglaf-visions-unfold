@@ -1,17 +1,28 @@
 import { motion } from 'framer-motion';
-import { Linkedin, Twitter } from 'lucide-react';
+import { Linkedin, Facebook } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
 
+import dhirendraImg from '@/assets/team/dhirendra-pandey.png';
+import mudassarImg from '@/assets/team/mudassar-basit.png';
+import rajeshImg from '@/assets/team/rajesh-gurjar.png';
+import praveenImg from '@/assets/team/praveen-upadhyay.png';
+import bittuImg from '@/assets/team/bittu-shukla.png';
+import vivekImg from '@/assets/team/vivek-jha.png';
+import rahulImg from '@/assets/team/rahul-shukla.png';
+
+const LINKEDIN_URL = 'https://in.linkedin.com/company/eglaftech';
+const FACEBOOK_URL = 'https://www.facebook.com/EGLAFTECH';
+
 const team = [
-  { name: 'Dhirendra Pandey', role: 'CEO & Founder', initials: 'DP', gradient: 'from-primary to-purple-600' },
-  { name: 'Mudassar Basit', role: 'CTO', initials: 'MB', gradient: 'from-blue-500 to-cyan-500' },
-  { name: 'Rajesh Gurjar', role: 'Lead Developer', initials: 'RG', gradient: 'from-green-500 to-emerald-500' },
-  { name: 'Praveen Upadhyay', role: 'AI Lead', initials: 'PU', gradient: 'from-violet-500 to-purple-500' },
-  { name: 'Bittu Shukla', role: 'Project Manager', initials: 'BS', gradient: 'from-orange-500 to-amber-500' },
-  { name: 'Vivek Jha', role: 'Dev Engineer', initials: 'VJ', gradient: 'from-rose-500 to-pink-500' },
-  { name: 'Rahul Shukla', role: 'Digital Market Expert', initials: 'RS', gradient: 'from-indigo-500 to-blue-500' },
+  { name: 'Dhirendra Pandey', role: 'CEO & Founder', image: dhirendraImg },
+  { name: 'Mudassar Basit', role: 'CTO', image: mudassarImg },
+  { name: 'Rajesh Gurjar', role: 'Lead Developer', image: rajeshImg },
+  { name: 'Praveen Upadhyay', role: 'AI Lead', image: praveenImg },
+  { name: 'Bittu Shukla', role: 'Project Manager', image: bittuImg },
+  { name: 'Vivek Jha', role: 'Dev Engineer', image: vivekImg },
+  { name: 'Rahul Shukla', role: 'Digital Market Expert', image: rahulImg },
 ];
 
 export default function Team() {
@@ -44,19 +55,21 @@ export default function Team() {
             {team.map((member, i) => (
               <motion.div key={member.name} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} whileHover={{ y: -10 }} className="group glass-card overflow-hidden">
                 <div className="aspect-square overflow-hidden relative">
-                  <div className={`w-full h-full bg-gradient-to-br ${member.gradient} flex items-center justify-center group-hover:scale-110 transition-transform duration-500`}>
-                    <span className="text-5xl md:text-6xl font-bold text-white/90">{member.initials}</span>
-                  </div>
+                  <img 
+                    src={member.image} 
+                    alt={member.name} 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                  />
                 </div>
                 <div className="p-6">
                   <h3 className="font-display font-semibold text-lg">{member.name}</h3>
                   <p className="text-primary text-sm mb-4">{member.role}</p>
                   <div className="flex gap-3">
-                    <a href="#" className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors">
+                    <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors">
                       <Linkedin className="w-4 h-4" />
                     </a>
-                    <a href="#" className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors">
-                      <Twitter className="w-4 h-4" />
+                    <a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors">
+                      <Facebook className="w-4 h-4" />
                     </a>
                   </div>
                 </div>
