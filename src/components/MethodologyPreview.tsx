@@ -708,13 +708,13 @@ const ExpandableStepCard = ({
       <motion.div
         layout
         whileHover={{ scale: isActive ? 1 : 1.02, y: isActive ? 0 : -5 }}
-        className={`glass-card p-6 rounded-2xl border transition-all duration-500 cursor-pointer relative overflow-hidden ${
+        className={`glass-card p-4 sm:p-6 rounded-2xl border transition-all duration-500 cursor-pointer relative overflow-hidden ${
           isActive 
-            ? 'border-primary shadow-[0_0_40px_rgba(0,245,255,0.4)] bg-primary/10' 
+            ? 'border-primary shadow-[0_0_30px_rgba(0,245,255,0.3)] sm:shadow-[0_0_40px_rgba(0,245,255,0.4)] bg-primary/10' 
             : 'border-border/50 hover:border-primary/50'
         }`}
         style={{
-          boxShadow: isActive ? `0 0 40px ${color}40` : undefined
+          boxShadow: isActive ? `0 0 30px ${color}30` : undefined
         }}
       >
         {/* Animated border glow */}
@@ -730,9 +730,9 @@ const ExpandableStepCard = ({
         />
 
         {/* Step Number Badge with pulse effect */}
-        <div className="absolute -top-3 -left-3">
+        <div className="absolute -top-2 -left-2 sm:-top-3 sm:-left-3">
           <motion.div
-            className="absolute inset-0 w-10 h-10 rounded-full"
+            className="absolute inset-0 w-7 h-7 sm:w-10 sm:h-10 rounded-full"
             style={{ background: color }}
             animate={isActive ? {
               scale: [1, 1.5, 1],
@@ -741,21 +741,21 @@ const ExpandableStepCard = ({
             transition={{ duration: 2, repeat: Infinity }}
           />
           <div 
-            className="relative w-8 h-8 rounded-full flex items-center justify-center text-background font-bold text-sm shadow-lg"
+            className="relative w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-background font-bold text-xs sm:text-sm shadow-lg"
             style={{ background: `linear-gradient(135deg, ${color}, ${color}cc)` }}
           >
             {step.step}
           </div>
         </div>
 
-        {/* 3D Icon Container */}
-        <div className="h-20 w-20 mx-auto mb-4 rounded-xl overflow-hidden relative">
+        {/* Icon Container */}
+        <div className="h-14 w-14 sm:h-20 sm:w-20 mx-auto mb-3 sm:mb-4 rounded-xl overflow-hidden relative">
           {webglDisabled ? (
             <div
               className="h-full w-full rounded-xl flex items-center justify-center border border-border/50"
               style={{ background: `${color}15` }}
             >
-              <Icon className="w-9 h-9" style={{ color }} />
+              <Icon className="w-6 h-6 sm:w-9 sm:h-9" style={{ color }} />
             </div>
           ) : (
             <Canvas camera={{ position: [0, 0, 3] }}>
@@ -780,24 +780,24 @@ const ExpandableStepCard = ({
         {/* Title & Icon */}
         <div className="flex items-center justify-center gap-2 mb-2">
           <motion.div 
-            className={`p-2 rounded-lg transition-all duration-300 ${
+            className={`p-1.5 sm:p-2 rounded-lg transition-all duration-300 ${
               isActive ? 'text-background' : 'bg-muted/50 text-primary'
             }`}
             style={{ background: isActive ? color : undefined }}
             animate={isActive ? { scale: [1, 1.1, 1] } : {}}
             transition={{ duration: 1.5, repeat: Infinity }}
           >
-            <Icon className="w-4 h-4" />
+            <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </motion.div>
-          <h3 className="font-bold text-lg">{step.title}</h3>
+          <h3 className="font-bold text-base sm:text-lg">{step.title}</h3>
         </div>
 
-        <p className="text-muted-foreground text-sm text-center mb-3">{step.description}</p>
+        <p className="text-muted-foreground text-xs sm:text-sm text-center mb-2 sm:mb-3">{step.description}</p>
 
         {/* Quick info pills */}
         <div className="flex justify-center gap-2 mb-2">
           <span 
-            className="px-3 py-1 rounded-full text-xs font-medium"
+            className="px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium"
             style={{ 
               background: `${color}20`, 
               color: color,
@@ -815,52 +815,52 @@ const ExpandableStepCard = ({
           transition={{ duration: 0.4, ease: "easeInOut" }}
           className="overflow-hidden"
         >
-          <div className="space-y-4 pt-4 border-t border-border/50">
+          <div className="space-y-3 sm:space-y-4 pt-3 sm:pt-4 border-t border-border/50">
             {/* Timeline */}
             <motion.div 
-              className="flex items-start gap-3"
+              className="flex items-start gap-2 sm:gap-3"
               initial={{ opacity: 0, x: -20 }}
               animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
               transition={{ delay: 0.1 }}
             >
               <div 
-                className="p-2 rounded-lg"
+                className="p-1.5 sm:p-2 rounded-lg flex-shrink-0"
                 style={{ background: `${color}20` }}
               >
-                <Clock className="w-4 h-4" style={{ color }} />
+                <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4" style={{ color }} />
               </div>
               <div>
-                <span className="font-semibold text-sm text-foreground">Timeline</span>
-                <p className="text-muted-foreground text-sm">{step.timeline}</p>
+                <span className="font-semibold text-xs sm:text-sm text-foreground">Timeline</span>
+                <p className="text-muted-foreground text-xs sm:text-sm">{step.timeline}</p>
               </div>
             </motion.div>
 
             {/* Deliverables */}
             <motion.div 
-              className="flex items-start gap-3"
+              className="flex items-start gap-2 sm:gap-3"
               initial={{ opacity: 0, x: -20 }}
               animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
               transition={{ delay: 0.2 }}
             >
               <div 
-                className="p-2 rounded-lg"
+                className="p-1.5 sm:p-2 rounded-lg flex-shrink-0"
                 style={{ background: `${color}20` }}
               >
-                <FileCheck className="w-4 h-4" style={{ color }} />
+                <FileCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4" style={{ color }} />
               </div>
-              <div className="flex-1">
-                <span className="font-semibold text-sm text-foreground">Deliverables</span>
-                <ul className="text-muted-foreground text-sm mt-1 space-y-1">
+              <div className="flex-1 min-w-0">
+                <span className="font-semibold text-xs sm:text-sm text-foreground">Deliverables</span>
+                <ul className="text-muted-foreground text-xs sm:text-sm mt-1 space-y-0.5 sm:space-y-1">
                   {step.deliverables.map((item, i) => (
                     <motion.li 
                       key={i}
-                      className="flex items-start gap-2"
+                      className="flex items-start gap-1.5 sm:gap-2"
                       initial={{ opacity: 0, x: -10 }}
                       animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
                       transition={{ delay: 0.2 + i * 0.05 }}
                     >
-                      <span style={{ color }} className="mt-1">•</span>
-                      {item}
+                      <span style={{ color }} className="mt-0.5 sm:mt-1 flex-shrink-0">•</span>
+                      <span className="break-words">{item}</span>
                     </motion.li>
                   ))}
                 </ul>
@@ -869,30 +869,30 @@ const ExpandableStepCard = ({
 
             {/* Collaboration */}
             <motion.div 
-              className="flex items-start gap-3"
+              className="flex items-start gap-2 sm:gap-3"
               initial={{ opacity: 0, x: -20 }}
               animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
               transition={{ delay: 0.3 }}
             >
               <div 
-                className="p-2 rounded-lg"
+                className="p-1.5 sm:p-2 rounded-lg flex-shrink-0"
                 style={{ background: `${color}20` }}
               >
-                <Users className="w-4 h-4" style={{ color }} />
+                <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4" style={{ color }} />
               </div>
-              <div className="flex-1">
-                <span className="font-semibold text-sm text-foreground">Client Touchpoints</span>
-                <ul className="text-muted-foreground text-sm mt-1 space-y-1">
+              <div className="flex-1 min-w-0">
+                <span className="font-semibold text-xs sm:text-sm text-foreground">Client Touchpoints</span>
+                <ul className="text-muted-foreground text-xs sm:text-sm mt-1 space-y-0.5 sm:space-y-1">
                   {step.collaboration.map((item, i) => (
                     <motion.li 
                       key={i}
-                      className="flex items-start gap-2"
+                      className="flex items-start gap-1.5 sm:gap-2"
                       initial={{ opacity: 0, x: -10 }}
                       animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
                       transition={{ delay: 0.3 + i * 0.05 }}
                     >
-                      <span style={{ color }} className="mt-1">•</span>
-                      {item}
+                      <span style={{ color }} className="mt-0.5 sm:mt-1 flex-shrink-0">•</span>
+                      <span className="break-words">{item}</span>
                     </motion.li>
                   ))}
                 </ul>
@@ -901,30 +901,30 @@ const ExpandableStepCard = ({
 
             {/* Success Metrics */}
             <motion.div 
-              className="flex items-start gap-3"
+              className="flex items-start gap-2 sm:gap-3"
               initial={{ opacity: 0, x: -20 }}
               animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
               transition={{ delay: 0.4 }}
             >
               <div 
-                className="p-2 rounded-lg"
+                className="p-1.5 sm:p-2 rounded-lg flex-shrink-0"
                 style={{ background: `${color}20` }}
               >
-                <Target className="w-4 h-4" style={{ color }} />
+                <Target className="w-3.5 h-3.5 sm:w-4 sm:h-4" style={{ color }} />
               </div>
-              <div className="flex-1">
-                <span className="font-semibold text-sm text-foreground">Success Metrics</span>
-                <ul className="text-muted-foreground text-sm mt-1 space-y-1">
+              <div className="flex-1 min-w-0">
+                <span className="font-semibold text-xs sm:text-sm text-foreground">Success Metrics</span>
+                <ul className="text-muted-foreground text-xs sm:text-sm mt-1 space-y-0.5 sm:space-y-1">
                   {step.metrics.map((item, i) => (
                     <motion.li 
                       key={i}
-                      className="flex items-start gap-2"
+                      className="flex items-start gap-1.5 sm:gap-2"
                       initial={{ opacity: 0, x: -10 }}
                       animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
                       transition={{ delay: 0.4 + i * 0.05 }}
                     >
-                      <span style={{ color }} className="mt-1">•</span>
-                      {item}
+                      <span style={{ color }} className="mt-0.5 sm:mt-1 flex-shrink-0">•</span>
+                      <span className="break-words">{item}</span>
                     </motion.li>
                   ))}
                 </ul>
@@ -935,10 +935,10 @@ const ExpandableStepCard = ({
 
         {/* Click indicator */}
         <motion.div 
-          className="flex items-center justify-center mt-3 text-muted-foreground text-xs"
+          className="flex items-center justify-center mt-2 sm:mt-3 text-muted-foreground text-[10px] sm:text-xs"
           animate={{ opacity: isActive ? 0 : 1 }}
         >
-          <span>Click to expand</span>
+          <span>Tap to expand</span>
         </motion.div>
       </motion.div>
     </motion.div>
@@ -1034,7 +1034,7 @@ export const JourneyToSuccessPreview = ({ showCTA = true }: { showCTA?: boolean 
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {methodologyStepsDetailed.map((step, index) => (
             <ExpandableStepCard 
               key={step.step} 
