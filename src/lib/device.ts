@@ -8,10 +8,17 @@ export function isMobileWebGLDisabled() {
   const ua = navigator.userAgent || '';
   const uaMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
 
-  // matchMedia doesn't trigger layout/reflow.
-  const mql = typeof window.matchMedia === 'function'
-    ? window.matchMedia('(max-width: 767px)')
-    : null;
+  // Many tablets/phones can present a "desktop" UA; touch + coarse pointer is a safer signal.
+  const hasTouch = (navigator.maxTouchPoints ?? 0) > 0;
 
-  return uaMobile || (mql ? mql.matches : window.innerWidth <= 768);
+  // matchMedia doesn't trigger layout/reflow.
+  const smallViewport = typeof window.matchMedia === 'function'
+    ? window.matchMedia('(max-width: 767px)').matches
+    : window.innerWidth <= 768;
+
+  const coarsePointer = typeof window.matchMedia === 'function'
+    ? window.matchMedia('(pointer: coarse)').matches
+    : false;
+
+  return uaMobile || smallViewport || (hasTouch && coarsePointer);
 }
