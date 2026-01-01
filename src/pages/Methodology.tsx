@@ -22,9 +22,21 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { isMobileWebGLDisabled } from '@/lib/device';
 
 // 3D Animated Background Component
 const AnimatedBackground = () => {
+  // WebGL can crash mobile browsers (context loss -> black screen)
+  if (isMobileWebGLDisabled()) {
+    return (
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-accent/10" />
+        <div className="absolute -top-24 -left-24 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
+        <div className="absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-accent/10 blur-3xl" />
+      </div>
+    );
+  }
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       <Canvas camera={{ position: [0, 0, 10], fov: 75 }}>
@@ -156,6 +168,7 @@ const ProcessStep = ({
 }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const webglDisabled = isMobileWebGLDisabled();
 
   return (
     <motion.div
@@ -186,13 +199,19 @@ const ProcessStep = ({
 
         {/* 3D Icon Container */}
         <div className="h-24 w-24 mx-auto mb-6 rounded-xl overflow-hidden">
-          <Canvas camera={{ position: [0, 0, 3] }}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[5, 5, 5]} intensity={1} />
-            <Suspense fallback={null}>
-              <Step3DIcon step={index} isActive={isActive} />
-            </Suspense>
-          </Canvas>
+          {webglDisabled ? (
+            <div className="h-full w-full rounded-xl bg-muted/30 border border-border/50 flex items-center justify-center">
+              <Icon className="w-10 h-10 text-primary" />
+            </div>
+          ) : (
+            <Canvas camera={{ position: [0, 0, 3] }}>
+              <ambientLight intensity={0.5} />
+              <pointLight position={[5, 5, 5]} intensity={1} />
+              <Suspense fallback={null}>
+                <Step3DIcon step={index} isActive={isActive} />
+              </Suspense>
+            </Canvas>
+          )}
         </div>
 
         {/* Title & Icon */}
@@ -484,6 +503,7 @@ const StepCard = ({
   color: string;
 }) => {
   const Icon = step.icon;
+  const webglDisabled = isMobileWebGLDisabled();
   
   return (
     <motion.div
@@ -577,13 +597,22 @@ const StepCard = ({
 
       {/* 3D Icon Container */}
       <div className="h-24 w-24 mx-auto mb-6 rounded-xl overflow-hidden relative">
-        <Canvas camera={{ position: [0, 0, 3] }}>
-          <ambientLight intensity={0.5} />
-          <pointLight position={[5, 5, 5]} intensity={1} color={color} />
-          <Suspense fallback={null}>
-            <Step3DIcon step={index} isActive={isActive} />
-          </Suspense>
-        </Canvas>
+        {webglDisabled ? (
+          <div
+            className="h-full w-full rounded-xl flex items-center justify-center border border-border/50"
+            style={{ background: `${color}15` }}
+          >
+            <Icon className="w-10 h-10" style={{ color }} />
+          </div>
+        ) : (
+          <Canvas camera={{ position: [0, 0, 3] }}>
+            <ambientLight intensity={0.5} />
+            <pointLight position={[5, 5, 5]} intensity={1} color={color} />
+            <Suspense fallback={null}>
+              <Step3DIcon step={index} isActive={isActive} />
+            </Suspense>
+          </Canvas>
+        )}
         {/* Glow effect behind icon */}
         <motion.div
           className="absolute inset-0 rounded-xl -z-10"

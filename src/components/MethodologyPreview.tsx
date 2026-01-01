@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { isMobileWebGLDisabled } from '@/lib/device';
 
 // Simplified 3D Icon for preview
 const Step3DIconSimple = ({ step, isHovered }: { step: number; isHovered: boolean }) => {
@@ -455,7 +456,8 @@ const TimelineCard = ({ step, index }: { step: typeof methodologySteps[0]; index
 const CompactStepCard = ({ step, index }: { step: typeof methodologySteps[0]; index: number }) => {
   const [isHovered, setIsHovered] = useState(false);
   const Icon = step.icon;
-  
+  const webglDisabled = isMobileWebGLDisabled();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -483,13 +485,22 @@ const CompactStepCard = ({ step, index }: { step: typeof methodologySteps[0]; in
 
         {/* 3D Icon */}
         <div className="h-16 w-16 mx-auto mb-4 rounded-lg overflow-hidden">
-          <Canvas camera={{ position: [0, 0, 3] }}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[5, 5, 5]} intensity={1} color={step.color} />
-            <Suspense fallback={null}>
-              <Step3DIconSimple step={index} isHovered={isHovered} />
-            </Suspense>
-          </Canvas>
+          {webglDisabled ? (
+            <div
+              className="h-full w-full rounded-lg flex items-center justify-center border border-border/50"
+              style={{ background: `${step.color}15` }}
+            >
+              <Icon className="w-8 h-8" style={{ color: step.color }} />
+            </div>
+          ) : (
+            <Canvas camera={{ position: [0, 0, 3] }}>
+              <ambientLight intensity={0.5} />
+              <pointLight position={[5, 5, 5]} intensity={1} color={step.color} />
+              <Suspense fallback={null}>
+                <Step3DIconSimple step={index} isHovered={isHovered} />
+              </Suspense>
+            </Canvas>
+          )}
         </div>
 
         {/* Content */}
@@ -683,7 +694,8 @@ const ExpandableStepCard = ({
   const isInView = useInView(ref, { once: true });
   const Icon = step.icon;
   const color = step.color;
-  
+  const webglDisabled = isMobileWebGLDisabled();
+
   return (
     <motion.div
       ref={ref}
@@ -738,13 +750,22 @@ const ExpandableStepCard = ({
 
         {/* 3D Icon Container */}
         <div className="h-20 w-20 mx-auto mb-4 rounded-xl overflow-hidden relative">
-          <Canvas camera={{ position: [0, 0, 3] }}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[5, 5, 5]} intensity={1} color={color} />
-            <Suspense fallback={null}>
-              <Step3DIconSimple step={index} isHovered={isActive} />
-            </Suspense>
-          </Canvas>
+          {webglDisabled ? (
+            <div
+              className="h-full w-full rounded-xl flex items-center justify-center border border-border/50"
+              style={{ background: `${color}15` }}
+            >
+              <Icon className="w-9 h-9" style={{ color }} />
+            </div>
+          ) : (
+            <Canvas camera={{ position: [0, 0, 3] }}>
+              <ambientLight intensity={0.5} />
+              <pointLight position={[5, 5, 5]} intensity={1} color={color} />
+              <Suspense fallback={null}>
+                <Step3DIconSimple step={index} isHovered={isActive} />
+              </Suspense>
+            </Canvas>
+          )}
           {/* Glow effect behind icon */}
           <motion.div
             className="absolute inset-0 rounded-xl -z-10"
