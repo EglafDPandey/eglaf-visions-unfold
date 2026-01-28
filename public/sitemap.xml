@@ -101,6 +101,14 @@
     <priority>0.90</priority>
   </url>
 
+  <!-- Landing Pages for Ads -->
+  <url>
+    <loc>https://eglaftechnology.com/lp/custom-software</loc>
+    <lastmod>2025-01-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
   <!-- Legal Pages - Low Priority -->
   <url>
     <loc>https://eglaftechnology.com/privacy-policy</loc>
