@@ -13,6 +13,8 @@ import { Footer } from '@/components/Footer';
 import { SEO } from '@/components/SEO';
 import { toast } from 'sonner';
 import { trackEvent, trackConversion } from '@/components/GoogleAnalytics';
+import { fbTrackLead } from '@/components/tracking/FacebookPixel';
+import { trackFormSubmission } from '@/components/tracking/GoogleTagManager';
 import { supabase } from '@/integrations/supabase/client';
 import { z } from 'zod';
 
@@ -148,15 +150,25 @@ export default function QuoteRequest() {
         throw error;
       }
       
-      // Track conversion for quote request
+      // Track conversion for quote request (GA4)
       trackConversion('quote_request', {
         services: selectedServices.join(', '),
         budget: validatedData.budget,
         timeline: validatedData.timeline,
       });
       
-      // Track event for detailed analytics
+      // Track event for detailed analytics (GA4)
       trackEvent('form_submit', 'Quote Request', selectedServices.join(', '));
+      
+      // Track lead for Facebook Pixel
+      fbTrackLead();
+      
+      // Track form submission for GTM
+      trackFormSubmission('quote_request', {
+        services: selectedServices,
+        budget: validatedData.budget,
+        timeline: validatedData.timeline,
+      });
       
       toast.success('Quote request submitted successfully! We\'ll get back to you within 24 hours.');
       

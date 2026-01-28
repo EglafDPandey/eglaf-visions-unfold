@@ -10,6 +10,8 @@ import { Footer } from '@/components/Footer';
 import { SEO, schemas } from '@/components/SEO';
 import { toast } from 'sonner';
 import { trackEvent, trackConversion } from '@/components/GoogleAnalytics';
+import { fbTrackContact } from '@/components/tracking/FacebookPixel';
+import { trackFormSubmission } from '@/components/tracking/GoogleTagManager';
 import { supabase } from '@/integrations/supabase/client';
 import { z } from 'zod';
 import { useSpamProtection } from '@/hooks/useSpamProtection';
@@ -104,14 +106,23 @@ export default function Contact() {
         return;
       }
       
-      // Track conversion for contact form
+      // Track conversion for contact form (GA4)
       trackConversion('contact_form', {
         subject: validatedData.subject,
         has_phone: !!validatedData.phone,
       });
       
-      // Track event for detailed analytics
+      // Track event for detailed analytics (GA4)
       trackEvent('form_submit', 'Contact Form', validatedData.subject || '');
+      
+      // Track contact for Facebook Pixel
+      fbTrackContact();
+      
+      // Track form submission for GTM
+      trackFormSubmission('contact_form', {
+        subject: validatedData.subject,
+        has_phone: !!validatedData.phone,
+      });
       
       toast.success('Message sent successfully!');
       setFormData({ name: '', email: '', phone: '', subject: '', message: '' });

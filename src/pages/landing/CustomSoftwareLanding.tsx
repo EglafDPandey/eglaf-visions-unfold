@@ -25,10 +25,13 @@ import {
   Target,
   Sparkles
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import eglafLogo from '@/assets/eglaf-logo.png';
+import { trackCTA, trackConversion } from '@/components/tracking';
+import { fbTrackViewContent } from '@/components/tracking/FacebookPixel';
+import { pushToDataLayer } from '@/components/tracking/GoogleTagManager';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -38,6 +41,12 @@ const fadeInUp = {
 
 const CustomSoftwareLanding = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  // Track page view on mount
+  useEffect(() => {
+    fbTrackViewContent('Custom Software Landing', 'Landing Page');
+    pushToDataLayer('landing_page_view', { page_name: 'custom_software' });
+  }, []);
 
   const faqs = [
     {
@@ -59,7 +68,12 @@ const CustomSoftwareLanding = () => {
   ];
 
   const scrollToContact = () => {
+    trackCTA('Get Consultation', 'Custom Software Landing');
     document.getElementById('consultation')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleHowItWorksClick = () => {
+    trackCTA('See How It Works', 'Custom Software Landing');
   };
 
   return (
@@ -112,7 +126,7 @@ const CustomSoftwareLanding = () => {
                   Get a Free Software Consultation
                 </Button>
                 <Button variant="outline" size="xl" className="text-lg" asChild>
-                  <a href="#how-it-works">
+                  <a href="#how-it-works" onClick={handleHowItWorksClick}>
                     See How It Works
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </a>
