@@ -8,6 +8,8 @@ import { HelmetProvider } from "react-helmet-async";
 import ScrollToTop from "@/components/ScrollToTop";
 import { AuthProvider } from "@/hooks/useAuth";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
+import { GoogleTagManager } from "@/components/tracking/GoogleTagManager";
+import { FacebookPixel } from "@/components/tracking/FacebookPixel";
 
 // Critical route - load immediately
 import Index from "./pages/Index";
@@ -56,6 +58,8 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <GoogleAnalytics />
+            <GoogleTagManager />
+            <FacebookPixel />
             <ScrollToTop />
             <Suspense fallback={<PageLoader />}>
               <Routes>
