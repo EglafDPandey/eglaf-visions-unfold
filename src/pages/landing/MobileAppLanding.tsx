@@ -34,6 +34,7 @@ import eglafLogo from '@/assets/eglaf-logo.png';
 import { trackCTA, trackConversion } from '@/components/tracking';
 import { fbTrackViewContent } from '@/components/tracking/FacebookPixel';
 import { pushToDataLayer } from '@/components/tracking/GoogleTagManager';
+import { useUTMTracking, getUTMParamsForTracking } from '@/hooks/useUTMTracking';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -43,11 +44,15 @@ const fadeInUp = {
 
 const MobileAppLanding = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  
+  // Capture UTM parameters from URL
+  useUTMTracking();
 
-  // Track page view on mount
+  // Track page view on mount with UTM params
   useEffect(() => {
+    const utmParams = getUTMParamsForTracking();
     fbTrackViewContent('Mobile App Development Landing', 'Landing Page');
-    pushToDataLayer('landing_page_view', { page_name: 'mobile_app_development' });
+    pushToDataLayer('landing_page_view', { page_name: 'mobile_app_development', ...utmParams });
   }, []);
 
   const faqs = [
