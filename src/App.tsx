@@ -39,6 +39,7 @@ const CustomSoftware = lazy(() => import("./pages/services/CustomSoftware"));
 const QuoteRequest = lazy(() => import("./pages/QuoteRequest"));
 const Methodology = lazy(() => import("./pages/Methodology"));
 const CustomSoftwareLanding = lazy(() => import("./pages/landing/CustomSoftwareLanding"));
+const MobileAppLanding = lazy(() => import("./pages/landing/MobileAppLanding"));
 
 const queryClient = new QueryClient();
 
@@ -87,6 +88,7 @@ const App = () => (
                 <Route path="/methodology" element={<Methodology />} />
                 {/* Landing Pages for Ads/SEO - Not linked in navigation */}
                 <Route path="/lp/custom-software" element={<CustomSoftwareLanding />} />
+                <Route path="/lp/mobile-app" element={<MobileAppLanding />} />
                 <Route path="/admin/login" element={<AdminLogin />} />
                 <Route path="/admin" element={<AdminDashboard />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
