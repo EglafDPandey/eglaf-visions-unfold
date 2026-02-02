@@ -222,7 +222,10 @@ export function SEO({
   schema,
   noindex = false,
 }: SEOProps) {
-  const fullTitle = title ? `${title} | ${defaults.siteName}` : `${defaults.siteName} - Custom Software & AI Solutions Company India`;
+  // Keep titles under 60 chars for optimal SEO (Google truncates at ~60-70)
+  const fullTitle = title 
+    ? `${title} | Eglaf Technology` 
+    : 'Eglaf Technology - Software Development India';
 
   const schemaScripts = schema
     ? Array.isArray(schema)

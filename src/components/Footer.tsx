@@ -28,7 +28,9 @@ const footerLinks = {
     { name: 'Blog', href: '/blog' },
     { name: 'Portfolio', href: '/portfolio' },
     { name: 'Methodology', href: '/methodology' },
+    { name: 'Custom Software', href: '/services/custom-software' },
     { name: 'SEO Services', href: '/services/seo-services' },
+    { name: 'Get a Quote', href: '/quote' },
   ],
 };
 

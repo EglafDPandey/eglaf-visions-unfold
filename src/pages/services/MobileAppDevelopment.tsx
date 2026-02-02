@@ -88,7 +88,7 @@ export default function MobileAppDevelopment() {
   return (
     <div className="min-h-screen bg-background">
       <SEO 
-        title="Mobile App Development Company India - iOS & Android App Development"
+        title="Mobile App Development India - iOS & Android"
         description="Top mobile app development company in India. Expert Flutter, React Native, Swift, Kotlin developers. iOS & Android app development. 200+ apps delivered. Affordable pricing. Get free consultation!"
         keywords="mobile app development company India, iOS app development, Android app development, Flutter app development, React Native developers, mobile application development services, cross-platform app development, native mobile app development, app development cost India, hire mobile app developers"
         canonical="https://eglaftechnology.com/services/mobile-development"

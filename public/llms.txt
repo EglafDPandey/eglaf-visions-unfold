@@ -1,0 +1,33 @@
+# Eglaf Technology
+
+> Custom software development company in Ahmedabad, India. We build web apps, mobile apps, AI solutions, and CRM systems.
+
+## About
+
+Eglaf Technology is a leading software development company with 10+ years of experience, delivering 500+ projects worldwide. We specialize in custom software, mobile apps, AI/ML solutions, CRM development, and SEO services.
+
+## Services
+
+- [Web Development](/services/web-development): React, Next.js, Vue.js, Angular web applications
+- [Mobile App Development](/services/mobile-development): iOS, Android, Flutter, React Native apps
+- [AI Solutions](/services/ai-solutions): Machine learning, NLP, computer vision, chatbots
+- [CRM Development](/services/crm-development): Salesforce, HubSpot, custom CRM systems
+- [Custom Software](/services/custom-software): Enterprise applications, SaaS platforms
+- [SEO Services](/services/seo-services): Search optimization, content strategy
+
+## Contact
+
+- Website: https://eglaftechnology.com
+- Email: info@eglaftech.com
+- Phone: +91-9898598257
+- Location: Ahmedabad, Gujarat, India
+
+## Key Pages
+
+- [Home](/)
+- [About](/about)
+- [Portfolio](/portfolio)
+- [Blog](/blog)
+- [Careers](/careers)
+- [Contact](/contact)
+- [Get a Quote](/quote)
