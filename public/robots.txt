@@ -1,6 +1,11 @@
 # Eglaf Technology - robots.txt
 # https://www.robotstxt.org/robotstxt.html
 
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
 User-agent: Googlebot
 Allow: /
 
@@ -13,12 +18,5 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-User-agent: *
-Allow: /
-
 # Sitemap location
 Sitemap: https://eglaftechnology.com/sitemap.xml
-
-# Disallow admin pages
-Disallow: /admin
-Disallow: /admin/

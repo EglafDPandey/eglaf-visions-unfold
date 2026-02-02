@@ -88,7 +88,7 @@ export default function WebDevelopment() {
   return (
     <div className="min-h-screen bg-background">
       <SEO 
-        title="Web Development Services - Custom Website Development Company India"
+        title="Web Development Services India - Custom Websites"
         description="Professional web development services in India. Custom React, Next.js, Vue.js websites. Responsive design, SEO-optimized, fast-loading websites. 500+ websites delivered. Get free quote!"
         keywords="web development company India, custom website development, React development services, Next.js development, Vue.js developers, responsive web design, ecommerce website development, WordPress development, web application development, frontend development services, full stack development India"
         canonical="https://eglaftechnology.com/services/web-development"
