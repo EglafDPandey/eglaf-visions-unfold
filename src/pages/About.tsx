@@ -1,11 +1,47 @@
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Target, Eye, Lightbulb, Users, Award, TrendingUp, Calendar, CheckCircle, Sparkles, Rocket, Heart, Globe } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Target, Eye, Lightbulb, Users, Award, TrendingUp, Calendar, CheckCircle, Sparkles, Rocket, Heart, Globe, ChevronDown } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { SEO } from '@/components/SEO';
+import { SEO, faqSchema } from '@/components/SEO';
 import { JourneyToSuccessPreview, ProjectTimeline, StatsSection, DataFlowSection } from '@/components/MethodologyPreview';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
+const aboutFaqs = [
+  {
+    question: 'What services does Eglaf Technology offer?',
+    answer: 'Eglaf Technology offers comprehensive software development services including custom web development, mobile app development (iOS & Android), AI/ML solutions, CRM development (Salesforce, HubSpot), enterprise software development, and professional SEO services. We work with modern technologies like React, Flutter, Node.js, and Python.',
+  },
+  {
+    question: 'Where is Eglaf Technology located?',
+    answer: 'Eglaf Technology is headquartered in Ahmedabad, Gujarat, India. Our office is located at BH F623 Arved Transcube Plaza, Ranip, Ahmedabad 382480. We serve clients globally across USA, UK, Europe, Middle East, and Asia Pacific regions.',
+  },
+  {
+    question: 'How much experience does Eglaf Technology have?',
+    answer: 'Founded in 2014, Eglaf Technology has over 10 years of experience in software development. We have successfully delivered 500+ projects for clients worldwide, with a team of 50+ expert developers, designers, and project managers.',
+  },
+  {
+    question: 'What is your development methodology?',
+    answer: 'We follow an Agile development methodology with iterative sprints, regular client communication, and continuous delivery. Our process includes discovery, design, development, testing, deployment, and ongoing support phases to ensure high-quality deliverables.',
+  },
+  {
+    question: 'Do you provide ongoing support and maintenance?',
+    answer: 'Yes, we offer comprehensive post-launch support and maintenance packages. This includes bug fixes, security updates, performance optimization, feature enhancements, and 24/7 technical support to ensure your software runs smoothly.',
+  },
+  {
+    question: 'How can I get a quote for my project?',
+    answer: 'You can request a free quote by visiting our quote request page, calling us at +91-9898598257, or emailing info@eglaftech.com. We typically respond within 24 hours with an initial assessment and consultation scheduling.',
+  },
+  {
+    question: 'What industries do you serve?',
+    answer: 'We serve diverse industries including healthcare, fintech, e-commerce, education, real estate, logistics, manufacturing, and startups. Our solutions are tailored to meet industry-specific requirements and compliance standards.',
+  },
+  {
+    question: 'Do you work with startups and small businesses?',
+    answer: 'Absolutely! We work with businesses of all sizes, from early-stage startups to Fortune 500 enterprises. We offer flexible engagement models and scalable solutions that grow with your business needs and budget.',
+  },
+];
 const milestones = [
   { year: '2014', title: 'Company Founded', description: 'Started with a vision to transform digital landscapes', icon: Rocket },
   { year: '2016', title: 'First Major Client', description: 'Partnered with Fortune 500 company', icon: Award },
@@ -129,10 +165,11 @@ export default function About() {
   return (
     <div className="min-h-screen bg-background overflow-hidden">
       <SEO 
-        title="About Us - Leading Software Development Company India"
+        title="About Us - Software Development Company India"
         description="About Eglaf Technology - Premier software development company in Ahmedabad, India since 2014. 10+ years experience, 500+ projects delivered, 50+ expert developers. Learn about our mission, vision, and journey."
         keywords="about Eglaf Technology, software company India, IT company Ahmedabad, technology company history, software development firm, tech startup India, Eglaf Technology team, company profile"
         canonical="https://eglaftechnology.com/about"
+        schema={[faqSchema(aboutFaqs)]}
       />
       <Navbar />
       
@@ -322,6 +359,99 @@ export default function About() {
       
       {/* Project Timeline */}
       <ProjectTimeline />
+
+      {/* FAQ Section */}
+      <section className="py-24 relative">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center max-w-3xl mx-auto mb-16"
+          >
+            <span className="inline-block px-4 py-2 rounded-full glass-card text-sm text-primary font-medium mb-6">
+              FAQ
+            </span>
+            <h2 className="text-3xl md:text-4xl font-display font-bold mb-6">
+              Frequently Asked <span className="gradient-text">Questions</span>
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Find answers to common questions about Eglaf Technology and our services.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-3xl mx-auto"
+          >
+            <Accordion type="single" collapsible className="space-y-4">
+              {aboutFaqs.map((faq, index) => (
+                <AccordionItem 
+                  key={index} 
+                  value={`item-${index}`}
+                  className="glass-card border-border/50 px-6 rounded-xl overflow-hidden"
+                >
+                  <AccordionTrigger className="text-left font-display font-semibold hover:text-primary transition-colors py-5">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground pb-5 leading-relaxed">
+                    {faq.answer}
+                    {index === 0 && (
+                      <span className="block mt-3">
+                        <Link to="/services/web-development" className="text-primary hover:underline mr-3">Web Development</Link>
+                        <Link to="/services/mobile-development" className="text-primary hover:underline mr-3">Mobile Apps</Link>
+                        <Link to="/services/ai-solutions" className="text-primary hover:underline">AI Solutions</Link>
+                      </span>
+                    )}
+                    {index === 3 && (
+                      <span className="block mt-3">
+                        <Link to="/methodology" className="text-primary hover:underline">Learn more about our methodology →</Link>
+                      </span>
+                    )}
+                    {index === 5 && (
+                      <span className="block mt-3">
+                        <Link to="/quote" className="text-primary hover:underline mr-3">Request a Quote</Link>
+                        <Link to="/contact" className="text-primary hover:underline">Contact Us</Link>
+                      </span>
+                    )}
+                    {index === 6 && (
+                      <span className="block mt-3">
+                        <Link to="/portfolio" className="text-primary hover:underline">View our Portfolio →</Link>
+                      </span>
+                    )}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </motion.div>
+
+          {/* CTA after FAQ */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mt-12"
+          >
+            <p className="text-muted-foreground mb-4">Have more questions?</p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+              >
+                Contact Us
+              </Link>
+              <Link
+                to="/team"
+                className="inline-flex items-center gap-2 px-6 py-3 glass-card rounded-lg font-medium hover:border-primary/50 transition-colors"
+              >
+                Meet Our Team
+              </Link>
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
       <Footer />
     </div>
