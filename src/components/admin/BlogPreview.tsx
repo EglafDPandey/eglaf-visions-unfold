@@ -27,7 +27,7 @@ export default function BlogPreview({
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Editor
           </Button>
-          <Badge variant="outline" className="text-yellow-400 border-yellow-400">
+          <Badge variant="outline" className="text-primary border-primary">
             Preview Mode
           </Badge>
         </div>
