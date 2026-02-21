@@ -10,6 +10,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { GoogleTagManager } from "@/components/tracking/GoogleTagManager";
 import { FacebookPixel } from "@/components/tracking/FacebookPixel";
+import { CookieConsent } from "@/components/CookieConsent";
 
 // Critical route - load immediately
 import Index from "./pages/Index";
