@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Edit, Trash2, Eye, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import BlogEditor from '@/components/admin/BlogEditor';
 
 interface Blog {
   id: string;
@@ -16,6 +16,8 @@ interface Blog {
   published: boolean;
   published_at: string | null;
   created_at: string;
+  category?: string | null;
+  tags?: string[] | null;
 }
 
 interface AdminBlogsProps {
@@ -152,6 +154,7 @@ export default function AdminBlogs({ onShowEditor }: AdminBlogsProps) {
                   </span>
                 </div>
                 <p className="text-sm text-muted-foreground line-clamp-1">{blog.excerpt}</p>
+                {blog.category && <Badge variant="secondary" className="mt-1 text-xs">{blog.category}</Badge>}
                 <p className="text-xs text-muted-foreground mt-2">
                   Created: {new Date(blog.created_at).toLocaleDateString()}
                 </p>

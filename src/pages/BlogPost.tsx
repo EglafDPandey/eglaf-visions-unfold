@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, Clock, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
@@ -17,6 +18,8 @@ interface Blog {
   cover_image: string | null;
   published_at: string | null;
   created_at: string;
+  category: string | null;
+  tags: string[] | null;
 }
 
 export default function BlogPost() {
@@ -25,9 +28,7 @@ export default function BlogPost() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (slug) {
-      fetchBlog();
-    }
+    if (slug) fetchBlog();
   }, [slug]);
 
   const fetchBlog = async () => {
@@ -38,26 +39,17 @@ export default function BlogPost() {
       .eq('published', true)
       .maybeSingle();
 
-    if (!error && data) {
-      setBlog(data);
-    }
+    if (!error && data) setBlog(data);
     setLoading(false);
   };
 
   const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
+    return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   };
 
   const handleShare = async () => {
     if (navigator.share) {
-      await navigator.share({
-        title: blog?.title,
-        url: window.location.href,
-      });
+      await navigator.share({ title: blog?.title, url: window.location.href });
     } else {
       navigator.clipboard.writeText(window.location.href);
     }
@@ -78,10 +70,7 @@ export default function BlogPost() {
         <div className="container mx-auto px-4 pt-32 text-center">
           <h1 className="font-display text-3xl font-bold text-foreground mb-4">Blog not found</h1>
           <Link to="/blog">
-            <Button variant="hero">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Blog
-            </Button>
+            <Button variant="hero"><ArrowLeft className="w-4 h-4 mr-2" />Back to Blog</Button>
           </Link>
         </div>
       </div>
@@ -112,80 +101,48 @@ export default function BlogPost() {
       />
       <Navbar />
 
-      {/* Hero Section */}
       <section className="pt-32 pb-8 relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-5" />
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
-
         <div className="container mx-auto px-4 relative z-10">
           <Link to="/blog">
             <Button variant="ghost" className="mb-8 text-muted-foreground hover:text-foreground">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Blog
+              <ArrowLeft className="w-4 h-4 mr-2" />Back to Blog
             </Button>
           </Link>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="max-w-4xl mx-auto"
-          >
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-4xl mx-auto">
             <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
-              <span className="flex items-center gap-1">
-                <Calendar className="w-4 h-4" />
-                {formatDate(blog.published_at || blog.created_at)}
-              </span>
-              <span className="flex items-center gap-1">
-                <Clock className="w-4 h-4" />5 min read
-              </span>
-              <Button variant="ghost" size="sm" onClick={handleShare}>
-                <Share2 className="w-4 h-4" />
-              </Button>
+              <span className="flex items-center gap-1"><Calendar className="w-4 h-4" />{formatDate(blog.published_at || blog.created_at)}</span>
+              <span className="flex items-center gap-1"><Clock className="w-4 h-4" />5 min read</span>
+              {blog.category && <Badge variant="secondary">{blog.category}</Badge>}
+              <Button variant="ghost" size="sm" onClick={handleShare}><Share2 className="w-4 h-4" /></Button>
             </div>
-
-            <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-6">
-              {blog.title}
-            </h1>
-
-            {blog.excerpt && (
-              <p className="text-xl text-muted-foreground mb-8">{blog.excerpt}</p>
+            <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-6">{blog.title}</h1>
+            {blog.excerpt && <p className="text-xl text-muted-foreground mb-4">{blog.excerpt}</p>}
+            {blog.tags && blog.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {blog.tags.map((tag) => <Badge key={tag} variant="outline">{tag}</Badge>)}
+              </div>
             )}
           </motion.div>
         </div>
       </section>
 
-      {/* Cover Image */}
       {blog.cover_image && (
         <section className="pb-8">
           <div className="container mx-auto px-4">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="max-w-4xl mx-auto"
-            >
-              <img
-                src={blog.cover_image}
-                alt={blog.title}
-                className="w-full rounded-xl shadow-2xl"
-              />
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-w-4xl mx-auto">
+              <img src={blog.cover_image} alt={blog.title} className="w-full rounded-xl shadow-2xl" />
             </motion.div>
           </div>
         </section>
       )}
 
-      {/* Content */}
       <section className="py-8 pb-20">
         <div className="container mx-auto px-4">
-          <motion.article
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="max-w-4xl mx-auto prose prose-invert prose-lg"
-          >
+          <motion.article initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="max-w-4xl mx-auto">
             <div className="glass-card p-8 md:p-12 rounded-xl">
-              <div className="text-foreground whitespace-pre-wrap leading-relaxed">
-                {blog.content}
-              </div>
+              <div className="prose prose-invert prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: blog.content }} />
             </div>
           </motion.article>
         </div>
