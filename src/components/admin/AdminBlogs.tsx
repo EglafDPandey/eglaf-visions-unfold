@@ -154,6 +154,7 @@ export default function AdminBlogs({ onShowEditor }: AdminBlogsProps) {
                   </span>
                 </div>
                 <p className="text-sm text-muted-foreground line-clamp-1">{blog.excerpt}</p>
+                {blog.category && <Badge variant="secondary" className="mt-1 text-xs">{blog.category}</Badge>}
                 <p className="text-xs text-muted-foreground mt-2">
                   Created: {new Date(blog.created_at).toLocaleDateString()}
                 </p>
