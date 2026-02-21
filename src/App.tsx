@@ -63,6 +63,7 @@ const App = () => (
             <GoogleTagManager />
             <FacebookPixel />
             <ScrollToTop />
+            <CookieConsent />
             <Suspense fallback={<PageLoader />}>
               <Routes>
                 <Route path="/" element={<Index />} />

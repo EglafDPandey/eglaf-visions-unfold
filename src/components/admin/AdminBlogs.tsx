@@ -16,6 +16,8 @@ interface Blog {
   published: boolean;
   published_at: string | null;
   created_at: string;
+  category?: string | null;
+  tags?: string[] | null;
 }
 
 interface AdminBlogsProps {
