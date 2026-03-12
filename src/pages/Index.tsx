@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
 import ServicesSection from '@/components/ServicesSection';
@@ -7,7 +8,11 @@ import AboutSection from '@/components/AboutSection';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 import { SEO, faqSchema, localBusinessSchema, websiteSchema } from '@/components/SEO';
-import { ProjectTimeline, StatsSection, DataFlowSection } from '@/components/MethodologyPreview';
+
+// Lazy-load heavy below-the-fold sections (MethodologyPreview has Three.js/Canvas)
+const LazyProjectTimeline = lazy(() => import('@/components/MethodologyPreview').then(m => ({ default: m.ProjectTimeline })));
+const LazyStatsSection = lazy(() => import('@/components/MethodologyPreview').then(m => ({ default: m.StatsSection })));
+const LazyDataFlowSection = lazy(() => import('@/components/MethodologyPreview').then(m => ({ default: m.DataFlowSection })));
 
 const homeFaqs = [
   {
@@ -44,9 +49,15 @@ const Index = () => {
       <Navbar />
       <HeroSection />
       <ServicesSection />
-      <StatsSection />
-      <DataFlowSection />
-      <ProjectTimeline />
+      <Suspense fallback={<div className="min-h-[200px]" />}>
+        <LazyStatsSection />
+      </Suspense>
+      <Suspense fallback={<div className="min-h-[200px]" />}>
+        <LazyDataFlowSection />
+      </Suspense>
+      <Suspense fallback={<div className="min-h-[200px]" />}>
+        <LazyProjectTimeline />
+      </Suspense>
       <DevelopersSection />
       <TestimonialsSection />
       <AboutSection />
