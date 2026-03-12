@@ -115,41 +115,26 @@ export function HeroSection() {
       {/* Content */}
       <div className="container mx-auto px-4 relative z-20 pt-20">
         <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="mb-6"
-          >
+          <div className="mb-6">
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-sm text-primary font-medium">
               <Sparkles className="w-4 h-4" />
               Innovative Technology Solutions
             </span>
-          </motion.div>
+          </div>
 
-          {/* H1 - LCP candidate: NO animation delay */}
-          <motion.h1
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-tight mb-6"
-          >
+          {/* H1 - LCP candidate: rendered immediately, NO framer-motion wrapper */}
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-tight mb-6">
             Building the{' '}
             <span className="gradient-text">Future</span>
             <br />
             of Digital Innovation
-          </motion.h1>
+          </h1>
 
-          {/* Description - LCP candidate: NO animation delay */}
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10"
-          >
+          {/* Description - LCP candidate: rendered immediately */}
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
             Eglaf Technology LLP delivers cutting-edge mobile apps, web solutions, 
             AI agents, and enterprise software that transform your business vision into reality.
-          </motion.p>
+          </p>
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
