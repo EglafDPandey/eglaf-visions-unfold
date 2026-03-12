@@ -1,4 +1,6 @@
 import { getUTMParamsForTracking } from '@/hooks/useUTMTracking';
+import { pushToDataLayer, trackCTAClick as gtmTrackCTAClick } from './GoogleTagManager';
+import { fbTrackLead, fbTrackContact, fbTrackSchedule, fbTrackCTAClick as fbTrackCTA } from './FacebookPixel';
 
 // Google Tag Manager
 export { GoogleTagManager, pushToDataLayer, trackFormSubmission, trackCTAClick, trackPageView, trackGTMConversion } from './GoogleTagManager';
@@ -10,12 +12,8 @@ export { FacebookPixel, fbTrackEvent, fbTrackLead, fbTrackContact, fbTrackComple
 export function trackConversion(type: 'lead' | 'contact' | 'consultation' | 'quote', data?: Record<string, unknown>) {
   const utmParams = getUTMParamsForTracking();
   
-  // GTM
-  const { pushToDataLayer } = require('./GoogleTagManager');
   pushToDataLayer('conversion', { conversion_type: type, ...utmParams, ...data });
   
-  // Facebook Pixel
-  const { fbTrackLead, fbTrackContact, fbTrackSchedule } = require('./FacebookPixel');
   switch (type) {
     case 'lead':
     case 'quote':
@@ -33,14 +31,10 @@ export function trackConversion(type: 'lead' | 'contact' | 'consultation' | 'quo
 // Track CTA clicks across both platforms with UTM params
 export function trackCTA(ctaName: string, location?: string) {
   const utmParams = getUTMParamsForTracking();
-  const { trackCTAClick } = require('./GoogleTagManager');
-  const { fbTrackCTAClick } = require('./FacebookPixel');
   
-  trackCTAClick(ctaName, location);
-  fbTrackCTAClick(ctaName, location);
+  gtmTrackCTAClick(ctaName, location);
+  fbTrackCTA(ctaName, location);
   
-  // Also push UTM data with CTA for attribution
-  const { pushToDataLayer } = require('./GoogleTagManager');
   if (Object.keys(utmParams).length > 0) {
     pushToDataLayer('cta_attribution', { cta_name: ctaName, cta_location: location, ...utmParams });
   }

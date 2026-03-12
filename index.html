@@ -9,6 +9,16 @@
     <link rel="manifest" href="/manifest.json" />
     <link rel="canonical" href="https://eglaftechnology.com/" />
     
+    <!-- Preconnect to Google Fonts for faster loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Non-render-blocking font loading with display=swap -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" media="print" onload="this.media='all'" />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" />
+    </noscript>
+    
     <!-- Preconnect to external origins for faster resource loading -->
     <link rel="preconnect" href="https://images.unsplash.com" />
     <link rel="dns-prefetch" href="https://images.unsplash.com" />
@@ -144,17 +154,17 @@
     <!-- Critical inline CSS to reduce render-blocking -->
     <style>
       :root {
-        --background: 240 10% 4%;
-        --foreground: 60 5% 90%;
-        --primary: 250 89% 68%;
+        --background: 222 47% 6%;
+        --foreground: 210 40% 98%;
+        --primary: 174 100% 50%;
       }
       *, *::before, *::after { box-sizing: border-box; }
       html { scroll-behavior: smooth; }
       body {
         margin: 0;
-        background-color: hsl(240 10% 4%);
-        color: hsl(60 5% 90%);
-        font-family: 'Inter', system-ui, sans-serif;
+        background-color: hsl(222, 47%, 6%);
+        color: hsl(210, 40%, 98%);
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
         -webkit-font-smoothing: antialiased;
       }
       #root { min-height: 100vh; }

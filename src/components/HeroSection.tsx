@@ -126,7 +126,7 @@ export function HeroSection() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0 }}
+            transition={{ duration: 0.3 }}
             className="mb-6"
           >
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-sm text-primary font-medium">
@@ -135,10 +135,11 @@ export function HeroSection() {
             </span>
           </motion.div>
 
+          {/* H1 - LCP candidate: NO animation delay */}
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
+            transition={{ duration: 0.3 }}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-tight mb-6"
           >
             Building the{' '}
@@ -147,11 +148,11 @@ export function HeroSection() {
             of Digital Innovation
           </motion.h1>
 
-          {/* LCP element - minimal delay for fast paint */}
+          {/* Description - LCP candidate: NO animation delay */}
           <motion.p
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.15 }}
+            transition={{ duration: 0.3 }}
             className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10"
           >
             Eglaf Technology LLP delivers cutting-edge mobile apps, web solutions, 
@@ -161,7 +162,7 @@ export function HeroSection() {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
             <Link to={quoteTo} onMouseEnter={preloadQuoteRequest} onFocus={preloadQuoteRequest}>
@@ -181,7 +182,7 @@ export function HeroSection() {
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
             className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20"
           >
             {[
@@ -194,7 +195,7 @@ export function HeroSection() {
                 key={stat.label}
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 1.2 + index * 0.1 }}
+                transition={{ duration: 0.4, delay: 0.6 + index * 0.1 }}
                 className="text-center"
               >
                 <div className="text-3xl md:text-4xl font-display font-bold gradient-text mb-2">
@@ -211,7 +212,7 @@ export function HeroSection() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
+        transition={{ delay: 1 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20"
       >
         <motion.div
