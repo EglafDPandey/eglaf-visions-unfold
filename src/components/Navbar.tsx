@@ -110,6 +110,7 @@ export const Navbar = forwardRef<HTMLElement, object>(function Navbar(_props, re
         <button
           className="md:hidden text-foreground p-2"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
