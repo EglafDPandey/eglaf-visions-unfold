@@ -155,33 +155,22 @@ export function HeroSection() {
             </Link>
           </motion.div>
 
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20"
-          >
+          {/* Stats — no per-item animation to reduce non-composited animations */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20">
             {[
               { value: '35+', label: 'Projects Delivered' },
               { value: '21+', label: 'Happy Clients' },
               { value: '14+', label: 'Expert Developers' },
               { value: '10+', label: 'Years Experience' },
-            ].map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, delay: 0.6 + index * 0.1 }}
-                className="text-center"
-              >
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
                 <div className="text-3xl md:text-4xl font-display font-bold gradient-text mb-2">
                   {stat.value}
                 </div>
                 <div className="text-sm text-muted-foreground">{stat.label}</div>
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </div>
 
