@@ -53,7 +53,10 @@ export const Navbar = forwardRef<HTMLElement, object>(function Navbar(_props, re
             <img 
               src={eglafLogo} 
               alt="Eglaf Technology" 
-              className="h-14 md:h-16 lg:h-20 w-auto object-contain animate-logo-glow hover:scale-105 transition-transform duration-300"
+              width={255}
+              height={98}
+              className="h-14 md:h-16 lg:h-20 w-auto object-contain hover:scale-105 transition-transform duration-300"
+              fetchPriority="high"
             />
           </motion.div>
         </Link>
