@@ -165,7 +165,9 @@ export default function AdminJobApplications() {
     <div>
       <div className="mb-6">
         <h2 className="font-display text-2xl font-bold text-foreground">Job Applications</h2>
-        <p className="text-muted-foreground">Review and manage job applications</p>
+        <p className="text-muted-foreground">
+          Review and manage job applications ({totalCount} total)
+        </p>
       </div>
 
       {applications.length === 0 ? (
