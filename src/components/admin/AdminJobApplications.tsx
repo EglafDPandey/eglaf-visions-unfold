@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Eye, Trash2, Mail, Phone, Calendar, Briefcase, Linkedin, FileText, Download } from 'lucide-react';
+import { Eye, Trash2, Mail, Phone, Calendar, Briefcase, Linkedin, FileText, Download, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
