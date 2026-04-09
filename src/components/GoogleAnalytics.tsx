@@ -16,10 +16,6 @@ export function GoogleAnalytics() {
 
   useEffect(() => {
     // Skip if no valid measurement ID
-    if (GA_MEASUREMENT_ID === 'G-XXXXXXXXXX') {
-      console.warn('Google Analytics: Please add your GA4 Measurement ID');
-      return;
-    }
 
     // Load gtag script if not already loaded
     if (!document.getElementById('gtag-script')) {
@@ -42,7 +38,7 @@ export function GoogleAnalytics() {
 
   // Track page views on route change
   useEffect(() => {
-    if (GA_MEASUREMENT_ID !== 'G-XXXXXXXXXX' && window.gtag) {
+    if (window.gtag) {
       window.gtag('config', GA_MEASUREMENT_ID, {
         page_path: location.pathname + location.search,
       });
@@ -59,7 +55,7 @@ export function trackEvent(
   label?: string,
   value?: number
 ) {
-  if (window.gtag && GA_MEASUREMENT_ID !== 'G-XXXXXXXXXX') {
+  if (window.gtag) {
     window.gtag('event', action, {
       event_category: category,
       event_label: label,
@@ -70,7 +66,7 @@ export function trackEvent(
 
 // Track conversions (e.g., form submissions, quote requests)
 export function trackConversion(conversionType: string, details?: Record<string, unknown>) {
-  if (window.gtag && GA_MEASUREMENT_ID !== 'G-XXXXXXXXXX') {
+  if (window.gtag) {
     window.gtag('event', 'conversion', {
       send_to: GA_MEASUREMENT_ID,
       conversion_type: conversionType,
