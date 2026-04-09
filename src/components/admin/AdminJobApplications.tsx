@@ -24,22 +24,33 @@ interface JobApplication {
   created_at: string;
 }
 
+const PAGE_SIZE = 20;
+
 export default function AdminJobApplications() {
   const [applications, setApplications] = useState<JobApplication[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedApplication, setSelectedApplication] = useState<JobApplication | null>(null);
   const [downloadingCV, setDownloadingCV] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
   const { toast } = useToast();
+
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
 
   useEffect(() => {
     fetchApplications();
-  }, []);
+  }, [currentPage]);
 
   const fetchApplications = async () => {
-    const { data, error } = await supabase
+    setLoading(true);
+    const from = (currentPage - 1) * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+
+    const { data, error, count } = await supabase
       .from('job_applications')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .select('*', { count: 'exact' })
+      .order('created_at', { ascending: false })
+      .range(from, to);
 
     if (error) {
       toast({
@@ -49,6 +60,7 @@ export default function AdminJobApplications() {
       });
     } else {
       setApplications(data || []);
+      setTotalCount(count || 0);
     }
     setLoading(false);
   };
