@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Eye, Trash2, Mail, Phone, Calendar, Briefcase, Linkedin, FileText, Download } from 'lucide-react';
+import { Eye, Trash2, Mail, Phone, Calendar, Briefcase, Linkedin, FileText, Download, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -24,22 +24,33 @@ interface JobApplication {
   created_at: string;
 }
 
+const PAGE_SIZE = 20;
+
 export default function AdminJobApplications() {
   const [applications, setApplications] = useState<JobApplication[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedApplication, setSelectedApplication] = useState<JobApplication | null>(null);
   const [downloadingCV, setDownloadingCV] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
   const { toast } = useToast();
+
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
 
   useEffect(() => {
     fetchApplications();
-  }, []);
+  }, [currentPage]);
 
   const fetchApplications = async () => {
-    const { data, error } = await supabase
+    setLoading(true);
+    const from = (currentPage - 1) * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+
+    const { data, error, count } = await supabase
       .from('job_applications')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .select('*', { count: 'exact' })
+      .order('created_at', { ascending: false })
+      .range(from, to);
 
     if (error) {
       toast({
@@ -49,6 +60,7 @@ export default function AdminJobApplications() {
       });
     } else {
       setApplications(data || []);
+      setTotalCount(count || 0);
     }
     setLoading(false);
   };
@@ -153,7 +165,9 @@ export default function AdminJobApplications() {
     <div>
       <div className="mb-6">
         <h2 className="font-display text-2xl font-bold text-foreground">Job Applications</h2>
-        <p className="text-muted-foreground">Review and manage job applications</p>
+        <p className="text-muted-foreground">
+          Review and manage job applications ({totalCount} total)
+        </p>
       </div>
 
       {applications.length === 0 ? (
@@ -221,6 +235,32 @@ export default function AdminJobApplications() {
               </div>
             </motion.div>
           ))}
+        </div>
+      )}
+
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center gap-2 mt-6">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(p => p - 1)}
+          >
+            <ChevronLeft className="w-4 h-4 mr-1" />
+            Previous
+          </Button>
+          <span className="text-sm text-muted-foreground px-3">
+            Page {currentPage} of {totalPages}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(p => p + 1)}
+          >
+            Next
+            <ChevronRight className="w-4 h-4 ml-1" />
+          </Button>
         </div>
       )}
 
