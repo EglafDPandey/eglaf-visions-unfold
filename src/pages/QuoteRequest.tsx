@@ -99,7 +99,33 @@ export default function QuoteRequest() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleServiceToggle = (serviceId: string) => {
+  const handleQuickSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { name, phone, message } = quickFormData;
+    if (!name.trim() || name.trim().length < 2) { toast.error('Please enter your name'); return; }
+    if (!phone.trim() || phone.trim().length < 7) { toast.error('Please enter a valid phone number'); return; }
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.from('contacts').insert({
+        name: name.trim(),
+        email: `${phone.trim()}@phone-lead.local`,
+        phone: phone.trim(),
+        message: message.trim() || 'Quick enquiry from quote page',
+      });
+      if (error) throw error;
+      trackConversion('quick_enquiry', { source: 'quote_page' });
+      trackEvent('form_submit', 'Quick Enquiry', 'quote_page');
+      fbTrackLead();
+      trackFormSubmission('quick_enquiry', { source: 'quote_page' });
+      toast.success('Thank you! We\'ll call you back within 2 hours.');
+      setQuickFormData({ name: '', phone: '', message: '' });
+    } catch {
+      toast.error('Failed to submit. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
     setSelectedServices(prev => 
       prev.includes(serviceId) 
         ? prev.filter(id => id !== serviceId)
