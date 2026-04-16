@@ -65,7 +65,9 @@ export default function QuoteRequest() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isQuickMode, setIsQuickMode] = useState(true);
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [quickFormData, setQuickFormData] = useState({ name: '', phone: '', message: '' });
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -97,7 +99,33 @@ export default function QuoteRequest() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleServiceToggle = (serviceId: string) => {
+  const handleQuickSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { name, phone, message } = quickFormData;
+    if (!name.trim() || name.trim().length < 2) { toast.error('Please enter your name'); return; }
+    if (!phone.trim() || phone.trim().length < 7) { toast.error('Please enter a valid phone number'); return; }
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.from('contacts').insert({
+        name: name.trim(),
+        email: `${phone.trim()}@phone-lead.local`,
+        phone: phone.trim(),
+        message: message.trim() || 'Quick enquiry from quote page',
+      });
+      if (error) throw error;
+      trackConversion('quick_enquiry', { source: 'quote_page' });
+      trackEvent('form_submit', 'Quick Enquiry', 'quote_page');
+      fbTrackLead();
+      trackFormSubmission('quick_enquiry', { source: 'quote_page' });
+      toast.success('Thank you! We\'ll call you back within 2 hours.');
+      setQuickFormData({ name: '', phone: '', message: '' });
+    } catch {
+      toast.error('Failed to submit. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
     setSelectedServices(prev => 
       prev.includes(serviceId) 
         ? prev.filter(id => id !== serviceId)
@@ -253,7 +281,73 @@ export default function QuoteRequest() {
             <p className="text-lg text-muted-foreground">
               Tell us about your project and we'll provide a detailed quote within 24 hours.
             </p>
+
+            {/* Quick / Detailed Toggle */}
+            <div className="flex items-center justify-center gap-2 mt-6">
+              <button
+                type="button"
+                onClick={() => setIsQuickMode(true)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${isQuickMode ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:text-foreground'}`}
+              >
+                ⚡ Quick Enquiry
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsQuickMode(false)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${!isQuickMode ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:text-foreground'}`}
+              >
+                📋 Detailed Quote
+              </button>
+            </div>
           </motion.div>
+
+          {/* Quick Enquiry Form */}
+          {isQuickMode ? (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="max-w-lg mx-auto"
+            >
+              <form onSubmit={handleQuickSubmit} className="glass-card p-8 space-y-5">
+                <div className="text-center mb-2">
+                  <p className="text-sm text-muted-foreground">Just 3 fields — we'll call you back!</p>
+                </div>
+                <Input
+                  name="name"
+                  placeholder="Your Name *"
+                  required
+                  value={quickFormData.name}
+                  onChange={(e) => setQuickFormData(prev => ({ ...prev, name: e.target.value }))}
+                  className="bg-muted/50 h-12"
+                />
+                <Input
+                  name="phone"
+                  type="tel"
+                  placeholder="Phone / WhatsApp Number *"
+                  required
+                  value={quickFormData.phone}
+                  onChange={(e) => setQuickFormData(prev => ({ ...prev, phone: e.target.value }))}
+                  className="bg-muted/50 h-12"
+                />
+                <Textarea
+                  name="message"
+                  placeholder="What do you need help with?"
+                  rows={3}
+                  value={quickFormData.message}
+                  onChange={(e) => setQuickFormData(prev => ({ ...prev, message: e.target.value }))}
+                  className="bg-muted/50 resize-none"
+                />
+                <Button type="submit" variant="hero" size="lg" className="w-full" disabled={isSubmitting}>
+                  {isSubmitting ? 'Submitting...' : <>📞 Get Free Callback</>}
+                </Button>
+                <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground">
+                  <span>✓ Free Consultation</span>
+                  <span>✓ No Obligation</span>
+                  <span>✓ Reply in 2 Hours</span>
+                </div>
+              </form>
+            </motion.div>
+          ) : (
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -483,6 +577,7 @@ export default function QuoteRequest() {
               </div>
             </form>
           </motion.div>
+          )}
         </div>
       </section>
 
