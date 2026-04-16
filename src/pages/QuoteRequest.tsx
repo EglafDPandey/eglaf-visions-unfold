@@ -551,6 +551,7 @@ export default function QuoteRequest() {
               </div>
             </form>
           </motion.div>
+          )}
         </div>
       </section>
 
