@@ -126,6 +126,7 @@ export default function QuoteRequest() {
     }
   };
 
+  const handleServiceToggle = (serviceId: string) => {
     setSelectedServices(prev => 
       prev.includes(serviceId) 
         ? prev.filter(id => id !== serviceId)
