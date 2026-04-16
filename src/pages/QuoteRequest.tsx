@@ -65,7 +65,9 @@ export default function QuoteRequest() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isQuickMode, setIsQuickMode] = useState(true);
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [quickFormData, setQuickFormData] = useState({ name: '', phone: '', message: '' });
   const [formData, setFormData] = useState({
     name: '',
     email: '',

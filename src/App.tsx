@@ -11,6 +11,9 @@ import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { GoogleTagManager } from "@/components/tracking/GoogleTagManager";
 import { FacebookPixel } from "@/components/tracking/FacebookPixel";
 import { CookieConsent } from "@/components/CookieConsent";
+import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
+import { ExitIntentPopup } from "@/components/ExitIntentPopup";
+import { StickyMobileCTA } from "@/components/StickyMobileCTA";
 
 // Critical route - load immediately
 import Index from "./pages/Index";
@@ -64,6 +67,9 @@ const App = () => (
             <FacebookPixel />
             <ScrollToTop />
             <CookieConsent />
+            <FloatingWhatsApp />
+            <ExitIntentPopup />
+            <StickyMobileCTA />
             <Suspense fallback={<PageLoader />}>
               <Routes>
                 <Route path="/" element={<Index />} />
