@@ -11,19 +11,38 @@ export default function AdminLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { signIn, user, isAdmin, loading } = useAuth();
+  const [hasAttemptedLogin, setHasAttemptedLogin] = useState(false);
+  const { signIn, signOut, user, isAdmin, loading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
-    if (!loading && user && isAdmin) {
+    if (loading) return;
+
+    // Successfully logged in as admin → redirect
+    if (user && isAdmin) {
+      setIsLoading(false);
       navigate('/admin');
+      return;
     }
-  }, [user, isAdmin, loading, navigate]);
+
+    // Logged in but NOT an admin → show error & sign out
+    if (hasAttemptedLogin && user && !isAdmin) {
+      toast({
+        title: 'Access Denied',
+        description: 'This account does not have admin privileges.',
+        variant: 'destructive',
+      });
+      signOut();
+      setIsLoading(false);
+      setHasAttemptedLogin(false);
+    }
+  }, [user, isAdmin, loading, navigate, hasAttemptedLogin, signOut, toast]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setHasAttemptedLogin(true);
 
     const { error } = await signIn(email, password);
 
@@ -34,13 +53,11 @@ export default function AdminLogin() {
         variant: 'destructive',
       });
       setIsLoading(false);
+      setHasAttemptedLogin(false);
       return;
     }
-
-    // Wait a moment for the auth state to update
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
+    // Don't toggle isLoading here — the useEffect above will handle
+    // redirect (admin) or error (not admin) once auth state resolves.
   };
 
   if (loading) {
