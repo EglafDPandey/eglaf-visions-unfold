@@ -20,9 +20,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const checkAdminRole = async (userId: string) => {
-    const { data, error } = await supabase.rpc('has_role', {
-      _user_id: userId,
+  const checkAdminRole = async () => {
+    const { data, error } = await supabase.rpc('current_user_has_role', {
       _role: 'admin'
     });
     if (!error && data) {
@@ -36,18 +35,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        setLoading(true);
         setSession(session);
         setUser(session?.user ?? null);
         
-        // Defer admin check with setTimeout
         if (session?.user) {
-          setTimeout(() => {
-            checkAdminRole(session.user.id);
+          setTimeout(async () => {
+            await checkAdminRole();
+            setLoading(false);
           }, 0);
         } else {
           setIsAdmin(false);
+          setLoading(false);
         }
-        setLoading(false);
       }
     );
 
@@ -56,9 +56,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
-        checkAdminRole(session.user.id);
+        checkAdminRole().finally(() => setLoading(false));
+      } else {
+        setLoading(false);
       }
-      setLoading(false);
     });
 
     return () => subscription.unsubscribe();
