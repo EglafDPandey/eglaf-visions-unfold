@@ -337,7 +337,7 @@ export default function AdminJobApplications() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handleDownloadCV(selectedApplication.cv_url!)}
+                    onClick={() => handleDownloadCV(selectedApplication.cv_url!, selectedApplication.name)}
                     disabled={downloadingCV}
                     className="mt-1"
                   >
