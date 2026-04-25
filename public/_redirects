@@ -1,1 +1,5 @@
-/*    /index.html   200
+/cloud-auth/*       https://cjcvhnkxqakdqtiveimq.supabase.co/auth/v1/:splat       200
+/cloud-rest/*       https://cjcvhnkxqakdqtiveimq.supabase.co/rest/v1/:splat       200
+/cloud-storage/*    https://cjcvhnkxqakdqtiveimq.supabase.co/storage/v1/:splat    200
+/cloud-functions/*  https://cjcvhnkxqakdqtiveimq.supabase.co/functions/v1/:splat  200
+/*                  /index.html                                                  200
