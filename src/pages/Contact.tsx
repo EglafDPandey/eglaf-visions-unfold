@@ -102,7 +102,8 @@ export default function Contact() {
       });
 
       if (error) {
-        toast.error(error.message || 'Failed to send message. Please try again.');
+        console.error('Contact form submission error:', error);
+        toast.error('Failed to send message. Please try again.');
         return;
       }
       

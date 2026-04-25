@@ -88,7 +88,8 @@ export function ContactSection() {
       });
 
       if (error) {
-        toast.error(error.message || 'Failed to send message. Please try again.');
+        console.error('Contact form submission error:', error);
+        toast.error('Failed to send message. Please try again.');
       } else {
         toast.success('Message sent successfully! We\'ll get back to you soon.');
         formElement.reset();
