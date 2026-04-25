@@ -1,6 +1,7 @@
 import { ArrowLeft, Calendar, Clock, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import DOMPurify from 'dompurify';
 
 interface BlogPreviewProps {
   title: string;
@@ -80,7 +81,7 @@ export default function BlogPreview({
             <div className="glass-card p-8 md:p-12 rounded-xl">
               <div
                 className="prose prose-invert prose-lg max-w-none"
-                dangerouslySetInnerHTML={{ __html: content || '<p>No content yet...</p>' }}
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content || '<p>No content yet...</p>', { USE_PROFILES: { html: true } }) }}
               />
             </div>
           </article>

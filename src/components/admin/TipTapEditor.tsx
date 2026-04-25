@@ -53,7 +53,11 @@ export default function TipTapEditor({ content, onChange, placeholder }: TipTapE
         heading: { levels: [1, 2, 3] },
       }),
       Image.configure({ inline: false, allowBase64: true }),
-      Link.configure({ openOnClick: false, HTMLAttributes: { class: 'text-primary underline' } }),
+      Link.configure({
+        openOnClick: false,
+        HTMLAttributes: { class: 'text-primary underline', rel: 'noopener noreferrer nofollow', target: '_blank' },
+        validate: (href: string) => /^https?:\/\//i.test(href) || /^mailto:/i.test(href),
+      }),
       Placeholder.configure({ placeholder: placeholder || 'Start writing...' }),
       Underline,
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
@@ -79,9 +83,11 @@ export default function TipTapEditor({ content, onChange, placeholder }: TipTapE
   };
 
   const addLink = () => {
-    const url = window.prompt('Enter URL:');
-    if (url) {
+    const url = window.prompt('Enter URL (must start with https:// or http://):');
+    if (url && (/^https?:\/\//i.test(url) || /^mailto:/i.test(url))) {
       editor.chain().focus().setLink({ href: url }).run();
+    } else if (url) {
+      window.alert('Invalid URL. Only http(s) and mailto links are allowed.');
     }
   };
 

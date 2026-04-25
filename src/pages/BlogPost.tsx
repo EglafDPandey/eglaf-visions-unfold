@@ -8,6 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { SEO, schemas } from '@/components/SEO';
+import DOMPurify from 'dompurify';
 
 interface Blog {
   id: string;
@@ -142,7 +143,7 @@ export default function BlogPost() {
         <div className="container mx-auto px-4">
           <motion.article initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="max-w-4xl mx-auto">
             <div className="glass-card p-8 md:p-12 rounded-xl">
-              <div className="prose prose-invert prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: blog.content }} />
+              <div className="prose prose-invert prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(blog.content, { USE_PROFILES: { html: true } }) }} />
             </div>
           </motion.article>
         </div>
