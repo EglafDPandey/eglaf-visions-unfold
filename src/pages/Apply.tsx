@@ -113,7 +113,8 @@ export default function Apply() {
           .upload(fileName, selectedFile);
 
         if (uploadError) {
-          throw new Error('Failed to upload CV: ' + uploadError.message);
+          console.error('CV upload error:', uploadError);
+          throw new Error('Failed to upload CV. Please try again.');
         }
 
         // Store the path reference (not public URL since bucket is now private)
@@ -134,7 +135,8 @@ export default function Apply() {
         });
 
       if (insertError) {
-        throw new Error('Failed to submit application: ' + insertError.message);
+        console.error('Application submission error:', insertError);
+        throw new Error('Failed to submit application. Please try again.');
       }
 
       setSubmitted(true);
