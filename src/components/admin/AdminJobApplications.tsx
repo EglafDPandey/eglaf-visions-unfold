@@ -124,14 +124,14 @@ export default function AdminJobApplications() {
     }
   };
 
-  const handleDownloadCV = async (cvUrl: string) => {
+  const handleDownloadCV = async (cvUrl: string, applicantName: string) => {
     setDownloadingCV(true);
     try {
       const { data, error } = await supabase.storage
         .from('resumes')
         .createSignedUrl(cvUrl, 60); // 60 second expiry
 
-      if (error) {
+      if (error || !data?.signedUrl) {
         toast({
           title: 'Error',
           description: 'Failed to generate download link',
@@ -140,8 +140,34 @@ export default function AdminJobApplications() {
         return;
       }
 
-      // Open in new tab
-      window.open(data.signedUrl, '_blank');
+      // Fetch file as blob so we can rename it on download
+      const response = await fetch(data.signedUrl);
+      if (!response.ok) throw new Error('Failed to fetch file');
+      const blob = await response.blob();
+
+      // Build filename: Name_YYYY-MM-DD_HHmm.ext
+      const now = new Date();
+      const pad = (n: number) => String(n).padStart(2, '0');
+      const datePart = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+      const timePart = `${pad(now.getHours())}${pad(now.getMinutes())}`;
+      const safeName = applicantName.trim().replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_+|_+$/g, '') || 'Applicant';
+      const ext = cvUrl.split('.').pop()?.split('?')[0] || 'pdf';
+      const filename = `${safeName}_${datePart}_${timePart}.${ext}`;
+
+      // Trigger download
+      const blobUrl = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(blobUrl);
+
+      toast({
+        title: 'Downloaded',
+        description: `Saved as ${filename}`,
+      });
     } catch (err) {
       toast({
         title: 'Error',
@@ -311,7 +337,7 @@ export default function AdminJobApplications() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handleDownloadCV(selectedApplication.cv_url!)}
+                    onClick={() => handleDownloadCV(selectedApplication.cv_url!, selectedApplication.name)}
                     disabled={downloadingCV}
                     className="mt-1"
                   >
