@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Edit, Trash2, Eye, FileText, Sparkles } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, FileText, Sparkles, RefreshCw, ImageOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
