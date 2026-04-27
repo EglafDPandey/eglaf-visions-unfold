@@ -197,49 +197,7 @@ Return ONLY valid JSON (no prose, no markdown fences) with this exact shape:
       // 2) Generate cover image
       let coverImageUrl: string | null = null;
       try {
-        const imgResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${LOVABLE_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: "google/gemini-2.5-flash-image",
-            messages: [{ role: "user", content: `${imagePrompt}. Wide 16:9 cover image, no text or letters in the image.` }],
-            modalities: ["image", "text"],
-          }),
-        });
-        if (imgResp.ok) {
-          const imgData = await imgResp.json();
-          const dataUrl: string | undefined =
-            imgData.choices?.[0]?.message?.images?.[0]?.image_url?.url;
-          if (dataUrl?.startsWith("data:")) {
-            const [meta, b64] = dataUrl.split(",");
-            const mime = meta.match(/data:(.*?);base64/)?.[1] || "image/png";
-            const ext = mime.split("/")[1] || "png";
-            const bin = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
-            const fileName = `ai/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-            const upRes = await fetch(
-              `${SUPABASE_URL}/storage/v1/object/blog-images/${fileName}`,
-              {
-                method: "POST",
-                headers: {
-                  Authorization: `Bearer ${SERVICE_ROLE}`,
-                  "Content-Type": mime,
-                  "x-upsert": "true",
-                },
-                body: bin,
-              },
-            );
-            if (upRes.ok) {
-              coverImageUrl = `${SUPABASE_URL}/storage/v1/object/public/blog-images/${fileName}`;
-            } else {
-              console.error("Image upload failed:", await upRes.text());
-            }
-          }
-        } else {
-          console.error("Image generation failed:", imgResp.status, await imgResp.text());
-        }
+        coverImageUrl = await generateCover(imagePrompt);
       } catch (e) {
         console.error("Image step error:", e);
       }
