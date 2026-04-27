@@ -28,7 +28,29 @@ export default function AdminBlogs({ onShowEditor }: AdminBlogsProps) {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
+  const [regeneratingId, setRegeneratingId] = useState<string | null>(null);
   const { toast } = useToast();
+
+  const handleRegenerateCover = async (blog: Blog) => {
+    setRegeneratingId(blog.id);
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-blog', {
+        body: { mode: 'cover', blogId: blog.id },
+      });
+      if (error) throw error;
+      if ((data as any)?.error) throw new Error((data as any).error);
+      toast({ title: 'Cover regenerated', description: 'New AI hero image saved.' });
+      fetchBlogs();
+    } catch (e: any) {
+      toast({
+        title: 'Regeneration failed',
+        description: e?.message || 'Could not regenerate cover',
+        variant: 'destructive',
+      });
+    } finally {
+      setRegeneratingId(null);
+    }
+  };
 
   const handleGenerateAI = async (count: number) => {
     setGenerating(true);
