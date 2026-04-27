@@ -282,23 +282,31 @@ const EnhancedDataFlowAnimation = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-32 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 blur-3xl" />
       </div>
 
-      <div className="relative flex justify-between items-center px-2 md:px-8">
+      <div className="relative flex justify-between items-start px-2 md:px-8">
         {nodes.map((node, index) => {
           const Icon = node.icon;
           const color = stepColors[index];
           
           return (
-            <div key={node.id} className="relative flex flex-col items-center">
-              {/* Connection line to next node */}
+            <div key={node.id} className="relative flex flex-col items-center flex-1">
+              {/* Connection line to next node - aligned to icon center (h-14 = 56px, center = 28px) */}
               {index < nodes.length - 1 && (
-                <div className="absolute top-1/2 left-full -translate-y-1/2 hidden md:block" style={{ width: 'calc(100% - 20px)' }}>
+                <div
+                  className="absolute hidden md:block pointer-events-none"
+                  style={{
+                    top: '28px',
+                    left: 'calc(50% + 28px)',
+                    width: 'calc(100% - 56px)',
+                    transform: 'translateY(-50%)',
+                  }}
+                >
                   <motion.div
-                    className="h-0.5 rounded-full origin-left"
+                    className="h-0.5 rounded-full origin-left w-full"
                     style={{
                       background: `linear-gradient(90deg, ${color}, ${stepColors[index + 1]})`
                     }}
                     initial={{ scaleX: 0, opacity: 0 }}
-                    animate={isInView ? { scaleX: 1, opacity: 0.6 } : { scaleX: 0, opacity: 0 }}
+                    animate={isInView ? { scaleX: 1, opacity: 0.7 } : { scaleX: 0, opacity: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.15 + 0.3 }}
                   />
                   {/* Flowing particles */}
