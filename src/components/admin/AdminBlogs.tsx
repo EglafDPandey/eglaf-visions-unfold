@@ -195,13 +195,36 @@ export default function AdminBlogs({ onShowEditor }: AdminBlogsProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="glass-card p-6 rounded-xl flex items-center justify-between"
+              className="glass-card p-6 rounded-xl flex items-center justify-between gap-4"
             >
-              <div className="flex-1">
+              <div className="relative shrink-0 w-32 h-20 rounded-lg overflow-hidden bg-muted/40 border border-border/50 group">
+                {blog.cover_image ? (
+                  <img
+                    src={blog.cover_image}
+                    alt={`${blog.title} cover`}
+                    loading="lazy"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                    <ImageOff className="w-5 h-5" />
+                  </div>
+                )}
+                <button
+                  type="button"
+                  onClick={() => handleRegenerateCover(blog)}
+                  disabled={regeneratingId === blog.id}
+                  title="Regenerate AI cover image"
+                  className="absolute inset-0 flex items-center justify-center bg-background/70 opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-100"
+                >
+                  <RefreshCw className={`w-5 h-5 text-foreground ${regeneratingId === blog.id ? 'animate-spin' : ''}`} />
+                </button>
+              </div>
+              <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-3 mb-2">
-                  <h3 className="font-display font-semibold text-foreground">{blog.title}</h3>
+                  <h3 className="font-display font-semibold text-foreground truncate">{blog.title}</h3>
                   <span
-                    className={`px-2 py-0.5 text-xs rounded-full ${
+                    className={`px-2 py-0.5 text-xs rounded-full shrink-0 ${
                       blog.published
                         ? 'bg-green-500/20 text-green-400'
                         : 'bg-yellow-500/20 text-yellow-400'
@@ -216,11 +239,21 @@ export default function AdminBlogs({ onShowEditor }: AdminBlogsProps) {
                   Created: {new Date(blog.created_at).toLocaleDateString()}
                 </p>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 shrink-0">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleRegenerateCover(blog)}
+                  disabled={regeneratingId === blog.id}
+                  title="Regenerate cover image"
+                >
+                  <RefreshCw className={`w-4 h-4 ${regeneratingId === blog.id ? 'animate-spin' : ''}`} />
+                </Button>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => handleTogglePublish(blog)}
+                  title={blog.published ? 'Unpublish' : 'Publish'}
                 >
                   <Eye className="w-4 h-4" />
                 </Button>
