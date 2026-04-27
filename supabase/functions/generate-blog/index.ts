@@ -46,12 +46,97 @@ Deno.serve(async (req) => {
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
 
     let count = 1;
+    let mode: "full" | "cover" = "full";
+    let blogId: string | null = null;
+    let customPrompt: string | null = null;
     try {
       const body = await req.json();
       if (body?.count && Number.isInteger(body.count)) {
         count = Math.min(Math.max(body.count, 1), 5);
       }
+      if (body?.mode === "cover") mode = "cover";
+      if (body?.blogId && typeof body.blogId === "string") blogId = body.blogId;
+      if (body?.prompt && typeof body.prompt === "string") customPrompt = body.prompt;
     } catch (_) {}
+
+    // Helper: generate + upload a cover image, returns public URL
+    const generateCover = async (prompt: string): Promise<string | null> => {
+      const imgResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "google/gemini-2.5-flash-image",
+          messages: [{ role: "user", content: `${prompt}. Wide 16:9 cover image, no text or letters in the image.` }],
+          modalities: ["image", "text"],
+        }),
+      });
+      if (!imgResp.ok) {
+        console.error("Image generation failed:", imgResp.status, await imgResp.text());
+        return null;
+      }
+      const imgData = await imgResp.json();
+      const dataUrl: string | undefined =
+        imgData.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+      if (!dataUrl?.startsWith("data:")) return null;
+      const [meta, b64] = dataUrl.split(",");
+      const mime = meta.match(/data:(.*?);base64/)?.[1] || "image/png";
+      const ext = mime.split("/")[1] || "png";
+      const bin = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+      const fileName = `ai/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+      const upRes = await fetch(
+        `${SUPABASE_URL}/storage/v1/object/blog-images/${fileName}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${SERVICE_ROLE}`,
+            "Content-Type": mime,
+            "x-upsert": "true",
+          },
+          body: bin,
+        },
+      );
+      if (!upRes.ok) {
+        console.error("Image upload failed:", await upRes.text());
+        return null;
+      }
+      return `${SUPABASE_URL}/storage/v1/object/public/blog-images/${fileName}`;
+    };
+
+    // Mode: regenerate cover only for an existing blog
+    if (mode === "cover") {
+      if (!blogId) throw new Error("blogId required for cover regeneration");
+      // Fetch existing blog for prompt fallback
+      const getRes = await fetch(
+        `${SUPABASE_URL}/rest/v1/blogs?id=eq.${blogId}&select=title,excerpt,category`,
+        { headers: { apikey: SERVICE_ROLE, Authorization: `Bearer ${SERVICE_ROLE}` } },
+      );
+      const rows = await getRes.json();
+      const existing = Array.isArray(rows) ? rows[0] : null;
+      if (!existing) throw new Error("Blog not found");
+      const prompt = customPrompt?.trim() ||
+        `${existing.title}. ${existing.excerpt || ""} Modern IT, ${existing.category || "technology"}, cinematic lighting, photorealistic.`;
+      const newUrl = await generateCover(prompt);
+      if (!newUrl) throw new Error("Cover generation failed");
+      const upd = await fetch(`${SUPABASE_URL}/rest/v1/blogs?id=eq.${blogId}`, {
+        method: "PATCH",
+        headers: {
+          apikey: SERVICE_ROLE,
+          Authorization: `Bearer ${SERVICE_ROLE}`,
+          "Content-Type": "application/json",
+          Prefer: "return=representation",
+        },
+        body: JSON.stringify({ cover_image: newUrl }),
+      });
+      if (!upd.ok) throw new Error(`Failed to update blog: ${await upd.text()}`);
+      const updated = await upd.json();
+      return new Response(
+        JSON.stringify({ success: true, blog: updated[0], cover_image: newUrl }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
 
     const created: any[] = [];
 
