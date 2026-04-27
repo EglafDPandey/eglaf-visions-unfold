@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Edit, Trash2, Eye, FileText } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, FileText, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
@@ -27,7 +27,32 @@ interface AdminBlogsProps {
 export default function AdminBlogs({ onShowEditor }: AdminBlogsProps) {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
+  const [generating, setGenerating] = useState(false);
   const { toast } = useToast();
+
+  const handleGenerateAI = async (count: number) => {
+    setGenerating(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-blog', {
+        body: { count },
+      });
+      if (error) throw error;
+      if ((data as any)?.error) throw new Error((data as any).error);
+      toast({
+        title: 'AI Draft Created',
+        description: `${(data as any)?.count ?? count} blog draft(s) generated. Review and publish when ready.`,
+      });
+      fetchBlogs();
+    } catch (e: any) {
+      toast({
+        title: 'Generation failed',
+        description: e?.message || 'Could not generate AI blog',
+        variant: 'destructive',
+      });
+    } finally {
+      setGenerating(false);
+    }
+  };
 
   useEffect(() => {
     fetchBlogs();
@@ -108,12 +133,22 @@ export default function AdminBlogs({ onShowEditor }: AdminBlogsProps) {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="font-display text-2xl font-bold text-foreground">Blog Posts</h2>
-          <p className="text-muted-foreground">Manage your blog content</p>
+          <p className="text-muted-foreground">Manage your blog content. AI drafts are saved unpublished — review before publishing.</p>
         </div>
-        <Button variant="hero" onClick={() => onShowEditor(null)}>
-          <Plus className="w-4 h-4 mr-2" />
-          New Post
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => handleGenerateAI(1)} disabled={generating}>
+            <Sparkles className="w-4 h-4 mr-2" />
+            {generating ? 'Generating…' : 'AI Draft (1)'}
+          </Button>
+          <Button variant="outline" onClick={() => handleGenerateAI(2)} disabled={generating}>
+            <Sparkles className="w-4 h-4 mr-2" />
+            {generating ? 'Generating…' : 'AI Drafts (2)'}
+          </Button>
+          <Button variant="hero" onClick={() => onShowEditor(null)}>
+            <Plus className="w-4 h-4 mr-2" />
+            New Post
+          </Button>
+        </div>
       </div>
 
       {blogs.length === 0 ? (
