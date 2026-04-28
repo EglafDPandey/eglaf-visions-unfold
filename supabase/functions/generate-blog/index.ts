@@ -91,6 +91,7 @@ Deno.serve(async (req) => {
         {
           method: "POST",
           headers: {
+            apikey: SERVICE_ROLE,
             Authorization: `Bearer ${SERVICE_ROLE}`,
             "Content-Type": mime,
             "x-upsert": "true",
