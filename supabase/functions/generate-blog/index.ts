@@ -195,15 +195,9 @@ Return ONLY valid JSON (no prose, no markdown fences) with this exact shape:
       }
 
       // 3) Insert blog as DRAFT (published = false)
-      const insertRes = await fetch(`${SUPABASE_URL}/rest/v1/blogs`, {
-        method: "POST",
-        headers: {
-          apikey: SERVICE_ROLE,
-          Authorization: `Bearer ${SERVICE_ROLE}`,
-          "Content-Type": "application/json",
-          Prefer: "return=representation",
-        },
-        body: JSON.stringify({
+      const { data: inserted, error: insErr } = await supabase
+        .from("blogs")
+        .insert({
           title,
           slug,
           excerpt,
@@ -213,15 +207,11 @@ Return ONLY valid JSON (no prose, no markdown fences) with this exact shape:
           tags,
           published: false,
           published_at: null,
-        }),
-      });
-
-      if (!insertRes.ok) {
-        const errTxt = await insertRes.text();
-        throw new Error(`Failed to save blog: ${errTxt}`);
-      }
-      const inserted = await insertRes.json();
-      created.push(inserted[0]);
+        })
+        .select()
+        .maybeSingle();
+      if (insErr) throw new Error(`Failed to save blog: ${insErr.message}`);
+      created.push(inserted);
     }
 
     return new Response(
