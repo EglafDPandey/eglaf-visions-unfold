@@ -11,6 +11,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import TipTapEditor from '@/components/admin/TipTapEditor';
 import BlogPreview from '@/components/admin/BlogPreview';
+import SeoChecks from '@/components/admin/SeoChecks';
 
 interface Blog {
   id: string;
@@ -285,6 +286,8 @@ export default function BlogEditor({ blog, onClose }: BlogEditorProps) {
               rows={3}
             />
           </div>
+
+          <SeoChecks title={title} slug={slug} excerpt={excerpt} blogId={blog?.id || null} />
 
           <div>
             <label className="block text-sm font-medium text-muted-foreground mb-2">Content</label>
