@@ -1,4 +1,6 @@
 // Generate AI blog draft (text + cover image) and save as unpublished
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
@@ -44,6 +46,9 @@ Deno.serve(async (req) => {
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
     const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
+    const supabase = createClient(SUPABASE_URL, SERVICE_ROLE, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
 
     let count = 1;
     let mode: "full" | "cover" = "full";
@@ -86,54 +91,41 @@ Deno.serve(async (req) => {
       const ext = mime.split("/")[1] || "png";
       const bin = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
       const fileName = `ai/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-      const upRes = await fetch(
-        `${SUPABASE_URL}/storage/v1/object/blog-images/${fileName}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${SERVICE_ROLE}`,
-            "Content-Type": mime,
-            "x-upsert": "true",
-          },
-          body: bin,
-        },
-      );
-      if (!upRes.ok) {
-        console.error("Image upload failed:", await upRes.text());
+      const { error: upErr } = await supabase.storage
+        .from("blog-images")
+        .upload(fileName, bin, { contentType: mime, upsert: true });
+      if (upErr) {
+        console.error("Image upload failed:", upErr.message);
         return null;
       }
-      return `${SUPABASE_URL}/storage/v1/object/public/blog-images/${fileName}`;
+      const { data: pub } = supabase.storage.from("blog-images").getPublicUrl(fileName);
+      return pub.publicUrl;
     };
 
     // Mode: regenerate cover only for an existing blog
     if (mode === "cover") {
       if (!blogId) throw new Error("blogId required for cover regeneration");
       // Fetch existing blog for prompt fallback
-      const getRes = await fetch(
-        `${SUPABASE_URL}/rest/v1/blogs?id=eq.${blogId}&select=title,excerpt,category`,
-        { headers: { apikey: SERVICE_ROLE, Authorization: `Bearer ${SERVICE_ROLE}` } },
-      );
-      const rows = await getRes.json();
-      const existing = Array.isArray(rows) ? rows[0] : null;
+      const { data: existing, error: getErr } = await supabase
+        .from("blogs")
+        .select("title, excerpt, category")
+        .eq("id", blogId)
+        .maybeSingle();
+      if (getErr) throw new Error(`Failed to load blog: ${getErr.message}`);
       if (!existing) throw new Error("Blog not found");
       const prompt = customPrompt?.trim() ||
         `${existing.title}. ${existing.excerpt || ""} Modern IT, ${existing.category || "technology"}, cinematic lighting, photorealistic.`;
       const newUrl = await generateCover(prompt);
       if (!newUrl) throw new Error("Cover generation failed");
-      const upd = await fetch(`${SUPABASE_URL}/rest/v1/blogs?id=eq.${blogId}`, {
-        method: "PATCH",
-        headers: {
-          apikey: SERVICE_ROLE,
-          Authorization: `Bearer ${SERVICE_ROLE}`,
-          "Content-Type": "application/json",
-          Prefer: "return=representation",
-        },
-        body: JSON.stringify({ cover_image: newUrl }),
-      });
-      if (!upd.ok) throw new Error(`Failed to update blog: ${await upd.text()}`);
-      const updated = await upd.json();
+      const { data: updated, error: updErr } = await supabase
+        .from("blogs")
+        .update({ cover_image: newUrl })
+        .eq("id", blogId)
+        .select()
+        .maybeSingle();
+      if (updErr) throw new Error(`Failed to update blog: ${updErr.message}`);
       return new Response(
-        JSON.stringify({ success: true, blog: updated[0], cover_image: newUrl }),
+        JSON.stringify({ success: true, blog: updated, cover_image: newUrl }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
@@ -203,15 +195,9 @@ Return ONLY valid JSON (no prose, no markdown fences) with this exact shape:
       }
 
       // 3) Insert blog as DRAFT (published = false)
-      const insertRes = await fetch(`${SUPABASE_URL}/rest/v1/blogs`, {
-        method: "POST",
-        headers: {
-          apikey: SERVICE_ROLE,
-          Authorization: `Bearer ${SERVICE_ROLE}`,
-          "Content-Type": "application/json",
-          Prefer: "return=representation",
-        },
-        body: JSON.stringify({
+      const { data: inserted, error: insErr } = await supabase
+        .from("blogs")
+        .insert({
           title,
           slug,
           excerpt,
@@ -221,15 +207,11 @@ Return ONLY valid JSON (no prose, no markdown fences) with this exact shape:
           tags,
           published: false,
           published_at: null,
-        }),
-      });
-
-      if (!insertRes.ok) {
-        const errTxt = await insertRes.text();
-        throw new Error(`Failed to save blog: ${errTxt}`);
-      }
-      const inserted = await insertRes.json();
-      created.push(inserted[0]);
+        })
+        .select()
+        .maybeSingle();
+      if (insErr) throw new Error(`Failed to save blog: ${insErr.message}`);
+      created.push(inserted);
     }
 
     return new Response(
