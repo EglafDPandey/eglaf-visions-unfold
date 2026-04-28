@@ -287,6 +287,8 @@ export default function BlogEditor({ blog, onClose }: BlogEditorProps) {
             />
           </div>
 
+          <SeoChecks title={title} slug={slug} excerpt={excerpt} blogId={blog?.id || null} />
+
           <div>
             <label className="block text-sm font-medium text-muted-foreground mb-2">Content</label>
             <TipTapEditor content={content} onChange={setContent} placeholder="Write your blog content here..." />
