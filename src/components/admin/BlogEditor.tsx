@@ -11,6 +11,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import TipTapEditor from '@/components/admin/TipTapEditor';
 import BlogPreview from '@/components/admin/BlogPreview';
+import SeoChecks from '@/components/admin/SeoChecks';
 
 interface Blog {
   id: string;
