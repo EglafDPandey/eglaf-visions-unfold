@@ -91,24 +91,15 @@ Deno.serve(async (req) => {
       const ext = mime.split("/")[1] || "png";
       const bin = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
       const fileName = `ai/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-      const upRes = await fetch(
-        `${SUPABASE_URL}/storage/v1/object/blog-images/${fileName}`,
-        {
-          method: "POST",
-          headers: {
-            apikey: SERVICE_ROLE,
-            Authorization: `Bearer ${SERVICE_ROLE}`,
-            "Content-Type": mime,
-            "x-upsert": "true",
-          },
-          body: bin,
-        },
-      );
-      if (!upRes.ok) {
-        console.error("Image upload failed:", await upRes.text());
+      const { error: upErr } = await supabase.storage
+        .from("blog-images")
+        .upload(fileName, bin, { contentType: mime, upsert: true });
+      if (upErr) {
+        console.error("Image upload failed:", upErr.message);
         return null;
       }
-      return `${SUPABASE_URL}/storage/v1/object/public/blog-images/${fileName}`;
+      const { data: pub } = supabase.storage.from("blog-images").getPublicUrl(fileName);
+      return pub.publicUrl;
     };
 
     // Mode: regenerate cover only for an existing blog
