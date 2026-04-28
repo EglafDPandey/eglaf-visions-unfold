@@ -106,31 +106,26 @@ Deno.serve(async (req) => {
     if (mode === "cover") {
       if (!blogId) throw new Error("blogId required for cover regeneration");
       // Fetch existing blog for prompt fallback
-      const getRes = await fetch(
-        `${SUPABASE_URL}/rest/v1/blogs?id=eq.${blogId}&select=title,excerpt,category`,
-        { headers: { apikey: SERVICE_ROLE, Authorization: `Bearer ${SERVICE_ROLE}` } },
-      );
-      const rows = await getRes.json();
-      const existing = Array.isArray(rows) ? rows[0] : null;
+      const { data: existing, error: getErr } = await supabase
+        .from("blogs")
+        .select("title, excerpt, category")
+        .eq("id", blogId)
+        .maybeSingle();
+      if (getErr) throw new Error(`Failed to load blog: ${getErr.message}`);
       if (!existing) throw new Error("Blog not found");
       const prompt = customPrompt?.trim() ||
         `${existing.title}. ${existing.excerpt || ""} Modern IT, ${existing.category || "technology"}, cinematic lighting, photorealistic.`;
       const newUrl = await generateCover(prompt);
       if (!newUrl) throw new Error("Cover generation failed");
-      const upd = await fetch(`${SUPABASE_URL}/rest/v1/blogs?id=eq.${blogId}`, {
-        method: "PATCH",
-        headers: {
-          apikey: SERVICE_ROLE,
-          Authorization: `Bearer ${SERVICE_ROLE}`,
-          "Content-Type": "application/json",
-          Prefer: "return=representation",
-        },
-        body: JSON.stringify({ cover_image: newUrl }),
-      });
-      if (!upd.ok) throw new Error(`Failed to update blog: ${await upd.text()}`);
-      const updated = await upd.json();
+      const { data: updated, error: updErr } = await supabase
+        .from("blogs")
+        .update({ cover_image: newUrl })
+        .eq("id", blogId)
+        .select()
+        .maybeSingle();
+      if (updErr) throw new Error(`Failed to update blog: ${updErr.message}`);
       return new Response(
-        JSON.stringify({ success: true, blog: updated[0], cover_image: newUrl }),
+        JSON.stringify({ success: true, blog: updated, cover_image: newUrl }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
