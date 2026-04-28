@@ -177,14 +177,43 @@ Return ONLY valid JSON (no prose, no markdown fences) with this exact shape:
       const rawContent = textData.choices?.[0]?.message?.content ?? "";
       const parsed = extractJSON(rawContent);
 
-      const title = String(parsed.title || "").trim();
-      const slug = slugify(parsed.slug || title) + "-" + Date.now().toString(36);
-      const excerpt = String(parsed.excerpt || "").trim();
+      let title = String(parsed.title || "").trim();
+      let excerpt = String(parsed.excerpt || "").trim();
       const tags = Array.isArray(parsed.tags) ? parsed.tags.slice(0, 8).map((t: any) => String(t)) : [];
       const content = String(parsed.content_html || "").trim();
       const imagePrompt = String(parsed.image_prompt || `${title}, modern IT, cinematic`).trim();
 
       if (!title || !content) throw new Error("AI returned incomplete content");
+
+      // SEO validation: title 30-65 chars
+      if (title.length < 30 || title.length > 65) {
+        if (title.length > 65) title = title.slice(0, 62).replace(/\s+\S*$/, "") + "…";
+        if (title.length < 30) throw new Error(`Title too short for SEO (${title.length} chars, need 30-65)`);
+      }
+
+      // SEO validation: meta description (excerpt) 120-160 chars
+      if (excerpt.length > 160) {
+        excerpt = excerpt.slice(0, 157).replace(/\s+\S*$/, "") + "…";
+      }
+      if (excerpt.length < 120) {
+        throw new Error(`Excerpt too short for SEO (${excerpt.length} chars, need 120-160)`);
+      }
+
+      // Slug: ensure uniqueness by checking DB, retry with counter if taken
+      const baseSlug = slugify(parsed.slug || title).slice(0, 70) || "post";
+      let slug = baseSlug;
+      let attempt = 0;
+      while (true) {
+        const { data: existing } = await supabase
+          .from("blogs").select("id").eq("slug", slug).maybeSingle();
+        if (!existing) break;
+        attempt++;
+        if (attempt > 20) {
+          slug = `${baseSlug}-${Date.now().toString(36)}`;
+          break;
+        }
+        slug = `${baseSlug}-${attempt}`;
+      }
 
       // 2) Generate cover image
       let coverImageUrl: string | null = null;
