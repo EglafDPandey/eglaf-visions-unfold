@@ -35,7 +35,33 @@ function extractJSON(text: string): any {
   const start = raw.indexOf("{");
   const end = raw.lastIndexOf("}");
   if (start === -1 || end === -1) throw new Error("No JSON object found");
-  return JSON.parse(raw.slice(start, end + 1));
+  let slice = raw.slice(start, end + 1);
+  try {
+    return JSON.parse(slice);
+  } catch (_) {
+    // Escape unescaped control chars inside string literals (LLMs often emit raw \n, \t, etc.)
+    let out = "";
+    let inStr = false;
+    let escape = false;
+    for (let i = 0; i < slice.length; i++) {
+      const ch = slice[i];
+      const code = ch.charCodeAt(0);
+      if (escape) { out += ch; escape = false; continue; }
+      if (ch === "\\") { out += ch; escape = true; continue; }
+      if (ch === '"') { inStr = !inStr; out += ch; continue; }
+      if (inStr && code < 0x20) {
+        if (ch === "\n") out += "\\n";
+        else if (ch === "\r") out += "\\r";
+        else if (ch === "\t") out += "\\t";
+        else out += "\\u" + code.toString(16).padStart(4, "0");
+        continue;
+      }
+      out += ch;
+    }
+    // Strip trailing commas as a bonus
+    out = out.replace(/,(\s*[}\]])/g, "$1");
+    return JSON.parse(out);
+  }
 }
 
 Deno.serve(async (req) => {
